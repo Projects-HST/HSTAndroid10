@@ -1,8 +1,10 @@
-package com.hst.osa;
+package com.hst.osa.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.hst.osa.R;
 
 public class MainActivity extends AppCompatActivity {
 
