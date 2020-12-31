@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.EmailLoginActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -77,32 +77,29 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginBottom="10dp"
-                            android:hint="@string/mobile"
+                            android:hint="@string/mail"
                             app:boxStrokeColor="@color/lite_grey"
-                            app:hintTextColor="@color/text_black"
-                            app:prefixText="+91">
+                            app:hintTextColor="@color/text_black">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/txt_edt_box"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
-                                android:padding="10dp"
-                                android:maxLength="13"
+                                android:inputType="textEmailAddress"
+                                android:maxLength="30"
                                 android:textColor="@color/grey"
                                 android:textSize="14sp" />
-
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
-                            android:id="@+id/mail_login"
+                            android:id="@+id/ph_login"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/signin_txt_box"
                             android:layout_alignParentEnd="true"
                             android:fontFamily="@font/semibold"
                             android:layout_marginEnd="20dp"
-                            android:text="@string/email"
+                            android:text="@string/phone"
                             android:textColor="@color/text_black"
                             android:textSize="14sp" />
 
@@ -110,10 +107,9 @@
                             android:id="@+id/btn_login"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/mail_login"
+                            android:layout_below="@id/ph_login"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="40dp"
-                            android:gravity="center"
                             android:fontFamily="@font/medium"
                             android:text="@string/signIn"
                             android:textAllCaps="false"
@@ -146,14 +142,14 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginHorizontal="20dp"
                                 android:background="@drawable/btn_half_round_color"
-                                android:drawablePadding="4dp"
+                                android:drawablePadding="10dp"
                                 android:fontFamily="@font/medium"
                                 android:gravity="center"
                                 android:paddingHorizontal="20dp"
                                 android:text="@string/ggLogIn"
                                 android:textAllCaps="false"
                                 android:textColor="@color/lite_blue"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 app:drawableStartCompat="@drawable/ic_search__1_" />
 
                             <TextView
@@ -165,38 +161,38 @@
                                 android:layout_marginHorizontal="20dp"
                                 android:layout_marginVertical="20dp"
                                 android:background="@drawable/btn_hf_rd_color_2"
-                                android:drawablePadding="15dp"
+                                android:drawablePadding="25dp"
                                 android:fontFamily="@font/medium"
                                 android:gravity="center"
                                 android:paddingHorizontal="20dp"
                                 android:text="@string/fbLogIn"
                                 android:textAllCaps="false"
                                 android:textColor="@color/blue"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 app:drawableStartCompat="@drawable/ic_facebook__2_" />
 
-                        <TextView
-                            android:id="@+id/tryLog"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/btn_fb_login"
-                            android:layout_marginStart="40dp"
-                            android:fontFamily="@font/light"
-                            android:text="@string/create"
-                            android:textColor="@color/text_black"
-                            android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tryLog"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btn_fb_login"
+                                android:layout_marginStart="40dp"
+                                android:fontFamily="@font/light"
+                                android:text="@string/create"
+                                android:textColor="@color/text_black"
+                                android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/signUp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/btn_fb_login"
-                            android:layout_toEndOf="@id/tryLog"
-                            android:fontFamily="@font/regular"
-                            android:paddingHorizontal="5dp"
-                            android:text="@string/signUp"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_black"/>
+                            <TextView
+                                android:id="@+id/signUp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btn_fb_login"
+                                android:layout_toEndOf="@id/tryLog"
+                                android:fontFamily="@font/regular"
+                                android:paddingHorizontal="5dp"
+                                android:text="@string/signUp"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_black"/>
 
                         </RelativeLayout>
 
