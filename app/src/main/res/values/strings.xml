@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">OSA</string>
+    <string name="welcome_sign">Let’s sign you in</string>
+    <string name="wl_note">Welcome back, you’ve been missed!</string>
+    <string name="mobile">Mobile Number</string>
+    <string name="email">Use Email ID</string>
+    <string name="signIn">Continue</string>
+    <string name="or">Or</string>
+    <string name="ggLogIn">Continue with Google</string>
+    <string name="fbLogIn">Continue with Facebook</string>
+    <string name="signUp">Sign Up</string>
+    <string name="create">Don’t have an account?</string>
+    <string name="sign">Sign In</string>
+    <string name="phone">Use Phone Number</string>
+    <string name="mail">Email ID</string>
+    <string name="otp_screen">Enter the 4 digit code sent to</string>
+    <string name="otp_note">We\'ve sent a 4 digit code to your phone number. Please enter the verification code.</string>
+    <string name="txt_resend">Didn’t receive the SMS?</string>
+    <string name="resend">Resend</string>
+    <string name="forgot">Forgot password?</string>
+    <string name="password">Password</string>
+    <string name="otp_page">OTP</string>
+    <string name="forgot_note">Forgot your password?</string>
+    <string name="forgot_msg">Enter your email address and we will send you instructions on how to reset your password.</string>
+    <string name="send">Send</string>
+    <string name="create_note">Create your account</string>
+    <string name="create_msg">After your registration is complete, you can see our products.</string>
+    <string name="name">User Name</string>
+    <string name="reset">" Reset Password"</string>
+    <string name="check_note">Check your email</string>
+    <string name="check_msg">We\'ve sent you instructions on how to reset the password (also check the Spam folder).</string>
+
+    <!-- Facebook-->
+    <string name="facebook_app_id">234269474903261</string>
+    <string name="fb_login_protocol_scheme">fb234269474903261</string>
+
 </resources>

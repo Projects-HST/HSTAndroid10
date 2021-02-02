@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hst.osa">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,13 +12,60 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OSA">
-        <activity android:name=".activity.MainActivity">
+
+        <activity android:name=".activity.SplashscreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/sign"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".activity.EmailLoginActivity"
+            android:label="@string/sign"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"/>
+        <activity
+            android:name=".activity.NumberVerificationActivity"
+            android:label="@string/otp_page"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"/>
+        <activity
+            android:name=".activity.PasswordActivity"
+            android:label="@string/password"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"/>
+        <activity
+            android:name=".activity.ForgotPassword"
+            android:label="@string/reset"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"/>
+        <activity
+            android:name=".activity.SignupActivity"
+            android:label="@string/signUp"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA"/>
+
+<!--        <meta-data android:name="com.facebook.sdk.ApplicationId"-->
+<!--            android:value="@string/facebook_app_id"/>-->
+
+<!--        <activity android:name="com.facebook.FacebookActivity"-->
+<!--            android:configChanges=-->
+<!--                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+<!--            android:label="@string/app_name" />-->
+
     </application>
 
 </manifest>
