@@ -29,4 +29,9 @@
     <string name="reset">" Reset Password"</string>
     <string name="check_note">Check your email</string>
     <string name="check_msg">We\'ve sent you instructions on how to reset the password (also check the Spam folder).</string>
+
+    <!-- Facebook-->
+    <string name="facebook_app_id">234269474903261</string>
+    <string name="fb_login_protocol_scheme">fb234269474903261</string>
+
 </resources>

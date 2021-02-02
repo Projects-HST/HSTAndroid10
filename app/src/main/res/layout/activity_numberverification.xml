@@ -84,7 +84,7 @@
                     <com.hst.osa.customview.CustomOtpEditText
                         android:id="@+id/otp"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/otp_msg"
                         android:layout_centerInParent="true"
                         android:gravity="center"
