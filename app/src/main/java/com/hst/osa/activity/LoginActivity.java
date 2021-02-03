@@ -76,9 +76,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 md.update(signature.toByteArray());
                 Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        }
+        catch (PackageManager.NameNotFoundException e) {
 
-        } catch (NoSuchAlgorithmException e) {
+        }
+        catch (NoSuchAlgorithmException e) {
 
         }
         callbackManager = CallbackManager.Factory.create();
