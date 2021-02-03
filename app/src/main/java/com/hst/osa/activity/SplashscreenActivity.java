@@ -1,6 +1,8 @@
 package com.hst.osa.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import com.facebook.FacebookSdk;
@@ -9,7 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.hst.osa.R;
 
 public class SplashscreenActivity extends AppCompatActivity {
-
+    private static int SPLASH_TIME_OUT = 2000;
+    private static final int PERMISSION_REQUEST_CODE = 1;
     String sh = "";
 
     @Override
@@ -18,6 +21,15 @@ public class SplashscreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
 //        FacebookSdk.sdkInitialize(getApplicationContext());
 //        AppEventsLogger.activateApp(this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(SplashscreenActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        }, SPLASH_TIME_OUT);
 
         hashFromSHA1();
     }
