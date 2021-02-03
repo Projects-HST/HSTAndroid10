@@ -17,4 +17,6 @@
     <color name="lite_grey">#BBBBBB</color>
     <color name="lite_blue">#4285F4</color>
     <color name="blue">#4267B2</color>
+    <color name="text_grey">#69696B</color>
+    <color name="trans">#00BD0621</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.gms.admin.customview;
+package com.hst.osa.customview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
