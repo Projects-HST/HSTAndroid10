@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">OSA</string>
+    <string name="splashscreen_tagline">Passion for Shop</string>
+    <string name="welcome_start">Get Started</string>
     <string name="welcome_sign">Let’s sign you in</string>
     <string name="wl_note">Welcome back, you’ve been missed!</string>
     <string name="mobile">Mobile Number</string>
@@ -41,6 +43,14 @@
 
 
     <!-- Side Menu -->
-
+    <string name="side_menu_dash">Dashboard</string>
+    <string name="side_menu_profile">Edit Profile</string>
+    <string name="side_menu_category">Category</string>
+    <string name="side_menu_wishlist">Wishlist</string>
+    <string name="side_menu_order">Order History</string>
+    <string name="side_menu_wallet">Wallet</string>
+    <string name="side_menu_address">Shipping Address</string>
+    <string name="side_menu_settings">Settings</string>
+    <string name="side_menu_logout">Logout</string>
 
 </resources>
