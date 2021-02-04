@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">OSA</string>
     <string name="welcome_sign">Let’s sign you in</string>
+
+    <!--    General-->
+    <string name="progress_loading">Loading…</string>
+    <string name="alert_button_ok">OK</string>
+    <string name="alert_button_cancel">Cancel</string>
+    <string name="alert_button_yes">Yes</string>
+    <string name="alert_button_no">No</string>
+    <string name="empty" />
+    <string name="error_no_net">No internet access. Please check your connection and try again.</string>
+    <string name="error_occurred">Failed to connect to the server. Please try again.</string>
+
     <string name="wl_note">Welcome back, you’ve been missed!</string>
     <string name="mobile">Mobile Number</string>
     <string name="email">Use Email ID</string>

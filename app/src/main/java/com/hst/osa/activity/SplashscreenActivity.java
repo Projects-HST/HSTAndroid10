@@ -13,7 +13,6 @@ import com.hst.osa.R;
 public class SplashscreenActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 2000;
     private static final int PERMISSION_REQUEST_CODE = 1;
-    String sh = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +34,8 @@ public class SplashscreenActivity extends AppCompatActivity {
     }
 
     public void hashFromSHA1() {
-        sh = "28:D6:E7:CF:CC:66:02:16:B1:97:3D:9A:FE:E7:8E:CB:20:1B:DE:03";
-        String[] arr = sh.split(":");
+        String sha1 = "28:D6:E7:CF:CC:66:02:16:B1:97:3D:9A:FE:E7:8E:CB:20:1B:DE:03";
+        String[] arr = sha1.split(":");
         byte[] byteArr = new  byte[arr.length];
 
         for (int i = 0; i< arr.length; i++) {
