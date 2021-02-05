@@ -3,17 +3,17 @@ package com.hst.osa.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -42,6 +42,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.hst.osa.R;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
@@ -49,6 +50,7 @@ import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
+import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
 
 import org.json.JSONException;
@@ -63,17 +65,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final String TAG = LoginActivity.class.getName();
 
     private TextView btnFacebook, btnGoogle;
-
+    private TextInputLayout tiNumber;
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
     private CallbackManager callbackManager;
     private LoginManager loginManager;
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInClient mGoogleSignInClient;
-
     private static final int RC_SIGN_IN = 9001;
     private int mSelectedLoginMode = 0;
-    private String url = "";
+    private String whichService = "", url = "";
+
+    private Button btnContinue;
+    private EditText txtNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +97,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        tiNumber = findViewById(R.id.ti_mobile_number);
+        txtNumber = findViewById(R.id.txt_mobile_number);
+        btnContinue = findViewById(R.id.btn_login);
         btnFacebook = findViewById(R.id.btn_fb_login);
         btnGoogle = findViewById(R.id.btn_gg_login);
+        btnContinue.setOnClickListener(this);
         btnFacebook.setOnClickListener(this);
         btnGoogle.setOnClickListener(this);
 
@@ -155,6 +164,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
+        if (v == btnContinue){
+            if (validateFields()) {
+                PreferenceStorage.saveMobileNo(this, txtNumber.getText().toString());
+                continueWithNumber();
+            }
+        }
         if (v == btnGoogle){
             signIn();
         }
@@ -165,7 +180,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private boolean validateFields() {
+        if (!OSAValidator.checkNullString(this.txtNumber.getText().toString().trim())) {
+            tiNumber.setError(getString(R.string.error_number));
+            requestFocus(txtNumber);
+            return false;
+        }if (!OSAValidator.checkMobileNumLength(this.txtNumber.getText().toString().trim())) {
+            tiNumber.setError(getString(R.string.error_number_min));
+            requestFocus(txtNumber);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    private void continueWithNumber() {
+        whichService = "mobile";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_MOBILE_NUMBER, txtNumber.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
+        String serverURL = OSAConstants.BUILD_URL + OSAConstants.MOBILE_VERIFY;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), serverURL);
+    }
+
     private void sendGoogleLogin(GoogleSignInAccount account) {
+        whichService = "google";
         String name = ""+account.getDisplayName();
         String mail = ""+account.getEmail();
         String photoUrl = "" + account.getPhotoUrl();
@@ -277,6 +327,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             // do action after Facebook login success
                             // or call your API
 //                            PreferenceStorage.saveSocialNetworkProfilePic(getApplicationContext(), url);
+                            whichService = "google";
 
                             String GCMKey = PreferenceStorage.getGCM(getApplicationContext());
                             JSONObject jsonObject = new JSONObject();
@@ -363,15 +414,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Log.d(TAG, "Show error dialog");
                         AlertDialogHelper.showSimpleAlertDialog(this, msg);
                     }
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                    sharedPreferences.edit().clear().apply();
-                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestEmail()
-                            .build();
-                    // Build a GoogleSignInClient with the options specified by gso.
-                    LoginManager.getInstance().logOut();
-                    mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-                    mGoogleSignInClient.signOut();
+//                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//                    sharedPreferences.edit().clear().apply();
+//                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                            .requestEmail()
+//                            .build();
+//                    // Build a GoogleSignInClient with the options specified by gso.
+//                    LoginManager.getInstance().logOut();
+//                    mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//                    mGoogleSignInClient.signOut();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -383,16 +434,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onResponse(JSONObject response) {
-
+        progressDialogHelper.hideProgressDialog();
         if (validateResponse(response)){
-
+            if (whichService.equalsIgnoreCase("mobile")) {
+                Intent i = new Intent(getApplicationContext(), NumberVerificationActivity.class);
+                startActivity(i);
+            }
         }
 
     }
 
     @Override
     public void onError(String error) {
-
     }
 
     @Override

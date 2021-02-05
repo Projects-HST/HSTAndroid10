@@ -144,4 +144,24 @@ public class PreferenceStorage {
     }
 
 
+    /*To store mobile number*/
+    public static void saveMobileNo(Context context, String type) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_MOBILE_NO, type);
+        editor.apply();
+    }
+
+    public static String getMobileNo(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String mobileNo;
+        mobileNo = sharedPreferences.getString(OSAConstants.KEY_MOBILE_NO, "");
+        return mobileNo;
+    }
+    /*End*/
+
+
+
 }

@@ -10,11 +10,19 @@ public class OSAConstants {
 
     public static final String FB_GPLUS_LOGIN = "socialLogin/";
 
+    public static final String MOBILE_VERIFY = "login_mobile/";
+
+    public static final String USER_LOGIN = "login_mobileotp/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
     public static final String PARAMS_MOBILE_TYPE = "mobile_type";
     public static final String PARAMS_GCM_KEY = "mob_key";
+    public static final String PARAMS_MOBILE_NUMBER = "mobile_number";
+    public static final String PARAMS_OTP = "OTP";
+    public static final String PARAMS_LOGIN_PORTAL = "login_portal";
+//    mobile_number,OTP,mob_key,mobile_type,login_type(FB/Gplus/Mobile/Email),login_portal(Web/App)
 
     //      Login mode constants
     public static final int FACEBOOK = 1;
@@ -47,6 +55,7 @@ public class OSAConstants {
     //    USER DATA
     public static String KEY_USER_ID = "user_id";
     public static String KEY_USER_PROFILE_PIC = "profile_pic";
+    public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";
     public static String VERSION_VALUE = "1";
 

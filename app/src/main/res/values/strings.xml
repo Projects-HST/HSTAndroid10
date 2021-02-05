@@ -13,9 +13,12 @@
     <string name="empty" />
     <string name="error_no_net">No internet access. Please check your connection and try again.</string>
     <string name="error_occurred">Failed to connect to the server. Please try again.</string>
+    <string name="error_number">Mobile number is required for sending otp</string>
+    <string name="error_number_min">Mobile number must be 10 digits</string>
 
     <string name="wl_note">Welcome back, you’ve been missed!</string>
     <string name="mobile">Mobile Number</string>
+    <string name="mobile_number_tag">: \n</string>
     <string name="email">Use Email ID</string>
     <string name="signIn">Continue</string>
     <string name="or">Or</string>

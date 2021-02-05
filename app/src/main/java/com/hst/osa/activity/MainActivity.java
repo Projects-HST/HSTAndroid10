@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
         name = navigationView.getHeaderView(0).findViewById(R.id.full_name);
         area = navigationView.getHeaderView(0).findViewById(R.id.area);
 
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //What to do on back clicked
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
         if (OSAValidator.checkNullString(PreferenceStorage.getProfilePic(this))) {
 //            Picasso.get().load(PreferenceStorage.getProfilePic(this)).into(profilePic);
         } else {
