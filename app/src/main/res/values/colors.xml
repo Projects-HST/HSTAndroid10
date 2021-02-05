@@ -15,8 +15,10 @@
     <color name="color_primary_dark">#5F0311</color>
     <color name="grey">#676870</color>
     <color name="lite_grey">#BBBBBB</color>
+    <color name="background_grey">#F4F3F4</color>
     <color name="lite_blue">#4285F4</color>
     <color name="blue">#4267B2</color>
     <color name="text_grey">#E2E2E2</color>
     <color name="trans">#00BD0621</color>
+    <color name="pink">#FFEBEE</color>
 </resources>

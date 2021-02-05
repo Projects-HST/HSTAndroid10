@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "52466163153",
+    "project_id": "onlineshoppingapp-aecff",
+    "storage_bucket": "onlineshoppingapp-aecff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52466163153:android:3485b2711edc4c6c53d4f0",
+        "android_client_info": {
+          "package_name": "com.hst.osa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52466163153-k6gmtd98gl8atsasn260ftheh309a37q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWU9FdKCfc6eQ49seitiUH69jFJURWESk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52466163153-k6gmtd98gl8atsasn260ftheh309a37q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

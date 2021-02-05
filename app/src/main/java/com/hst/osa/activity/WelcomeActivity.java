@@ -31,7 +31,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = WelcomeActivity.class.getName();
 
     private int[] layouts;
-    private Button btnSkip, btnNext;
+    private TextView btnSkip, btnNext;
     //    private static String[] PERMISSIONS_ALL = { Manifest.permission.READ_CALENDAR,
 //            Manifest.permission.WRITE_CALENDAR, Manifest.permission.ACCESS_FINE_LOCATION,
 //            Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -67,7 +67,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome);
 
-        btnSkip = (Button) findViewById(R.id.btn_skip);
+        btnSkip = (TextView) findViewById(R.id.btn_skip);
 
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
