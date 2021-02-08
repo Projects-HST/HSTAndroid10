@@ -107,6 +107,26 @@ public class PreferenceStorage {
         return userId;
     }
 
+
+    // UserPic
+    public static void saveProfilePic(Context context, String userPic) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_USER_PROFILE_PIC, userPic);
+        editor.apply();
+    }
+
+    public static String getProfilePic(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_USER_PROFILE_PIC, "");
+        return userId;
+    }
+    /*End*/
+
+
     public static void saveSocialNetworkProfilePic(Context context, String url) {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -122,6 +142,26 @@ public class PreferenceStorage {
         return url;
 
     }
+
+
+    /*To store mobile number*/
+    public static void saveMobileNo(Context context, String type) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_MOBILE_NO, type);
+        editor.apply();
+    }
+
+    public static String getMobileNo(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String mobileNo;
+        mobileNo = sharedPreferences.getString(OSAConstants.KEY_MOBILE_NO, "");
+        return mobileNo;
+    }
+    /*End*/
+
 
 
 }
