@@ -107,6 +107,57 @@ public class PreferenceStorage {
         return userId;
     }
 
+    // UserId
+    public static void saveName(Context context, String userId) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_NAME, userId);
+        editor.apply();
+    }
+
+    public static String getName(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_NAME, "");
+        return userId;
+    }
+
+    // UserId
+    public static void saveGender(Context context, String userId) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_GENDER, userId);
+        editor.apply();
+    }
+
+    public static String getGender(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_GENDER, "");
+        return userId;
+    }
+
+    // UserId
+    public static void saveEmail(Context context, String userId) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_EMAIL, userId);
+        editor.apply();
+    }
+
+    public static String getEmail(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_EMAIL, "");
+        return userId;
+    }
+
 
     // UserPic
     public static void saveProfilePic(Context context, String userPic) {

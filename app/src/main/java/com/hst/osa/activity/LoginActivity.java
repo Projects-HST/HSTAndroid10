@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,8 +65,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = LoginActivity.class.getName();
 
-    private TextView btnFacebook, btnGoogle;
-    private TextInputLayout tiNumber;
+    private TextView btnFacebook, btnGoogle, txtUseEmail, txtUseNumber, txtSignUp;
+    private TextInputLayout tiNumber, tiEmail, tiPassword;
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
     private CallbackManager callbackManager;
@@ -74,11 +75,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private int mSelectedLoginMode = 0;
-    private String whichService = "", url = "";
+    private String whichService = "", url = "", loginMethod = "number";
 
     private Button btnContinue;
-    private EditText txtNumber;
+    private EditText txtNumber, txtEmail, txtPassword;
 
+    private RelativeLayout layoutNumber, layoutEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,14 +99,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        txtUseEmail = findViewById(R.id.mail_login);
+        txtUseNumber = findViewById(R.id.ph_login);
+        txtUseEmail.setOnClickListener(this);
+        txtUseNumber.setOnClickListener(this);
+
+        layoutNumber = findViewById(R.id.layout_number);
+        layoutEmail = findViewById(R.id.layout_email);
+
         tiNumber = findViewById(R.id.ti_mobile_number);
         txtNumber = findViewById(R.id.txt_mobile_number);
+
+        tiEmail = findViewById(R.id.ti_email);
+        txtEmail = findViewById(R.id.txt_email);
+
+        tiPassword = findViewById(R.id.ti_password);
+        txtPassword = findViewById(R.id.txt_password);
+
         btnContinue = findViewById(R.id.btn_login);
         btnFacebook = findViewById(R.id.btn_fb_login);
         btnGoogle = findViewById(R.id.btn_gg_login);
         btnContinue.setOnClickListener(this);
         btnFacebook.setOnClickListener(this);
         btnGoogle.setOnClickListener(this);
+
+        txtSignUp = findViewById(R.id.txt_signUp);
+        txtSignUp.setOnClickListener(this);
 
         try {
             PackageInfo info = getApplicationContext().getPackageManager().getPackageInfo(
@@ -164,19 +184,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        if (v == btnContinue){
-            if (validateFields()) {
-                PreferenceStorage.saveMobileNo(this, txtNumber.getText().toString());
-                continueWithNumber();
+        if (v == btnContinue) {
+            if (loginMethod.equalsIgnoreCase("number")) {
+                if (validateFields()) {
+                    PreferenceStorage.saveMobileNo(this, txtNumber.getText().toString());
+                    continueWithNumber();
+                }
+            } else {
+                if (validateFieldEmail()) {
+                    PreferenceStorage.saveEmail(this, txtEmail.getText().toString());
+                    continueWithEmail();
+                }
             }
         }
-        if (v == btnGoogle){
+        if (v == btnGoogle) {
             signIn();
         }
         if (v == btnFacebook) {
             loginManager.logInWithReadPermissions(LoginActivity.this, (Arrays.asList("email", "public_profile")));
 //            PreferenceStorage.saveLoginMode(this, OSAConstants.FACEBOOK);
 //            mSelectedLoginMode = OSAConstants.FACEBOOK;
+        }
+        if (v == txtUseEmail) {
+            loginMethod = "email";
+            layoutEmail.setVisibility(View.VISIBLE);
+            layoutNumber.setVisibility(View.GONE);
+        }
+        if (v == txtUseNumber) {
+            loginMethod = "number";
+            layoutEmail.setVisibility(View.GONE);
+            layoutNumber.setVisibility(View.VISIBLE);
+        }
+        if (v == txtSignUp) {
+            Intent i = new Intent(getApplicationContext(), SignupActivity.class);
+            startActivity(i);
         }
     }
 
@@ -185,9 +226,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             tiNumber.setError(getString(R.string.error_number));
             requestFocus(txtNumber);
             return false;
-        }if (!OSAValidator.checkMobileNumLength(this.txtNumber.getText().toString().trim())) {
+        }
+        if (!OSAValidator.checkMobileNumLength(this.txtNumber.getText().toString().trim())) {
             tiNumber.setError(getString(R.string.error_number_min));
             requestFocus(txtNumber);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean validateFieldEmail() {
+        if (!OSAValidator.isEmailValid(this.txtEmail.getText().toString().trim())) {
+            tiEmail.setError(getString(R.string.error_email));
+            requestFocus(txtEmail);
+            return false;
+        } if (!OSAValidator.checkNullString(this.txtEmail.getText().toString().trim())) {
+            tiEmail.setError(getString(R.string.error_email));
+            requestFocus(txtEmail);
+            return false;
+        } if (!OSAValidator.checkNullString(this.txtPassword.getText().toString().trim())) {
+            tiPassword.setError(getString(R.string.error_password));
+            requestFocus(txtPassword);
+            return false;
+        } if (!OSAValidator.checkStringMinLength(6, this.txtPassword.getText().toString().trim())) {
+            tiPassword.setError(getString(R.string.error_password_min));
+            requestFocus(txtPassword);
             return false;
         } else {
             return true;
@@ -214,10 +278,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         serviceHelper.makeGetServiceCall(jsonObject.toString(), serverURL);
     }
 
+    private void continueWithEmail() {
+        whichService = "email";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_EMAIL, txtEmail.getText().toString());
+            jsonObject.put(OSAConstants.PARAMS_PASSWORD, txtPassword.getText().toString());
+            jsonObject.put(OSAConstants.PARAMS_GCM_KEY, PreferenceStorage.getGCM(getApplicationContext()));
+            jsonObject.put(OSAConstants.PARAMS_MOBILE_TYPE, "1");
+            jsonObject.put(OSAConstants.PARAMS_LOGIN_TYPE, "Mobile");
+            jsonObject.put(OSAConstants.PARAMS_LOGIN_PORTAL, "App");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
+        String url = OSAConstants.BUILD_URL + OSAConstants.EMAIL_LOGIN;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
     private void sendGoogleLogin(GoogleSignInAccount account) {
         whichService = "google";
-        String name = ""+account.getDisplayName();
-        String mail = ""+account.getEmail();
+        String name = "" + account.getDisplayName();
+        String mail = "" + account.getEmail();
         String photoUrl = "" + account.getPhotoUrl();
         PreferenceStorage.saveSocialNetworkProfilePic(getApplicationContext(), photoUrl);
 
@@ -265,10 +349,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            String name = ""+account.getDisplayName();
-            String first = ""+account.getDisplayName();
-            String last = ""+account.getDisplayName();
-            String mail = ""+account.getEmail();
+            String name = "" + account.getDisplayName();
+            String first = "" + account.getDisplayName();
+            String last = "" + account.getDisplayName();
+            String mail = "" + account.getEmail();
             String photoUrl = "" + account.getPhotoUrl();
 
             Log.d(TAG, "email" + mail);
@@ -320,7 +404,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String gender = object.optString("gender");
                             String birthday = object.optString("birthday");
 
-                            Log.d(TAG, "email" + email + "facebook gender" + gender + "birthday" + birthday );
+                            Log.d(TAG, "email" + email + "facebook gender" + gender + "birthday" + birthday);
 
                             url = "https://graph.facebook.com/" + fbUserID + "/picture?type=large";
 //                            disconnectFromFacebook();
@@ -435,7 +519,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onResponse(JSONObject response) {
         progressDialogHelper.hideProgressDialog();
-        if (validateResponse(response)){
+        if (validateResponse(response)) {
             if (whichService.equalsIgnoreCase("mobile")) {
                 Intent i = new Intent(getApplicationContext(), NumberVerificationActivity.class);
                 startActivity(i);

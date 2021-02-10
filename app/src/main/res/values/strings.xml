@@ -13,8 +13,12 @@
     <string name="empty" />
     <string name="error_no_net">No internet access. Please check your connection and try again.</string>
     <string name="error_occurred">Failed to connect to the server. Please try again.</string>
+    <string name="error_name">Name is required for registration</string>
     <string name="error_number">Mobile number is required for sending otp</string>
+    <string name="error_email">Enter a valid Email address</string>
+    <string name="error_password">Enter a valid Password</string>
     <string name="error_number_min">Mobile number must be 10 digits</string>
+    <string name="error_password_min">Password number must be at least 6 digits</string>
 
     <string name="wl_note">Welcome back, you’ve been missed!</string>
     <string name="mobile">Mobile Number</string>
@@ -58,6 +62,11 @@
     <string name="drawer_close">Drawer close</string>
     <string name="sign_out">Sign out</string>
     <string name="sign_out_alert">Do you really want to signout?</string>
+    <string name="category">Category</string>
+    <string name="best_selling">Best Selling</string>
+    <string name="new_arrivals">New Arrivals</string>
+    <string name="recently_viewed">Recently Viewed</string>
+    <string name="see_all">See All</string>
 
 
     <!-- Side Menu -->

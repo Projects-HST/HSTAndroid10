@@ -15,6 +15,7 @@
     <color name="color_primary_dark">#5F0311</color>
     <color name="grey">#676870</color>
     <color name="lite_grey">#BBBBBB</color>
+    <color name="foreground_grey">#41020202</color>
     <color name="background_grey">#F4F3F4</color>
     <color name="lite_blue">#4285F4</color>
     <color name="blue">#4267B2</color>

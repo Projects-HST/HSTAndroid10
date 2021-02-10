@@ -14,17 +14,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
@@ -56,7 +53,7 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
     private static final String TAG = NumberVerificationActivity.class.getName();
 
     private CustomOtpEditText otpEditText;
-    private TextView tvResendOTP, tvCountDown;
+    private TextView tvResendOTP, tvCountDown, tvNumber;
     private Button btnConfirm;
     private TextView btnChangeNumber;
     private String mobileNo;
@@ -83,6 +80,8 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
 
         mobileNo = PreferenceStorage.getMobileNo(getApplicationContext());
         otpEditText = (CustomOtpEditText) findViewById(R.id.otp_view);
+        tvNumber = (TextView) findViewById(R.id.number);
+        tvNumber.setText(mobileNo);
         tvResendOTP = (TextView) findViewById(R.id.resend);
         tvResendOTP.setOnClickListener(this);
         btnConfirm = (Button) findViewById(R.id.sendcode);
@@ -124,7 +123,7 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
             }
         });
 
-        countDownTimers();
+//        countDownTimers();
     }
 
     void countDownTimers() {
@@ -135,8 +134,8 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
                 int seconds = (int) (millisUntilFinished / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
-                tvCountDown.setText("Resend in " + String.format("%02d", minutes)
-                        + ":" + String.format("%02d", seconds) + " seconds");
+//                tvCountDown.setText("Resend in " + String.format("%02d", minutes)
+//                        + ":" + String.format("%02d", seconds) + " seconds");
             }
 
             public void onFinish() {
@@ -168,8 +167,8 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 checkVerify = "Resend";
-                                countDownTimers();
-                                tvCountDown.setVisibility(View.VISIBLE);
+//                                countDownTimers();
+//                                tvCountDown.setVisibility(View.VISIBLE);
                                 JSONObject jsonObject = new JSONObject();
                                 try {
 
@@ -212,7 +211,7 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
                     }
 
                     progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
-                    String url = OSAConstants.BUILD_URL + OSAConstants.USER_LOGIN;
+                    String url = OSAConstants.BUILD_URL + OSAConstants.NUMBER_LOGIN;
                     serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
                 } else {
                     
@@ -273,27 +272,19 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
 //                    Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
                     JSONObject data = response.getJSONObject("userData");
 
-                    String userId = data.getString("user_master_id");
-                    String fullName = data.getString("full_name");
+                    String userId = data.getString("customer_id");
+                    String fullName = data.getString("first_name");
                     String gender = data.getString("gender");
-                    String mobileVerify = data.getString("mobile_verify");
-                    String phoneNo = data.getString("phone_no");
-                    String profilePic = data.getString("profile_pic");
+                    String profilePic = data.getString("profile_picture");
                     String email = data.getString("email");
-                    String emailVerifyStatus = data.getString("email_verify");
-                    String userType = data.getString("user_type");
 
                     PreferenceStorage.saveUserId(getApplicationContext(), userId);
-//                    PreferenceStorage.saveName(getApplicationContext(), fullName);
-//                    PreferenceStorage.saveGender(getApplicationContext(), gender);
-////                    PreferenceStorage.saveAddress(getApplicationContext(), address);
-//                    PreferenceStorage.saveProfilePic(getApplicationContext(), profilePic);
-//                    PreferenceStorage.saveEmail(getApplicationContext(), email);
-//                    PreferenceStorage.saveEmailVerify(getApplicationContext(), emailVerifyStatus);
-//                    PreferenceStorage.saveUserType(getApplicationContext(), userType);
+                    PreferenceStorage.saveName(getApplicationContext(), fullName);
+                    PreferenceStorage.saveGender(getApplicationContext(), gender);
+                    PreferenceStorage.saveProfilePic(getApplicationContext(), profilePic);
+                    PreferenceStorage.saveEmail(getApplicationContext(), email);
 
-//                    PreferenceStorage.saveUserId(getApplicationContext(), userId);
-//                    PreferenceStorage.saveCheckFirstTimeProfile(getApplicationContext(), "new");
+                    PreferenceStorage.saveUserId(getApplicationContext(), userId);
                     Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 ////                    homeIntent.putExtra("profile_state", "new");
@@ -357,10 +348,10 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
         checkVerify = "verified";
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put(OSAConstants.PARAMS_MOBILE_NUMBER, PreferenceStorage.getUserId(getApplicationContext()));
-            jsonObject.put(OSAConstants.PARAMS_OTP, PreferenceStorage.getMobileNo(getApplicationContext()));
-            jsonObject.put(OSAConstants.PARAMS_GCM_KEY, otp);
-            jsonObject.put(OSAConstants.PARAMS_MOBILE_TYPE, PreferenceStorage.getGCM(getApplicationContext()));
+            jsonObject.put(OSAConstants.PARAMS_MOBILE_NUMBER, PreferenceStorage.getMobileNo(getApplicationContext()));
+            jsonObject.put(OSAConstants.PARAMS_OTP, otp);
+            jsonObject.put(OSAConstants.PARAMS_GCM_KEY, PreferenceStorage.getGCM(getApplicationContext()));
+            jsonObject.put(OSAConstants.PARAMS_MOBILE_TYPE, "1");
             jsonObject.put(OSAConstants.PARAMS_LOGIN_TYPE, "Mobile");
             jsonObject.put(OSAConstants.PARAMS_LOGIN_PORTAL, "App");
 
@@ -369,7 +360,7 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
         }
 
         progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
-        String url = OSAConstants.BUILD_URL + OSAConstants.USER_LOGIN;
+        String url = OSAConstants.BUILD_URL + OSAConstants.NUMBER_LOGIN;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 

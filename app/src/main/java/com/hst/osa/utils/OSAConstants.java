@@ -12,7 +12,11 @@ public class OSAConstants {
 
     public static final String MOBILE_VERIFY = "login_mobile/";
 
-    public static final String USER_LOGIN = "login_mobileotp/";
+    public static final String NUMBER_LOGIN = "login_mobileotp/";
+
+    public static final String EMAIL_LOGIN = "login/";
+
+    public static final String DASHBOARD = "home_page/";
 
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
@@ -22,6 +26,8 @@ public class OSAConstants {
     public static final String PARAMS_MOBILE_NUMBER = "mobile_number";
     public static final String PARAMS_OTP = "OTP";
     public static final String PARAMS_LOGIN_PORTAL = "login_portal";
+    public static final String PARAMS_EMAIL = "email";
+    public static final String PARAMS_PASSWORD = "password";
 //    mobile_number,OTP,mob_key,mobile_type,login_type(FB/Gplus/Mobile/Email),login_portal(Web/App)
 
     //      Login mode constants
@@ -54,6 +60,9 @@ public class OSAConstants {
 
     //    USER DATA
     public static String KEY_USER_ID = "user_id";
+    public static String KEY_NAME = "name";
+    public static String KEY_GENDER = "gender";
+    public static String KEY_EMAIL = "email";
     public static String KEY_USER_PROFILE_PIC = "profile_pic";
     public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";

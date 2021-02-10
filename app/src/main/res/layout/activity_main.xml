@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:windowLightStatusBar="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:windowLightStatusBar="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,45 +17,40 @@
             style="@style/ToolBarStyle.Event"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:gravity="center_vertical"
             android:background="@drawable/gradient_bg"
+            android:gravity="center_vertical"
             android:minHeight="@dimen/abc_action_bar_default_height_material"
             android:theme="@style/ThemeOverlay.MyApp.ActionBar" />
 
         <RelativeLayout
             android:id="@+id/search"
             android:layout_width="match_parent"
-            android:background="@color/background_grey"
-            android:layout_height="80dp">
+            android:layout_height="80dp"
+            android:background="@color/background_grey">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/gradient_bg"/>
+                android:background="@drawable/gradient_bg" />
 
             <androidx.appcompat.widget.SearchView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:iconifiedByDefault="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/btn_oval_white"/>
+                android:clickable="true"
+                android:background="@drawable/btn_oval_white"
+                app:iconifiedByDefault="true" />
 
         </RelativeLayout>
-
-        <!--        <include-->
-        <!--            android:id="@+id/dashboard_layout"-->
-        <!--            layout="@layout/fragment_dashboard"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent" />-->
 
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_grey"
-            android:layout_below="@+id/activity_toolbar"/>
+            android:layout_below="@+id/activity_toolbar"
+            android:background="@color/background_grey" />
 
     </LinearLayout>
 

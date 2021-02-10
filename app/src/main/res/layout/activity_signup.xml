@@ -52,7 +52,7 @@
                         android:gravity="center"
                         android:text="@string/create_note"
                         android:textColor="@color/text_black"
-                        android:textSize="18sp" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                         android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/name_txt_box"
+                            android:id="@+id/ti_name"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                             app:hintTextColor="@color/text_black">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/txt_edt_box_1"
+                                android:id="@+id/txt_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textEmailAddress"
@@ -94,7 +94,7 @@
 
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/mail_txt_box"
+                            android:id="@+id/ti_email"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                             app:hintTextColor="@color/text_black">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/txt_edt_box_2"
+                                android:id="@+id/txt_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textEmailAddress"
@@ -115,7 +115,7 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/mobile_txt_box"
+                            android:id="@+id/ti_mobile_number"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -123,20 +123,23 @@
                             android:layout_marginBottom="10dp"
                             android:hint="@string/mobile"
                             app:boxStrokeColor="@color/lite_grey"
-                            app:hintTextColor="@color/text_black">
+                            app:hintTextColor="@color/text_black"
+                            app:prefixText="+91">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/txt_edt_box_3"
+                                android:id="@+id/txt_mobile_number"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="textEmailAddress"
-                                android:maxLength="30"
+                                android:inputType="number"
+                                android:maxLength="10"
+                                android:padding="10dp"
                                 android:textColor="@color/grey"
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
+
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/signin_txt_box"
+                            android:id="@+id/ti_password"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -148,10 +151,10 @@
                             app:hintTextColor="@color/text_black">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/txt_edt_box"
+                                android:id="@+id/txt_password"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
+                                android:inputType="textPassword"
                                 android:maxLength="30"
                                 android:textColor="@color/grey"
                                 android:textSize="14sp" />
@@ -159,7 +162,7 @@
 
 
                         <Button
-                            android:id="@+id/btn_login"
+                            android:id="@+id/btn_signup"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="20dp"

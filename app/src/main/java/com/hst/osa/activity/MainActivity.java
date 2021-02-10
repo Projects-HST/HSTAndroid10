@@ -17,23 +17,27 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hst.osa.R;
+import com.hst.osa.fragment.DashboardFragment;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private TextView name, area;
+    private LinearLayout sideDash, sideProfile, sideCat, sideWish, sideOrder, sideWallet, sideAddress, sideSettings, sideLogout;
+    private TextView name, mailId;
     private boolean doubleBackToExitPressedOnce = false;
-    private CardView profilePic;
+    private ImageView profilePic;
     NavigationView navigationView;
     String page = "";
 
@@ -50,78 +54,48 @@ public class MainActivity extends AppCompatActivity {
     private void initializeIDs() {
 
         navigationView = findViewById(R.id.nav_view);
-        profilePic = navigationView.getHeaderView(0).findViewById(R.id.imageView);
+        profilePic = navigationView.getHeaderView(0).findViewById(R.id.user_img);
         name = navigationView.getHeaderView(0).findViewById(R.id.full_name);
-        area = navigationView.getHeaderView(0).findViewById(R.id.area);
-
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //What to do on back clicked
-                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(i);
-            }
-        });
-
-        if (OSAValidator.checkNullString(PreferenceStorage.getProfilePic(this))) {
-//            Picasso.get().load(PreferenceStorage.getProfilePic(this)).into(profilePic);
+        mailId = navigationView.getHeaderView(0).findViewById(R.id.area);
+        if(PreferenceStorage.getName(this).equalsIgnoreCase("") || PreferenceStorage.getName(this).isEmpty()) {
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //What to do on back clicked
+                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(i);
+                }
+            });
         } else {
-//            profilePic.setImageResource(R.drawable.ic_profile);
+            name.setText(PreferenceStorage.getName(this));
+            mailId.setText(PreferenceStorage.getEmail(this));
         }
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        if (OSAValidator.checkNullString(PreferenceStorage.getProfilePic(this))&&(!PreferenceStorage.getProfilePic(this).isEmpty())) {
+            Picasso.get().load(PreferenceStorage.getProfilePic(this)).into(profilePic);
+        } else {
+            profilePic.setImageResource(R.drawable.ic_profile);
+        }
 
-            // This method will trigger on item Click of navigation menu
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
+        sideDash = navigationView.getHeaderView(0).findViewById(R.id.side_dashboard);
+        sideProfile = navigationView.getHeaderView(0).findViewById(R.id.side_profile);
+        sideCat = navigationView.getHeaderView(0).findViewById(R.id.side_category);
+        sideOrder = navigationView.getHeaderView(0).findViewById(R.id.side_order_history);
+        sideWallet = navigationView.getHeaderView(0).findViewById(R.id.side_wallet);
+        sideAddress = navigationView.getHeaderView(0).findViewById(R.id.side_address);
+        sideSettings = navigationView.getHeaderView(0).findViewById(R.id.side_settings);
+        sideLogout = navigationView.getHeaderView(0).findViewById(R.id.side_logout);
 
-                    case R.id.nav_dash:
-//                        changePage(0);
-                        break;
-                    case R.id.nav_profile:
-//                        showItems();
-                        break;
-                    case R.id.nav_category:
-//                        changePage(1);
-                        break;
-                    case R.id.nav_wishlist:
-//                        changePage(2);
-                        break;
-                    case R.id.nav_order:
-//                        changePage(3);
-                        break;
-                    case R.id.nav_wallet:
-//                        changePage(4);
-                        break;
-                    case R.id.nav_address:
-//                        changePage(5);
-                        break;
-                    case R.id.nav_settings:
-//                        changePage(6);
-                        break;
-                    case R.id.nav_logout:
-                        logout();
-                        break;
-                }
-                return true;
-            }
-        });
-//        if (page.equalsIgnoreCase("settings")) {
-//            changePage(6);
-//            navigationView.getMenu().getItem(7).setChecked(true);
-//        } else {
-//            changePage(0);
-//            navigationView.getMenu().getItem(0).setChecked(true);
-//        }
+        sideDash.setOnClickListener(this);
+        sideProfile.setOnClickListener(this);
+        sideCat.setOnClickListener(this);
+        sideOrder.setOnClickListener(this);
+        sideWallet.setOnClickListener(this);
+        sideAddress.setOnClickListener(this);
+        sideSettings.setOnClickListener(this);
+        sideLogout.setOnClickListener(this);
 
-//        if (PreferenceStorage.getUserRole(this).equalsIgnoreCase("1")) {
-//            navigationView.getMenu().getItem(5).setVisible(true);
-//        } else {
-//            navigationView.getMenu().getItem(5).setVisible(false);
-//        }
-
-//        callGetSubCategoryService();
+        changePage(0);
 
     }
 
@@ -151,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
         Fragment newFragment = null;
 
         if (position == 0) {
-            toolbar.setTitle(getString(R.string.side_menu_dash));
+//            toolbar.setTitle(getString(R.string.side_menu_dash));
             mDrawerLayout.closeDrawers();
-//            newFragment = new DashboardFragment();
+            newFragment = new DashboardFragment();
         } else if (position == 1) {
 //            newFragment = new ConstituentFragment();
 //            toolbar.setTitle(getString(R.string.constituent_title));
@@ -263,4 +237,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        if (view == sideDash) {
+            changePage(0);
+        }if (view == sideProfile) {
+
+        }if (view == sideCat) {
+
+        }if (view == sideOrder) {
+
+        }if (view == sideWallet) {
+
+        }if (view == sideAddress) {
+
+        }if (view == sideSettings) {
+
+        }if (view == sideLogout) {
+            logout();
+        }
+    }
 }
