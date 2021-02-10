@@ -17,6 +17,7 @@ import android.widget.ViewFlipper;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,10 +25,14 @@ import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.adapter.AdvertisementListAdapter;
 import com.hst.osa.adapter.CategoryHorizontalListAdapter;
+import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.NewArrivalsListAdapter;
 import com.hst.osa.bean.support.Advertisement;
 import com.hst.osa.bean.support.AdvertisementList;
 import com.hst.osa.bean.support.Category;
 import com.hst.osa.bean.support.CategoryList;
+import com.hst.osa.bean.support.Product;
+import com.hst.osa.bean.support.ProductList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -46,7 +51,7 @@ import java.util.ArrayList;
 import static android.util.Log.d;
 
 
-public class DashboardFragment extends Fragment implements IServiceListener, DialogClickListener, CategoryHorizontalListAdapter.OnItemClickListener, AdvertisementListAdapter.OnItemClickListener {
+public class DashboardFragment extends Fragment implements IServiceListener, DialogClickListener, CategoryHorizontalListAdapter.OnItemClickListener, AdvertisementListAdapter.OnItemClickListener, BestSellingListAdapter.OnItemClickListener, NewArrivalsListAdapter.OnItemClickListener {
 
     private static final String TAG = DashboardFragment.class.getName();
     Context context;
@@ -66,6 +71,16 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
     Advertisement advertisement;
     AdvertisementList advertisementList;
     private RecyclerView recyclerViewAdvertisement;
+
+    private ArrayList<Product> productArrayList = new ArrayList<>();
+    Product product;
+    ProductList productList;
+    private RecyclerView recyclerViewPopularProduct;
+
+    private ArrayList<Product> productArrayList1 = new ArrayList<>();
+    Product product1;
+    ProductList productList1;
+    private RecyclerView recyclerViewNewArrivals;
 
     private Animation slide_in_left, slide_in_right, slide_out_left, slide_out_right;
     private View rootView;
@@ -99,7 +114,8 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
 
         recyclerViewCategory = (RecyclerView) rootView.findViewById(R.id.listView_categories);
         recyclerViewAdvertisement = (RecyclerView) rootView.findViewById(R.id.listView_ads);
-//        mRecyclerView1 = (RecyclerView) rootView.findViewById(R.id.listView_trends);
+        recyclerViewPopularProduct = (RecyclerView) rootView.findViewById(R.id.listView_best_selling);
+        recyclerViewNewArrivals = (RecyclerView) rootView.findViewById(R.id.listView_new_arrivals);
 //        layout_all = (LinearLayout) rootView.findViewById(R.id.layout_all);
 
 //      create animations
@@ -192,24 +208,36 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
                     recyclerViewAdvertisement.setLayoutManager(mLayoutManagerAds);
                     recyclerViewAdvertisement.setAdapter(advertisementListAdapter);
 
-                } else if (res.equalsIgnoreCase("trend")) {
+                    JSONObject popularObjData = response.getJSONObject("popular_product_list");
+                    productList = gson.fromJson(popularObjData.toString(), ProductList.class);
+                    productArrayList.add(0, productList.getProductArrayList().get(0));
+                    productArrayList.add(1, productList.getProductArrayList().get(1));
+                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
+                    GridLayoutManager  mLayoutManager = new GridLayoutManager(getActivity(), 4);
+                    mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                        @Override
+                        public int getSpanSize(int position) {
+                            if (adasd.getItemViewType(position) > 0) {
+                                return adasd.getItemViewType(position);
+                            } else {
+                                return 1;
+                            }
+                            //return 2;
+                        }
+                    });
+                    recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
+                    recyclerViewPopularProduct.setAdapter(adasd);
 
-//                    Gson gson = new Gson();
-//                    trendingServicesArrayList = gson.fromJson(response.toString(), TrendingServicesList.class);
-//                    if (trendingServicesArrayList.getserviceArrayList() != null && trendingServicesArrayList.getserviceArrayList().size() > 0) {
-//                        int totalCount = trendingServicesArrayList.getCount();
-////                    this.serviceHistoryArrayList.addAll(ongoingServiceList.getserviceArrayList());
-//                        boolean isLoadingForFirstTime = false;
-////                        updateListAdapter(serviceHistoryList.getFeedbackArrayList());
-//                        loadMembersList(trendingServicesArrayList.getserviceArrayList().size());
-//                    } else {
-//                        if (trendingArrayList != null) {
-//                            trendingArrayList.clear();
-////                            updateListAdapter(serviceHistoryList.getFeedbackArrayList());
-//                            loadMembersList(trendingServicesArrayList.getserviceArrayList().size());
-//                        }
-//                    }
-//                    loadMob();
+                    JSONObject newArrivalsObjData = response.getJSONObject("new_product");
+                    productList1 = gson.fromJson(newArrivalsObjData.toString(), ProductList.class);
+                    productArrayList1.add(0, productList1.getProductArrayList().get(0));
+                    productArrayList1.add(1, productList1.getProductArrayList().get(1));
+                    productArrayList1.add(2, productList1.getProductArrayList().get(2));
+                    NewArrivalsListAdapter newArrivalsListAdapter = new NewArrivalsListAdapter(productArrayList1, this);
+                    RecyclerView.LayoutManager mLayoutManagerNewArrivals = new LinearLayoutManager(getActivity());
+                    recyclerViewNewArrivals.setLayoutManager(mLayoutManagerNewArrivals);
+                    recyclerViewNewArrivals.setAdapter(newArrivalsListAdapter);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -97,5 +97,4 @@ public class Category implements Serializable {
         this.category_desc = category_desc;
     }
 
-
 }

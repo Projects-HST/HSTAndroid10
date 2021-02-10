@@ -36,19 +36,19 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txt"
-            android:layout_marginHorizontal="60dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/white_bg_button"
-            app:backgroundTint="null"
-            android:fontFamily="@font/regular"
-            android:text="@string/notify_return"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:drawableStart=""/>
+<!--        <Button-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/txt"-->
+<!--            android:layout_marginHorizontal="60dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:background="@drawable/white_bg_button"-->
+<!--            app:backgroundTint="@color/trans"-->
+<!--            android:fontFamily="@font/regular"-->
+<!--            android:text="@string/notify_return"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:drawableStart=""/>-->
 
     </RelativeLayout>
 

@@ -15,4 +15,10 @@
         <!-- Customize your theme here. -->
 <!--        <item name="windowActionBar">false</item>-->
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/golden</item>
+        <item name="colorControlActivated">@color/golden</item>
+    </style>
+
 </resources>
