@@ -79,5 +79,8 @@
     <string name="side_menu_address">Shipping Address</string>
     <string name="side_menu_settings">Settings</string>
     <string name="side_menu_logout">Logout</string>
+    <string name="notify_return">Return To Homepage</string>
+    <string name="notify">No Notifications Here</string>
+    <string name="clear">Clear all</string>
 
 </resources>
