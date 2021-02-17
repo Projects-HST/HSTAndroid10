@@ -91,31 +91,14 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
             holder.txtProductMRP.setText("₹" + product.getprod_mrp_price());
             holder.txtProductMRP.setPaintFlags(holder.txtProductMRP.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
+        holder.productRating.setRating(Float.parseFloat(product.getReview_average()));
+
 
         if (OSAValidator.checkNullString(product.getproduct_cover_img())) {
             Picasso.get().load(product.getproduct_cover_img()).into(holder.productBanner);
         } else {
 //            newsImage.setImageResource(R.drawable.news_banner);
         }
-    }
-
-    private String getserverdateformat(String dd) {
-        String serverFormatDate = "";
-        if (dd != null && dd != "") {
-
-            String date = dd;
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date testDate = null;
-            try {
-                testDate = formatter.parse(date);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
-            serverFormatDate = sdf.format(testDate);
-            System.out.println(".....Date..." + serverFormatDate);
-        }
-        return serverFormatDate;
     }
 
     @Override

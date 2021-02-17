@@ -17,11 +17,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CategoryHorizontalListAdapter extends RecyclerView.Adapter<CategoryHorizontalListAdapter.MyViewHolder> {
+public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.MyViewHolder> {
 
     private ArrayList<Category> categoryArrayList;
     Context context;
-    private OnItemClickListener onItemClickListener;
+    private CategoryListAdapter.OnItemClickListener onItemClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txtCategoryName;
@@ -47,7 +47,7 @@ public class CategoryHorizontalListAdapter extends RecyclerView.Adapter<Category
     }
 
 
-    public CategoryHorizontalListAdapter(ArrayList<Category> CategoryArrayList, OnItemClickListener onItemClickListener) {
+    public CategoryListAdapter(ArrayList<Category> CategoryArrayList, CategoryListAdapter.OnItemClickListener onItemClickListener) {
         this.categoryArrayList = CategoryArrayList;
         this.onItemClickListener = onItemClickListener;
     }
@@ -58,15 +58,15 @@ public class CategoryHorizontalListAdapter extends RecyclerView.Adapter<Category
 
 
     @Override
-    public CategoryHorizontalListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CategoryListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_horizontal_category, parent, false);
 
-        return new CategoryHorizontalListAdapter.MyViewHolder(itemView);
+        return new CategoryListAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(CategoryHorizontalListAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(CategoryListAdapter.MyViewHolder holder, int position) {
         Category category = categoryArrayList.get(position);
         holder.txtCategoryName.setText(category.getcategory_name());
 
@@ -82,4 +82,18 @@ public class CategoryHorizontalListAdapter extends RecyclerView.Adapter<Category
     public int getItemCount() {
         return categoryArrayList.size();
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        /*if ((position + 1) % 7 == 4 || (position + 1) % 7 == 0) {
+            return 2;
+        } else {
+            return 1;
+        }*/
+        if (categoryArrayList.get(position) != null || categoryArrayList.get(position).getSize() > 0)
+            return 2;
+        else
+            return 1;
+    }
+
 }

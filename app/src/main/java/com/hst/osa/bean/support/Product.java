@@ -63,6 +63,14 @@ public class Product implements Serializable {
     @Expose
     private String stocks_left;
 
+    @SerializedName("review_average")
+    @Expose
+    private String review_average;
+
+    @SerializedName("wishlisted")
+    @Expose
+    private String wishlisted;
+
     @SerializedName("size")
     @Expose
     private int size = 3;
@@ -261,6 +269,34 @@ public class Product implements Serializable {
      */
     public void setstocks_left(String stocks_left) {
         this.stocks_left = stocks_left;
+    }
+
+    /**
+     * @return The review_average
+     */
+    public String getReview_average() {
+        return review_average;
+    }
+
+    /**
+     * @param review_average The review_average
+     */
+    public void setReview_average(String review_average) {
+        this.review_average = review_average;
+    }
+
+    /**
+     * @return The wishlisted
+     */
+    public String getWishlisted() {
+        return wishlisted;
+    }
+
+    /**
+     * @param wishlisted The wishlisted
+     */
+    public void setWishlisted(String wishlisted) {
+        this.wishlisted = wishlisted;
     }
 
     public int getSize() {

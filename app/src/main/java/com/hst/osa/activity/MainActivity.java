@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hst.osa.R;
+import com.hst.osa.fragment.CategoryFragment;
 import com.hst.osa.fragment.DashboardFragment;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
@@ -125,35 +127,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fragment newFragment = null;
 
         if (position == 0) {
-//            toolbar.setTitle(getString(R.string.side_menu_dash));
+            toolbar.setTitle(getString(R.string.side_menu_dash_title));
             mDrawerLayout.closeDrawers();
             newFragment = new DashboardFragment();
         } else if (position == 1) {
-//            newFragment = new ConstituentFragment();
-//            toolbar.setTitle(getString(R.string.constituent_title));
-            mDrawerLayout.closeDrawers();
-        } else if (position == 2) {
-//            newFragment = new MeetingsFragment();
-//            toolbar.setTitle(getString(R.string.meeting));
-            mDrawerLayout.closeDrawers();
-        } else if (position == 3) {
-//            newFragment = new GrievanceFragment();
-//            toolbar.setTitle(getString(R.string.grievance_title));
-            mDrawerLayout.closeDrawers();
-        } else if (position == 4) {
-//            newFragment = new StaffFragment();
-//            toolbar.setTitle(getString(R.string.side_menu_staff));
-            mDrawerLayout.closeDrawers();
-        } else if (position == 5) {
-//            newFragment = new ReportFragment();
-//            toolbar.setTitle(getString(R.string.side_menu_report));
-            mDrawerLayout.closeDrawers();
-        } else if (position == 6) {
-//            newFragment = new SettingsFragment();
-//            toolbar.setTitle(getString(R.string.side_menu_settings));
+            newFragment = new CategoryFragment();
+            toolbar.setTitle(getString(R.string.side_menu_category));
             mDrawerLayout.closeDrawers();
         }
-
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragmentContainer, newFragment)
                 .commit();
@@ -216,10 +197,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                }
             }
         };
-//        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
         mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_hambugger);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayout.isDrawerVisible(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+            }
+        });
         // enable ActionBar app icon to behave as action to toggle nav drawer
     }
 
@@ -242,9 +232,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (view == sideDash) {
             changePage(0);
         }if (view == sideProfile) {
-
         }if (view == sideCat) {
-
+            changePage(1);
         }if (view == sideOrder) {
 
         }if (view == sideWallet) {

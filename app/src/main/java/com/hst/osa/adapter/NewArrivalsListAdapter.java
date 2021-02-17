@@ -88,6 +88,7 @@ public class NewArrivalsListAdapter extends RecyclerView.Adapter<NewArrivalsList
             holder.txtProductMRP.setText("₹" + product.getprod_mrp_price());
             holder.txtProductMRP.setPaintFlags(holder.txtProductMRP.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
+        holder.productRating.setRating(Float.parseFloat(product.getReview_average()));
 
         if (OSAValidator.checkNullString(product.getproduct_cover_img())) {
             Picasso.get().load(product.getproduct_cover_img()).into(holder.productBanner);

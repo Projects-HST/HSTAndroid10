@@ -1,23 +1,40 @@
 package com.hst.osa.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.adapter.AdvertisementListAdapter;
 import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.CategoryHorizontalListAdapter;
+import com.hst.osa.adapter.NewArrivalsListAdapter;
+import com.hst.osa.bean.support.Advertisement;
+import com.hst.osa.bean.support.AdvertisementList;
+import com.hst.osa.bean.support.Category;
+import com.hst.osa.bean.support.CategoryList;
 import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.ProductList;
 import com.hst.osa.helpers.AlertDialogHelper;
@@ -27,7 +44,9 @@ import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +54,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class CategoryFragment extends Fragment implements IServiceListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener{
+public class BestSellingFragment extends Fragment implements IServiceListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener{
 
     private static final String TAG = BestSellingFragment.class.getName();
     Context context;

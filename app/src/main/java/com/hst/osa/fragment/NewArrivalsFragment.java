@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class CategoryFragment extends Fragment implements IServiceListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener{
+public class NewArrivalsFragment extends Fragment implements IServiceListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener{
 
     private static final String TAG = BestSellingFragment.class.getName();
     Context context;
