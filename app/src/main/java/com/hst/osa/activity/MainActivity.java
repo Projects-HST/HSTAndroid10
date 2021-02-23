@@ -27,11 +27,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.hst.osa.R;
 import com.hst.osa.fragment.CategoryFragment;
 import com.hst.osa.fragment.DashboardFragment;
+import com.hst.osa.interfaces.OnBackPressedListener;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnBackPressedListener {
 
     Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String page = "";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
@@ -101,26 +102,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onBackPressed() {
-        //Checking for fragment count on backstack
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else if (!doubleBackToExitPressedOnce) {
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
-        } else {
-            super.onBackPressed();
-            return;
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        //Checking for fragment count on backstack
+//        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//            getSupportFragmentManager().popBackStack();
+//        } else if (!doubleBackToExitPressedOnce) {
+//            this.doubleBackToExitPressedOnce = true;
+//            Toast.makeText(this, "Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
+//            new Handler().postDelayed(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    doubleBackToExitPressedOnce = false;
+//                }
+//            }, 2000);
+//        } else {
+//            super.onBackPressed();
+//            return;
+//        }
+//    }
 
     public void changePage(int position) {
 
@@ -226,6 +227,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Using in Base Fragment
+     */
+    public ActionBarDrawerToggle getToggle() {
+        return mDrawerToggle;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (fragment instanceof OnBackPressedListener) {
+            ((OnBackPressedListener) fragment).onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public void onClick(View view) {
@@ -233,7 +253,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             changePage(0);
         }if (view == sideProfile) {
         }if (view == sideCat) {
-            changePage(1);
+            Intent i = new Intent(this, CategoryActivity.class);
+            startActivity(i);
+//            changePage(1);
         }if (view == sideOrder) {
 
         }if (view == sideWallet) {

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.activity.CategoryActivity;
 import com.hst.osa.adapter.AdvertisementListAdapter;
 import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.BestSellingListAdapter;
@@ -320,9 +321,13 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
     @Override
     public void onClick(View view) {
         if (view == seeAllCategories) {
-            Fragment newFragment = null;
-            newFragment = new CategoryFragment();
-            replaceFragment(newFragment);
+//            Fragment newFragment = null;
+//            newFragment = new CategoryFragment();
+//            replaceFragment(newFragment);
+
+            Intent i = new Intent(getActivity(), CategoryActivity.class);
+            startActivity(i);
+
         } if (view == seeAllBestSelling) {
             Fragment newFragment = null;
             newFragment = new BestSellingFragment();
@@ -337,7 +342,7 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
     public void replaceFragment(Fragment someFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, someFragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("Dashboard");
         transaction.commit();
     }
 

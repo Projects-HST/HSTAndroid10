@@ -1,18 +1,18 @@
-package com.hst.osa.fragment;
+package com.hst.osa.activity;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -27,6 +27,7 @@ import com.hst.osa.bean.support.Category;
 import com.hst.osa.bean.support.CategoryList;
 import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.ProductList;
+import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class CategoryFragment extends BaseFragment implements IServiceListener, DialogClickListener, CategoryListAdapter.OnItemClickListener {
+public class CategoryActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, CategoryListAdapter.OnItemClickListener{
 
     private static final String TAG = BestSellingFragment.class.getName();
     Context context;
@@ -59,7 +60,6 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
     private RecyclerView recyclerViewCategory;
     private View rootView;
     private TextView itemCount;
-    private AppCompatActivity activity;
 
     public static BestSellingFragment newInstance(int position) {
         BestSellingFragment frag = new BestSellingFragment();
@@ -70,65 +70,32 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
+        setContentView(R.layout.activity_category);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        rootView = inflater.inflate(R.layout.fragment_category, container, false);
-        initiateServices();
-
-//        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.activity_toolbar);
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//        toolbar.setNavigationIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_left_arrow));
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Fragment newFragment = null;
-//                newFragment = new DashboardFragment();
-//                replaceFragment(newFragment);
-//            }
-//        });
-
-        activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setTitle(R.string.category);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_left_arrow);
-        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_left_arrow);
-
-
-        recyclerViewCategory = (RecyclerView) rootView.findViewById(R.id.listView_best_selling);
-        itemCount = (TextView) rootView.findViewById(R.id.item_count);
-        getDashboardServices();
-//        loadMob();
-        return rootView;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (activity.getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            if (item.getItemId() == R.id.home) {
-                Fragment newFragment = null;
-                newFragment = new DashboardFragment();
-                replaceFragment(newFragment);
-                return true;
-            } else {
-                return false;
+        Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_left_arrow));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
-        } else {
-            return false;
-        }
+        });
 
+        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_best_selling);
+        itemCount = (TextView) findViewById(R.id.item_count);
+        initiateServices();
+        getDashboardServices();
     }
+
 
     public void initiateServices() {
 
-        serviceHelper = new ServiceHelper(getActivity());
+        serviceHelper = new ServiceHelper(this);
         serviceHelper.setServiceListener(this);
-        progressDialogHelper = new ProgressDialogHelper(getActivity());
+        progressDialogHelper = new ProgressDialogHelper(this);
 
     }
 
@@ -145,7 +112,7 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
                             (status.equalsIgnoreCase("notRegistered")) || (status.equalsIgnoreCase("error")))) {
                         signInSuccess = false;
                         d(TAG, "Show error dialog");
-                        AlertDialogHelper.showSimpleAlertDialog(rootView.getContext(), msg);
+                        AlertDialogHelper.showSimpleAlertDialog(this, msg);
 
                     } else {
                         signInSuccess = true;
@@ -169,7 +136,7 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
                 categoryList = gson.fromJson(categoryObjData.toString(), CategoryList.class);
                 categoryArrayList.addAll(categoryList.getCategoryArrayList());
                 mAdapter = new CategoryListAdapter(categoryArrayList, this);
-                GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 4);
+                GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
                 mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                     @Override
                     public int getSpanSize(int position) {
@@ -220,7 +187,7 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 //        } else {
 //            category = categoryArrayList.get(position);
 //        }
-//        intent = new Intent(getActivity(), SubCategoryActivity.class);
+//        intent = new Intent(this, SubCategoryActivity.class);
 //        intent.putExtra("cat", category);
 //        startActivity(intent);
 
@@ -228,9 +195,9 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 
     private void getDashboardServices() {
         JSONObject jsonObject = new JSONObject();
-        String id = PreferenceStorage.getUserId(getActivity());
+        String id = PreferenceStorage.getUserId(this);
         try {
-//            jsonObject.put(SkilExConstants.USER_MASTER_ID, PreferenceStorage.getUserId(getActivity()));
+//            jsonObject.put(SkilExConstants.USER_MASTER_ID, PreferenceStorage.getUserId(this));
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -239,26 +206,6 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 //        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
         String url = OSAConstants.BUILD_URL + OSAConstants.DASHBOARD;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
-    }
-
-    public void replaceFragment(Fragment someFragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, someFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        activity.getSupportActionBar().setTitle(R.string.category);
-        Fragment newFragment = null;
-        newFragment = new DashboardFragment();
-        replaceFragment(newFragment);
     }
 
 }
