@@ -12,12 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
-import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.NewArrivalsListAdapter;
 import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.ProductList;
 import com.hst.osa.helpers.AlertDialogHelper;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class NewArrivalsFragment extends Fragment implements IServiceListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener{
+public class NewArrivalsFragment extends Fragment implements IServiceListener, DialogClickListener, NewArrivalsListAdapter.OnItemClickListener{
 
     private static final String TAG = BestSellingFragment.class.getName();
     Context context;
@@ -48,7 +48,7 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
     private ArrayList<Product> productArrayList = new ArrayList<>();
     Product product;
     ProductList productList;
-    private RecyclerView recyclerViewPopularProduct;
+    private RecyclerView recyclerViewNewArrivals;
     private View rootView;
     private TextView itemCount;
 
@@ -84,7 +84,7 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
 //            }
 //        });
 
-        recyclerViewPopularProduct = (RecyclerView) rootView.findViewById(R.id.listView_best_selling);
+        recyclerViewNewArrivals = (RecyclerView) rootView.findViewById(R.id.listView_best_selling);
         itemCount = (TextView) rootView.findViewById(R.id.item_count);
         getDashboardServices();
 //        loadMob();
@@ -132,24 +132,13 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
             try {
                 Gson gson = new Gson();
 
-                JSONObject popularObjData = response.getJSONObject("popular_product_list");
+                JSONObject popularObjData = response.getJSONObject("new_product");
                 productList = gson.fromJson(popularObjData.toString(), ProductList.class);
                 productArrayList.addAll(productList.getProductArrayList());
-                BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
-                GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 4);
-                mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        if (adasd.getItemViewType(position) > 0) {
-                            return adasd.getItemViewType(position);
-                        } else {
-                            return 1;
-                        }
-                        //return 2;
-                    }
-                });
-                recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
-                recyclerViewPopularProduct.setAdapter(adasd);
+                NewArrivalsListAdapter newArrivalsListAdapter = new NewArrivalsListAdapter(productArrayList, this);
+                RecyclerView.LayoutManager mLayoutManagerNewArrivals = new LinearLayoutManager(getActivity());
+                recyclerViewNewArrivals.setLayoutManager(mLayoutManagerNewArrivals);
+                recyclerViewNewArrivals.setAdapter(newArrivalsListAdapter);
                 itemCount.setText(productArrayList.size() + " Items");
             } catch (JSONException e) {
                 e.printStackTrace();
