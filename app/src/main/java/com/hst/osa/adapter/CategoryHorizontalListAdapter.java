@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
@@ -62,7 +60,7 @@ public class CategoryHorizontalListAdapter extends RecyclerView.Adapter<Category
     @Override
     public CategoryHorizontalListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_category, parent, false);
+                .inflate(R.layout.list_item_horizontal_category, parent, false);
 
         return new CategoryHorizontalListAdapter.MyViewHolder(itemView);
     }

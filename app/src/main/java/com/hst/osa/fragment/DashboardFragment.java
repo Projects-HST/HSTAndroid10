@@ -13,21 +13,29 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.activity.CategoryActivity;
 import com.hst.osa.adapter.AdvertisementListAdapter;
 import com.hst.osa.adapter.CategoryHorizontalListAdapter;
+import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.NewArrivalsListAdapter;
 import com.hst.osa.bean.support.Advertisement;
 import com.hst.osa.bean.support.AdvertisementList;
 import com.hst.osa.bean.support.Category;
 import com.hst.osa.bean.support.CategoryList;
+import com.hst.osa.bean.support.Product;
+import com.hst.osa.bean.support.ProductList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -46,7 +54,7 @@ import java.util.ArrayList;
 import static android.util.Log.d;
 
 
-public class DashboardFragment extends Fragment implements IServiceListener, DialogClickListener, CategoryHorizontalListAdapter.OnItemClickListener, AdvertisementListAdapter.OnItemClickListener {
+public class DashboardFragment extends Fragment implements IServiceListener, DialogClickListener, CategoryHorizontalListAdapter.OnItemClickListener, AdvertisementListAdapter.OnItemClickListener, BestSellingListAdapter.OnItemClickListener, NewArrivalsListAdapter.OnItemClickListener, View.OnClickListener {
 
     private static final String TAG = DashboardFragment.class.getName();
     Context context;
@@ -67,6 +75,16 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
     AdvertisementList advertisementList;
     private RecyclerView recyclerViewAdvertisement;
 
+    private ArrayList<Product> productArrayList = new ArrayList<>();
+    Product product;
+    ProductList productList;
+    private RecyclerView recyclerViewPopularProduct;
+
+    private ArrayList<Product> productArrayList1 = new ArrayList<>();
+    Product product1;
+    ProductList productList1;
+    private RecyclerView recyclerViewNewArrivals;
+
     private Animation slide_in_left, slide_in_right, slide_out_left, slide_out_right;
     private View rootView;
     private ViewFlipper viewFlipper;
@@ -76,6 +94,7 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
     private Intent intent;
     private LinearLayout layout_all;
 
+    private TextView seeAllCategories, seeAllBestSelling, seeAllNewArrivals;
 
     public static DashboardFragment newInstance(int position) {
         DashboardFragment frag = new DashboardFragment();
@@ -99,8 +118,16 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
 
         recyclerViewCategory = (RecyclerView) rootView.findViewById(R.id.listView_categories);
         recyclerViewAdvertisement = (RecyclerView) rootView.findViewById(R.id.listView_ads);
-//        mRecyclerView1 = (RecyclerView) rootView.findViewById(R.id.listView_trends);
-//        layout_all = (LinearLayout) rootView.findViewById(R.id.layout_all);
+        recyclerViewPopularProduct = (RecyclerView) rootView.findViewById(R.id.listView_best_selling);
+        recyclerViewNewArrivals = (RecyclerView) rootView.findViewById(R.id.listView_new_arrivals);
+
+        seeAllCategories = (TextView) rootView.findViewById(R.id.see_all_category);
+        seeAllBestSelling = (TextView) rootView.findViewById(R.id.see_all_best_selling);
+        seeAllNewArrivals = (TextView) rootView.findViewById(R.id.see_all_new_arrivals);
+
+        seeAllCategories.setOnClickListener(this);
+        seeAllBestSelling.setOnClickListener(this);
+        seeAllNewArrivals.setOnClickListener(this);
 
 //      create animations
         slide_in_left = AnimationUtils.loadAnimation(getActivity(), R.anim.in_from_left);
@@ -176,7 +203,9 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
 
                     JSONObject categoryObjData = response.getJSONObject("cat_list");
                     categoryList = gson.fromJson(categoryObjData.toString(), CategoryList.class);
-                    categoryArrayList.addAll(categoryList.getCategoryArrayList());
+                    for (int a = 0; a <=3; a++) {
+                        categoryArrayList.add(a, categoryList.getCategoryArrayList().get(a));
+                    }
                     mAdapter = new CategoryHorizontalListAdapter(categoryArrayList, this);
 //                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -192,24 +221,37 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
                     recyclerViewAdvertisement.setLayoutManager(mLayoutManagerAds);
                     recyclerViewAdvertisement.setAdapter(advertisementListAdapter);
 
-                } else if (res.equalsIgnoreCase("trend")) {
+                    JSONObject popularObjData = response.getJSONObject("popular_product_list");
+                    productList = gson.fromJson(popularObjData.toString(), ProductList.class);
+                    for (int b = 0; b <=1; b++) {
+                        productArrayList.add(b, productList.getProductArrayList().get(b));
+                    }
+                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
+                    GridLayoutManager  mLayoutManager = new GridLayoutManager(getActivity(), 4);
+                    mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                        @Override
+                        public int getSpanSize(int position) {
+                            if (adasd.getItemViewType(position) > 0) {
+                                return adasd.getItemViewType(position);
+                            } else {
+                                return 1;
+                            }
+                            //return 2;
+                        }
+                    });
+                    recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
+                    recyclerViewPopularProduct.setAdapter(adasd);
 
-//                    Gson gson = new Gson();
-//                    trendingServicesArrayList = gson.fromJson(response.toString(), TrendingServicesList.class);
-//                    if (trendingServicesArrayList.getserviceArrayList() != null && trendingServicesArrayList.getserviceArrayList().size() > 0) {
-//                        int totalCount = trendingServicesArrayList.getCount();
-////                    this.serviceHistoryArrayList.addAll(ongoingServiceList.getserviceArrayList());
-//                        boolean isLoadingForFirstTime = false;
-////                        updateListAdapter(serviceHistoryList.getFeedbackArrayList());
-//                        loadMembersList(trendingServicesArrayList.getserviceArrayList().size());
-//                    } else {
-//                        if (trendingArrayList != null) {
-//                            trendingArrayList.clear();
-////                            updateListAdapter(serviceHistoryList.getFeedbackArrayList());
-//                            loadMembersList(trendingServicesArrayList.getserviceArrayList().size());
-//                        }
-//                    }
-//                    loadMob();
+                    JSONObject newArrivalsObjData = response.getJSONObject("new_product");
+                    productList1 = gson.fromJson(newArrivalsObjData.toString(), ProductList.class);
+                    for (int c = 0; c <=2; c++) {
+                        productArrayList1.add(c, productList1.getProductArrayList().get(c));
+                    }
+                    NewArrivalsListAdapter newArrivalsListAdapter = new NewArrivalsListAdapter(productArrayList1, this);
+                    RecyclerView.LayoutManager mLayoutManagerNewArrivals = new LinearLayoutManager(getActivity());
+                    recyclerViewNewArrivals.setLayoutManager(mLayoutManagerNewArrivals);
+                    recyclerViewNewArrivals.setAdapter(newArrivalsListAdapter);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -275,4 +317,33 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
         String url = OSAConstants.BUILD_URL + OSAConstants.DASHBOARD;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
+
+    @Override
+    public void onClick(View view) {
+        if (view == seeAllCategories) {
+//            Fragment newFragment = null;
+//            newFragment = new CategoryFragment();
+//            replaceFragment(newFragment);
+
+            Intent i = new Intent(getActivity(), CategoryActivity.class);
+            startActivity(i);
+
+        } if (view == seeAllBestSelling) {
+            Fragment newFragment = null;
+            newFragment = new BestSellingFragment();
+            replaceFragment(newFragment);
+        } if (view == seeAllNewArrivals) {
+            Fragment newFragment = null;
+            newFragment = new NewArrivalsFragment();
+            replaceFragment(newFragment);
+        }
+    }
+
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, someFragment);
+        transaction.addToBackStack("Dashboard");
+        transaction.commit();
+    }
+
 }

@@ -27,6 +27,10 @@ public class Category implements Serializable {
     @Expose
     private String category_desc;
 
+    @SerializedName("size")
+    @Expose
+    private int size = 3;
+
     /**
      * @return The id
      */
@@ -97,5 +101,12 @@ public class Category implements Serializable {
         this.category_desc = category_desc;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 
 }

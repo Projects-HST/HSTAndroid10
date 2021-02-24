@@ -70,6 +70,7 @@
 
 
     <!-- Side Menu -->
+    <string name="side_menu_dash_title">Easy Shop</string>
     <string name="side_menu_dash">Dashboard</string>
     <string name="side_menu_profile">Edit Profile</string>
     <string name="side_menu_category">Category</string>

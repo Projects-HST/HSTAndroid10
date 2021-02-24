@@ -1,3 +1,5 @@
 package com.hst.osa.fragment;
 
-public class WishListFragment {}
+import androidx.fragment.app.Fragment;
+
+public class WishListFragment extends Fragment {}
