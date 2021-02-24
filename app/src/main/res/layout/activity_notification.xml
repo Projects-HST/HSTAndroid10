@@ -7,6 +7,7 @@
     tools:context=".activity.NotificationActivity">
 
     <RelativeLayout
+        android:id="@+id/nullNotify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -47,12 +48,12 @@
             android:fontFamily="@font/regular"
             android:text="@string/notify_return"
             android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:drawableStart=""/>
+            android:textAllCaps="false" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/notifyList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

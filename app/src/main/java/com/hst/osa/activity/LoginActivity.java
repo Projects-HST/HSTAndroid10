@@ -350,8 +350,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             String name = "" + account.getDisplayName();
-            String first = "" + account.getDisplayName();
-            String last = "" + account.getDisplayName();
+            String first = "" + account.getGivenName();
+            String last = "" + account.getFamilyName();
             String mail = "" + account.getEmail();
             String photoUrl = "" + account.getPhotoUrl();
 
