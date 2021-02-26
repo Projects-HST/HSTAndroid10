@@ -76,6 +76,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
 
+        <activity
+            android:name=".activity.ProductDetailActivity"
+            android:label="@string/category"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA" />
+
+        <activity
+            android:name=".activity.SubCategoryActivity"
+            android:label="@string/category"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

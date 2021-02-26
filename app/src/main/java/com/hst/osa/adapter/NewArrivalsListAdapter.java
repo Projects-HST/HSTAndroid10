@@ -48,7 +48,7 @@ public class NewArrivalsListAdapter extends RecyclerView.Adapter<NewArrivalsList
         @Override
         public void onClick(View v) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(v, getAdapterPosition());
+                onItemClickListener.onItemClickNewArrivals(v, getAdapterPosition());
             }
 //            else {
 //                onClickListener.onClick(Selecttick);
@@ -63,7 +63,7 @@ public class NewArrivalsListAdapter extends RecyclerView.Adapter<NewArrivalsList
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        public void onItemClickNewArrivals(View view, int position);
     }
 
 

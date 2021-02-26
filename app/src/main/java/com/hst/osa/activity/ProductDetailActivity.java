@@ -1,32 +1,31 @@
 package com.hst.osa.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
-import com.hst.osa.adapter.BestSellingListAdapter;
-import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.CategoryListAdapter;
-import com.hst.osa.bean.support.Category;
 import com.hst.osa.bean.support.CategoryList;
-import com.hst.osa.bean.support.Product;
-import com.hst.osa.bean.support.ProductList;
+import com.hst.osa.customview.AViewFlipper;
 import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
@@ -35,7 +34,9 @@ import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,38 +44,24 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class CategoryActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, CategoryListAdapter.OnItemClickListener{
+public class ProductDetailActivity extends AppCompatActivity implements IServiceListener, DialogClickListener {
 
-    private static final String TAG = BestSellingFragment.class.getName();
+    private static final String TAG = ProductDetailActivity.class.getName();
     Context context;
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
-    private Handler mHandler = new Handler();
-    int totalCount = 0, checkrun = 0;
-    protected boolean isLoadingForFirstTime = true;
+    private String productID;
+    AViewFlipper aViewFlipper;
 
-    private ArrayList<Category> categoryArrayList = new ArrayList<>();
-    Category category;
-    CategoryList categoryList;
-    private CategoryListAdapter mAdapter;
-    private RecyclerView recyclerViewCategory;
-    private View rootView;
-    private TextView itemCount;
-
-    public static BestSellingFragment newInstance(int position) {
-        BestSellingFragment frag = new BestSellingFragment();
-        Bundle b = new Bundle();
-        b.putInt("position", position);
-        frag.setArguments(b);
-        return frag;
-    }
+    private LinearLayout dotsLayout;
+    private TextView[] dots;
+    private ArrayList<String> imgUrl = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
-
-        Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
+        setContentView(R.layout.activity_product_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_left_arrow));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -84,12 +71,57 @@ public class CategoryActivity extends AppCompatActivity implements IServiceListe
             }
         });
 
-        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_best_selling);
-        itemCount = (TextView) findViewById(R.id.item_count);
+        productID = getIntent().getStringExtra("productObj");
+        aViewFlipper = findViewById(R.id.view_flipper);
+        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+
         initiateServices();
         getDashboardServices();
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        super.dispatchTouchEvent(event);
+        return gestureDetector.onTouchEvent(event);
+    }
+
+    GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+
+            float sensitvity = 100;
+            if (imgUrl.size() >= 1) {
+                if ((e1.getX() - e2.getX()) > sensitvity) {
+                    SwipeLeft();
+                } else if ((e2.getX() - e1.getX()) > sensitvity) {
+                    SwipeRight();
+                }
+            }
+            return true;
+        }
+    };
+
+    GestureDetector gestureDetector = new GestureDetector(simpleOnGestureListener);
+
+
+    private void SwipeLeft() {
+        aViewFlipper.setInAnimation(this, R.anim.in_from_right);
+        aViewFlipper.showNext();
+    }
+
+    private void SwipeRight() {
+        aViewFlipper.setInAnimation(this, R.anim.in_from_left);
+        aViewFlipper.showPrevious();
+    }
+
+    private void setImageInFlipr(String imgUrl) {
+        ImageView image = new ImageView(this);
+        Picasso.get().load(imgUrl).into(image);
+        image.setScaleType(ImageView.ScaleType.FIT_XY);
+        aViewFlipper.addView(image);
+    }
 
     public void initiateServices() {
 
@@ -131,26 +163,18 @@ public class CategoryActivity extends AppCompatActivity implements IServiceListe
         if (validateSignInResponse(response)) {
             try {
                 Gson gson = new Gson();
+//                JSONArray images = response.getJSONArray("image_result");
+//                if (imgUrl.size() >= 0) {
+//                    for (int i = 0; i < images.length(); i++) {
+//                        imgUrl.add(images.getJSONObject(i).getString("gallery_url"));
+//                    }
+//                    for (int a = 0; a < imgUrl.size(); a++) {
+//                        setImageInFlipr(imgUrl.get(a));
+//                    }
+//                }
+                JSONObject productDetails = response.getJSONObject("product_details").getJSONObject("product_details");
 
-                JSONObject categoryObjData = response.getJSONObject("cat_list");
-                categoryList = gson.fromJson(categoryObjData.toString(), CategoryList.class);
-                categoryArrayList.addAll(categoryList.getCategoryArrayList());
-                mAdapter = new CategoryListAdapter(categoryArrayList, this);
-                GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
-                mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        if (mAdapter.getItemViewType(position) > 0) {
-                            return mAdapter.getItemViewType(position);
-                        } else {
-                            return 1;
-                        }
-                        //return 2;
-                    }
-                });
-                recyclerViewCategory.setLayoutManager(mLayoutManager);
-                recyclerViewCategory.setAdapter(mAdapter);
-//                itemCount.setText(categoryArrayList.size() + " Items");
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -172,24 +196,6 @@ public class CategoryActivity extends AppCompatActivity implements IServiceListe
 
     @Override
     public void onAlertNegativeClicked(int tag) {
-
-    }
-
-    @Override
-    public void onItemClickCategory(View view, int position) {
-//        d(TAG, "onEvent list item click" + position);
-//        Category category = null;
-//        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
-//            d(TAG, "while searching");
-//            int actualindex = categoryListAdapter.getActualEventPos(position);
-//            d(TAG, "actual index" + actualindex);
-//            category = categoryArrayList.get(actualindex);
-//        } else {
-//            category = categoryArrayList.get(position);
-//        }
-//        intent = new Intent(this, SubCategoryActivity.class);
-//        intent.putExtra("cat", category);
-//        startActivity(intent);
 
     }
 

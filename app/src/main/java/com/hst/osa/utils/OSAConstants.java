@@ -2,7 +2,7 @@ package com.hst.osa.utils;
 
 public class OSAConstants {
 
-    public static final String BASE_URL = "http://happysanztech.com/";
+    public static final String BASE_URL = "https://happysanztech.com/";
 
     public static final String JOINT_URL = "shopping/";
 
@@ -17,6 +17,10 @@ public class OSAConstants {
     public static final String EMAIL_LOGIN = "login/";
 
     public static final String DASHBOARD = "home_page/";
+
+    public static final String SUB_CATEGORY_LIST = "sub_cat_list/";
+
+    public static final String PRODUCT_LIST = "sub_cat_list/";
 
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
