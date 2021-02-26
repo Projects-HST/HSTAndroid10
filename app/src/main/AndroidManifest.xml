@@ -43,33 +43,33 @@
             android:name=".activity.LoginActivity"
             android:label="@string/sign"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA"
+            android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.EmailLoginActivity"
             android:label="@string/sign"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.NumberVerificationActivity"
             android:label="@string/otp_page"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.PasswordActivity"
             android:label="@string/password"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.ForgotPassword"
             android:label="@string/reset"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.SignupActivity"
             android:label="@string/signUp"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
 
         <activity
             android:name=".activity.CategoryActivity"

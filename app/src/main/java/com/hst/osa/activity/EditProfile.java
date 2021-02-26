@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.hst.osa.R;
+
 public class EditProfile extends AppCompatActivity {
 
     @Override

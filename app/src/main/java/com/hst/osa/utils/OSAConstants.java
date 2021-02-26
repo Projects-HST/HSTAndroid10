@@ -2,7 +2,7 @@ package com.hst.osa.utils;
 
 public class OSAConstants {
 
-    public static final String BASE_URL = "http://happysanz.in/";
+    public static final String BASE_URL = "http://happysanztech.com/";
 
     public static final String JOINT_URL = "shopping/";
 
