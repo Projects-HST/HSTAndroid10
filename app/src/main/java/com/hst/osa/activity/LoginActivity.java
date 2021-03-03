@@ -301,7 +301,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String first = "" + account.getGivenName();
         String last = "" + account.getFamilyName();
         String mail = "" + account.getEmail();
+        String ggId = "" + account.getId();
         String photoUrl = "" + account.getPhotoUrl();
+
+        Log.d( TAG, "id" + ggId);
         PreferenceStorage.saveSocialNetworkProfilePic(getApplicationContext(), photoUrl);
 
         String GCMKey = PreferenceStorage.getGCM(this);
@@ -353,12 +356,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String first = "" + account.getGivenName();
             String last = "" + account.getFamilyName();
             String mail = "" + account.getEmail();
+            String googleId = "" + account.getId();
             String photoUrl = "" + account.getPhotoUrl();
 
-            Log.d(TAG, "name" + name);
+            Log.d(TAG, "name" + name + "id" + googleId);
             PreferenceStorage.saveSocialNetworkProfilePic(getApplicationContext(), photoUrl);
 
             String GCMKey = PreferenceStorage.getGCM(this);
+            whichService = "google";
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put(OSAConstants.PARAMS_EMAIL, mail);

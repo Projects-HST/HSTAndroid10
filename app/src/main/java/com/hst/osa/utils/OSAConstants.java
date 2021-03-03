@@ -18,6 +18,8 @@ public class OSAConstants {
 
     public static final String DASHBOARD = "home_page/";
 
+    public static final String SUBCATEGORY = "sub_cat_list/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
@@ -67,6 +69,7 @@ public class OSAConstants {
     public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";
     public static String VERSION_VALUE = "1";
+    public static String KEY_CAT_ID = "cat_id";
 
     public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
 

@@ -1,6 +1,7 @@
 package com.hst.osa.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -177,20 +178,19 @@ public class CategoryActivity extends AppCompatActivity implements IServiceListe
 
     @Override
     public void onItemClick(View view, int position) {
-//        d(TAG, "onEvent list item click" + position);
-//        Category category = null;
-//        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
-//            d(TAG, "while searching");
-//            int actualindex = categoryListAdapter.getActualEventPos(position);
-//            d(TAG, "actual index" + actualindex);
-//            category = categoryArrayList.get(actualindex);
-//        } else {
-//            category = categoryArrayList.get(position);
-//        }
-//        intent = new Intent(this, SubCategoryActivity.class);
-//        intent.putExtra("cat", category);
-//        startActivity(intent);
-
+        d(TAG, "onEvent list item click" + position);
+        Category category = null;
+        if (mAdapter != null) {
+            d(TAG, "while searching");
+            int actualindex = mAdapter.getItemViewType(position);
+            d(TAG, "actual index" + actualindex);
+            category = categoryArrayList.get(position);
+        } else {
+            category = categoryArrayList.get(position);
+        }
+        Intent intent = new Intent(this, SubCategoryActivity.class);
+        intent.putExtra("cat", category.getid());
+        startActivity(intent);
     }
 
     private void getDashboardServices() {
