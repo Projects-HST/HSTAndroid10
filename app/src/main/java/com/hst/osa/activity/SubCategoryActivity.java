@@ -213,7 +213,7 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         try {
             jsonObject.put(OSAConstants.KEY_USER_ID, "");
             jsonObject.put(OSAConstants.KEY_CAT_ID, catId);
-            jsonObject.put(OSAConstants.KEY_SUB_CAT, subCatId);
+            jsonObject.put(OSAConstants.KEY_SUB_CAT_ID, subCatId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

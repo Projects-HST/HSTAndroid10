@@ -103,5 +103,6 @@
     <string name="write_reviews">Write your review</string>
     <string name="price">Price</string>
     <string name="add_cart">Add to Cart</string>
+    <string name="sub_category">ALL</string>
 
 </resources>
