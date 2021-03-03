@@ -208,8 +208,8 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
+//    @Override
+//    public void onItemClick(View view, int position) {
 //        d(TAG, "onEvent list item click" + position);
 //        Category category = null;
 //        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
@@ -224,7 +224,7 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 //        intent.putExtra("cat", category);
 //        startActivity(intent);
 
-    }
+//    }
 
     private void getDashboardServices() {
         JSONObject jsonObject = new JSONObject();
@@ -261,4 +261,8 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
         replaceFragment(newFragment);
     }
 
+    @Override
+    public void onItemClickCategory(View view, int position) {
+
+    }
 }

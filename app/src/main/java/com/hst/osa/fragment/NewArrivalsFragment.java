@@ -164,8 +164,8 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
 
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
+//    @Override
+//    public void onItemClick(View view, int position) {
 //        d(TAG, "onEvent list item click" + position);
 //        Category category = null;
 //        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
@@ -180,7 +180,7 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
 //        intent.putExtra("cat", category);
 //        startActivity(intent);
 
-    }
+//    }
 
     private void getDashboardServices() {
         JSONObject jsonObject = new JSONObject();
@@ -204,4 +204,8 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
         transaction.commit();
     }
 
+    @Override
+    public void onItemClickNewArrivals(View view, int position) {
+
+    }
 }

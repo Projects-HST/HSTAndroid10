@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OSA"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SubCategoryActivity"></activity>
         <activity android:name=".activity.EditProfile" />
         <activity android:name=".activity.NotificationActivity" />
 

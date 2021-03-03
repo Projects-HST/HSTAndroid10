@@ -95,5 +95,6 @@
     <string name="in_stock">In Stock</string>
     <string name="out_stock">Out of Stock</string>
     <string name="reviews">Reviews</string>
+    <string name="sub_category">ALL</string>
 
 </resources>
