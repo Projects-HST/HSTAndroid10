@@ -12,12 +12,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.hst.osa.R;
 
-import com.hst.osa.adapter.SubCatProductListAdapter;
+import com.hst.osa.adapter.BestSellingListAdapter;
 import com.hst.osa.adapter.SubCategoryListAdapter;
-import com.hst.osa.bean.support.Category;
 import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.SubCategory;
 import com.hst.osa.bean.support.SubCategoryList;
@@ -37,7 +35,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class SubCategoryActivity extends AppCompatActivity implements IServiceListener, SubCategoryListAdapter.OnItemClickListener, DialogClickListener, SubCatProductListAdapter.OnItemClickListener {
+public class SubCategoryActivity extends AppCompatActivity implements IServiceListener, SubCategoryListAdapter.OnItemClickListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -161,7 +159,7 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     Gson gson = new Gson();
                     productList = gson.fromJson(response.toString(), SubProductList.class);
                     productArrayList.addAll(productList.getProductArrayList());
-                    SubCatProductListAdapter adasd = new SubCatProductListAdapter(productArrayList, this);
+                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
                     GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
                     mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                         @Override
