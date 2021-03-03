@@ -1,6 +1,7 @@
 package com.hst.osa.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.activity.SubCategoryActivity;
 import com.hst.osa.adapter.BestSellingListAdapter;
 import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.CategoryListAdapter;
@@ -208,24 +210,6 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 
     }
 
-//    @Override
-//    public void onItemClick(View view, int position) {
-//        d(TAG, "onEvent list item click" + position);
-//        Category category = null;
-//        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
-//            d(TAG, "while searching");
-//            int actualindex = categoryListAdapter.getActualEventPos(position);
-//            d(TAG, "actual index" + actualindex);
-//            category = categoryArrayList.get(actualindex);
-//        } else {
-//            category = categoryArrayList.get(position);
-//        }
-//        intent = new Intent(getActivity(), SubCategoryActivity.class);
-//        intent.putExtra("cat", category);
-//        startActivity(intent);
-
-//    }
-
     private void getDashboardServices() {
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(getActivity());
@@ -263,6 +247,11 @@ public class CategoryFragment extends BaseFragment implements IServiceListener, 
 
     @Override
     public void onItemClickCategory(View view, int position) {
-
+        Category category = null;
+        category = categoryArrayList.get(position);
+        Intent intent;
+        intent = new Intent(getActivity(), SubCategoryActivity.class);
+        intent.putExtra("categoryObj", category.getid());
+        startActivity(intent);
     }
 }

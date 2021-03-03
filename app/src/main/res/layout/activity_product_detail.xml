@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_grey"
-    android:orientation="vertical">
+    android:background="@color/background_grey">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:background="@color/background_grey"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/cart_layout"
+        android:layout_alignParentTop="true"
+        android:background="@color/background_grey">
 
         <LinearLayout
             android:id="@+id/newsfeed_layout"
@@ -43,8 +44,7 @@
                     android:id="@+id/view_flipper"
                     android:layout_width="match_parent"
                     android:layout_height="420dp"
-                    android:autoStart="false"
-                    android:foreground="@color/grey" />
+                    android:autoStart="false" />
 
                 <LinearLayout
                     android:id="@+id/layoutDots"
@@ -60,7 +60,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-20dp">
+                android:layout_marginTop="-50dp">
 
                 <ImageView
                     android:id="@+id/product_like"
@@ -124,12 +124,13 @@
                             android:layout_alignParentStart="true"
                             android:ellipsize="end"
                             android:fontFamily="@font/semibold"
-                            android:text="Rs.1000"
+                            android:text=""
                             android:textColor="@color/text_black"
                             android:textSize="25sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/share"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -144,6 +145,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/size_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -151,35 +153,7 @@
                         android:layout_marginEnd="20dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/regular"
-                            android:text="@string/color"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listView_colors"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:padding="1dp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp">
-
-                        <TextView
+                            android:id="@+id/txt_size"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/regular"
@@ -188,18 +162,47 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listView_size"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_size"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:padding="1dp" />
+
+
                     </RelativeLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listView_size"
+
+                    <RelativeLayout
+                        android:id="@+id/colours_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:padding="1dp" />
+                        android:layout_marginEnd="20dp">
+
+                        <TextView
+                            android:id="@+id/txt_color"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/regular"
+                            android:text="@string/color"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listView_colors"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_color"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:padding="1dp" />
+
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -252,7 +255,7 @@
                                     android:layout_height="40dp"
                                     android:fontFamily="@font/regular"
                                     android:gravity="center"
-                                    android:text="10" />
+                                    android:text="1" />
 
                                 <ImageView
                                     android:id="@+id/plus"
@@ -260,7 +263,7 @@
                                     android:layout_height="40dp"
                                     android:background="@drawable/btn_round_black_border"
                                     android:padding="10dp"
-                                    android:src="@drawable/ic_minus_circle" />
+                                    android:src="@drawable/ic_plus_circle" />
 
                             </LinearLayout>
 
@@ -301,13 +304,15 @@
 
                                 <EditText
                                     android:id="@+id/pincode"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:layout_alignParentStart="true"
-                                    android:layout_marginStart="10dp"
+                                    android:background="@drawable/btn_square_border"
                                     android:fontFamily="@font/regular"
-                                    android:gravity="center"
-                                    android:text="10" />
+                                    android:gravity="left|center_vertical"
+                                    android:hint="@string/pincode"
+                                    android:paddingStart="10dp"
+                                    android:textSize="14sp" />
 
                                 <TextView
                                     android:id="@+id/check_pincode"
@@ -319,7 +324,7 @@
                                     android:fontFamily="@font/regular"
                                     android:gravity="center"
                                     android:text="@string/check"
-                                    android:textColor="@color/white"/>
+                                    android:textColor="@color/white" />
 
                             </RelativeLayout>
 
@@ -338,14 +343,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="20dp">
+                        android:layout_marginEnd="20dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/regular"
-                            android:text="@string/color"
+                            android:text="@string/detail"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -367,13 +372,13 @@
                             android:id="@+id/product_detail_more"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
                             android:layout_marginTop="10dp"
-                            android:padding="5dp"
                             android:layout_marginBottom="5dp"
                             android:ellipsize="end"
-                            android:layout_gravity="end"
                             android:fontFamily="@font/regular"
                             android:maxLines="2"
+                            android:padding="5dp"
                             android:text="@string/more"
                             android:textColor="@color/out_of_stock"
                             android:textSize="16sp" />
@@ -382,6 +387,7 @@
                     </LinearLayout>
 
                     <RelativeLayout
+                        android:id="@+id/review_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -389,6 +395,7 @@
                         android:layout_marginEnd="20dp">
 
                         <TextView
+                            android:id="@+id/txt_reviews"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/regular"
@@ -397,28 +404,86 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/txt_write_review"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_reviews"
+                            android:fontFamily="@font/regular"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:text="@string/write_reviews"
+                            android:textColor="@color/out_of_stock"
+                            android:textSize="14sp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listView_reviews"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_write_review"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:padding="1dp" />
+
                     </RelativeLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listView_reviews"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:padding="1dp" />
-
                 </LinearLayout>
-
 
             </RelativeLayout>
 
         </LinearLayout>
 
-
     </ScrollView>
 
+    <RelativeLayout
+        android:id="@+id/cart_layout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_price"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/price_text"
+                android:textAllCaps="true"
+                android:text="@string/price"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_width="wrap_content"
+                android:textColor="@color/out_of_stock"
+                android:textSize="18sp"
+                android:text="450"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/add_to_cart"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_size_color"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/medium"
+            android:text="@string/add_cart"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

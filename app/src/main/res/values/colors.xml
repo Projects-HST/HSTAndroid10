@@ -30,4 +30,8 @@
     <color name="pink">#FFEBEE</color>
     <color name="in_stock">#46AB62</color>
     <color name="out_of_stock">#BD0621</color>
+    <color name="size_border">#E1E1E1</color>
+    <color name="size_text">#605A65</color>
+    <color name="price_text">#929292</color>
+    <color name="colour_border">#CE3E3E</color>
 </resources>

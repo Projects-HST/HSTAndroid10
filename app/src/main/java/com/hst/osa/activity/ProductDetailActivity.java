@@ -1,32 +1,43 @@
 package com.hst.osa.activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
-import com.hst.osa.adapter.CategoryListAdapter;
-import com.hst.osa.bean.support.CategoryList;
+import com.hst.osa.adapter.ColourListAdapter;
+import com.hst.osa.adapter.ReviewListAdapter;
+import com.hst.osa.adapter.SizeListAdapter;
+import com.hst.osa.bean.support.Colour;
+import com.hst.osa.bean.support.ColourList;
+import com.hst.osa.bean.support.Product;
+import com.hst.osa.bean.support.Review;
+import com.hst.osa.bean.support.ReviewList;
+import com.hst.osa.bean.support.Size;
+import com.hst.osa.bean.support.SizeList;
 import com.hst.osa.customview.AViewFlipper;
-import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -36,7 +47,6 @@ import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,18 +54,46 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class ProductDetailActivity extends AppCompatActivity implements IServiceListener, DialogClickListener {
+public class ProductDetailActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, SizeListAdapter.OnItemClickListener, ColourListAdapter.OnItemClickListener, View.OnClickListener, ReviewListAdapter.OnItemClickListener {
 
     private static final String TAG = ProductDetailActivity.class.getName();
     Context context;
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
-    private String productID;
+    private String productID, sizeID = "0", colourID;
     AViewFlipper aViewFlipper;
 
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private ArrayList<String> imgUrl = new ArrayList<>();
+
+    private RelativeLayout sizeLayout, colourLayout, reviewLayout;
+    public RatingBar productRating;
+    public TextView productName, productPrice, productShare, productQuantity;
+    public ImageView btnPlus, btnMinus;
+    public EditText deliverCode;
+    public TextView checkCode;
+    public TextView productDetail, viewMore, productReviews;
+    public TextView totalPrice, addCart;
+
+    private ArrayList<Size> sizeArrayList = new ArrayList<>();
+    private SizeListAdapter mAdapter;
+    private RecyclerView recyclerViewSize;
+    Size size;
+    SizeList sizeList;
+
+    private ArrayList<Colour> colourArrayList = new ArrayList<>();
+    private RecyclerView recyclerViewColour;
+    Colour colour;
+    ColourList colourList;
+
+    private ArrayList<Review> reviewArrayList = new ArrayList<>();
+    private RecyclerView recyclerViewReview;
+    Review review;
+    ReviewList reviewList;
+
+    String resFor = "";
+    float currentPrice = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         setContentView(R.layout.activity_product_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_left_arrow));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -74,6 +111,32 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         productID = getIntent().getStringExtra("productObj");
         aViewFlipper = findViewById(R.id.view_flipper);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+
+        sizeLayout = (RelativeLayout) findViewById(R.id.size_layout);
+        colourLayout = (RelativeLayout) findViewById(R.id.colours_layout);
+        reviewLayout = (RelativeLayout) findViewById(R.id.review_layout);
+
+        recyclerViewSize = (RecyclerView) findViewById(R.id.listView_size);
+        recyclerViewColour = (RecyclerView) findViewById(R.id.listView_colors);
+        recyclerViewReview = (RecyclerView) findViewById(R.id.listView_reviews);
+
+        productRating = (RatingBar) findViewById(R.id.ratingBar);
+        productName = (TextView) findViewById(R.id.product_name);
+        productPrice = (TextView) findViewById(R.id.product_price);
+        productShare = (TextView) findViewById(R.id.share);
+        productQuantity = (TextView) findViewById(R.id.quantity);
+        btnMinus = (ImageView) findViewById(R.id.minus);
+        btnMinus.setOnClickListener(this);
+        deliverCode = (EditText) findViewById(R.id.pincode);
+        btnPlus = (ImageView) findViewById(R.id.plus);
+        btnPlus.setOnClickListener(this);
+        productDetail = (TextView) findViewById(R.id.product_detail);
+        viewMore = (TextView) findViewById(R.id.product_detail_more);
+        productReviews = (TextView) findViewById(R.id.txt_reviews);
+        totalPrice = (TextView) findViewById(R.id.total_price);
+        addCart = (TextView) findViewById(R.id.add_to_cart);
+        addCart.setOnClickListener(this);
+
 
         initiateServices();
         getDashboardServices();
@@ -162,19 +225,69 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         progressDialogHelper.hideProgressDialog();
         if (validateSignInResponse(response)) {
             try {
-                Gson gson = new Gson();
-//                JSONArray images = response.getJSONArray("image_result");
-//                if (imgUrl.size() >= 0) {
-//                    for (int i = 0; i < images.length(); i++) {
-//                        imgUrl.add(images.getJSONObject(i).getString("gallery_url"));
-//                    }
-//                    for (int a = 0; a < imgUrl.size(); a++) {
-//                        setImageInFlipr(imgUrl.get(a));
-//                    }
-//                }
-                JSONObject productDetails = response.getJSONObject("product_details").getJSONObject("product_details");
+                if (resFor.equalsIgnoreCase("detail")) {
+                    JSONObject productDetails = response.getJSONObject("product_details").getJSONObject("product_details");
+                    imgUrl.add(productDetails.getString("product_cover_img"));
+                    setImageInFlipr(imgUrl.get(0));
+                    productName.setText(productDetails.getString("product_name"));
+                    productDetail.setText(productDetails.getString("product_description"));
+                    productPrice.setText("Rs." + productDetails.getString("prod_actual_price"));
+                    currentPrice = Float.parseFloat(productDetails.getString("prod_actual_price"));
 
+                    if (response.getJSONObject("product_review").getString("status").equalsIgnoreCase("success")) {
+                        if (!response.getJSONObject("product_review").getJSONObject("product_review").getString("review_count").equalsIgnoreCase("0")) {
+                            JSONObject reviewDetails = response.getJSONObject("product_review").getJSONObject("product_review");
+                            productRating.setRating(Float.parseFloat(reviewDetails.getString("average")));
+                        }
+                        productReviews.setText(getString(R.string.reviews) + "(" + response.getJSONObject("product_review").getJSONObject("product_review").getString("review_count") + ")");
+                    }
+                    if (productDetails.getString("combined_status").equalsIgnoreCase("0")) {
+                        sizeLayout.setVisibility(View.GONE);
+                        colourLayout.setVisibility(View.GONE);
+                        getProductReviews();
+                    } else {
+                        getProductSize();
+                    }
+                } else if (resFor.equalsIgnoreCase("size")) {
+                    Gson gson = new Gson();
+                    sizeList = null;
+                    sizeList = gson.fromJson(response.toString(), SizeList.class);
+                    sizeArrayList.clear();
+                    sizeArrayList.addAll(sizeList.getSizeArrayList());
+                    mAdapter = new SizeListAdapter(sizeArrayList, this);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                    recyclerViewSize.setLayoutManager(layoutManager);
+                    recyclerViewSize.setAdapter(mAdapter);
+                    sizeID = sizeArrayList.get(0).getid();
+                    getProductColour();
+                } else if (resFor.equalsIgnoreCase("colour")) {
+                    Gson gson = new Gson();
+                    colourList = null;
+                    colourList = gson.fromJson(response.toString(), ColourList.class);
+                    colourArrayList.clear();
+                    colourArrayList.addAll(colourList.getColourArrayList());
+                    ColourListAdapter adapter = new ColourListAdapter(colourArrayList, this);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                    recyclerViewColour.setLayoutManager(layoutManager);
+                    recyclerViewColour.setAdapter(adapter);
+                    productPrice.setText("Rs." + colourArrayList.get(0).getProd_actual_price());
+                    currentPrice = Float.parseFloat(colourArrayList.get(0).getProd_actual_price());
+                    colourID = colourArrayList.get(0).getid();
+                    calculatePrice(Integer.parseInt(productQuantity.getText().toString()));
+                    getProductReviews();
+                } else if (resFor.equalsIgnoreCase("review")) {
+                    Gson gson = new Gson();
+                    reviewList = null;
+                    reviewList = gson.fromJson(response.toString(), ReviewList.class);
+                    reviewArrayList.clear();
+                    reviewArrayList.addAll(reviewList.getReviewArrayList());
+                    ReviewListAdapter adapter = new ReviewListAdapter(reviewArrayList, this);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+                    recyclerViewReview.setLayoutManager(layoutManager);
+                    recyclerViewReview.setAdapter(adapter);
+                } else if (resFor.equalsIgnoreCase("addCart")) {
 
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -200,18 +313,169 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
     }
 
     private void getDashboardServices() {
+        resFor = "detail";
         JSONObject jsonObject = new JSONObject();
-        String id = PreferenceStorage.getUserId(this);
         try {
 //            jsonObject.put(SkilExConstants.USER_MASTER_ID, PreferenceStorage.getUserId(this));
-            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 //        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
-        String url = OSAConstants.BUILD_URL + OSAConstants.DASHBOARD;
+        String url = OSAConstants.BUILD_URL + OSAConstants.PRODUCT_DETAIL;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
+    private void getProductSize() {
+        resFor = "size";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.GET_PRODUCT_SIZE;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void getProductColour() {
+        resFor = "colour";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
+            jsonObject.put(OSAConstants.PARAMS_SIZE_ID, sizeID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.GET_PRODUCT_COLOUR;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void getProductReviews() {
+        resFor = "review";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.GET_PRODUCT_REVIEWS;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void addToCart() {
+        resFor = "addCart";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
+            jsonObject.put(OSAConstants.PARAMS_COMBINED_ID, colourID);
+            jsonObject.put(OSAConstants.PARAMS_QUANTITY, productQuantity.getText().toString());
+            jsonObject.put(OSAConstants.KEY_USER_ID, PreferenceStorage.getUserId(this));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.ADD_TO_CART;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    @Override
+    public void onItemClickSize(View view, int position) {
+        Size size = null;
+        size = sizeArrayList.get(position);
+        SizeListAdapter.selected_item = position;
+        recyclerViewSize.getAdapter().notifyDataSetChanged();
+        sizeID = size.getid();
+        getProductColour();
+    }
+
+    @Override
+    public void onItemClickColour(View view, int position) {
+        Colour colour = null;
+        colour = colourArrayList.get(position);
+        ColourListAdapter.selected_item = position;
+        recyclerViewColour.getAdapter().notifyDataSetChanged();
+        productPrice.setText("Rs." + colour.getProd_actual_price());
+        currentPrice = Float.parseFloat(colour.getProd_actual_price());
+        colourID = colour.getid();
+        calculatePrice(Integer.parseInt(productQuantity.getText().toString()));
+    }
+
+    private boolean checkValueMinus() {
+        return (Integer.parseInt(productQuantity.getText().toString()) > 1) && (Integer.parseInt(productQuantity.getText().toString()) <= 10);
+    }
+
+    private boolean checkValuePlus() {
+        return (Integer.parseInt(productQuantity.getText().toString()) >= 1) && (Integer.parseInt(productQuantity.getText().toString()) < 10);
+    }
+
+    private void calculatePrice(int val) {
+        float finalPrice = currentPrice * val;
+        totalPrice.setText(String.valueOf(finalPrice));
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == btnMinus) {
+            if (checkValueMinus()) {
+                int currentVal = Integer.parseInt(productQuantity.getText().toString());
+                currentVal--;
+                productQuantity.setText(String.valueOf(currentVal));
+                calculatePrice(currentVal);
+            }
+        }
+        if (view == btnPlus) {
+            if (checkValuePlus()) {
+                int currentVal = Integer.parseInt(productQuantity.getText().toString());
+                currentVal++;
+                productQuantity.setText(String.valueOf(currentVal));
+                calculatePrice(currentVal);
+            }
+        }
+        if (view == addCart) {
+            if (PreferenceStorage.getUserId(this).isEmpty()) {
+                if (PreferenceStorage.getUserId(this).equalsIgnoreCase("")) {
+                    android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle(R.string.login);
+                    alertDialogBuilder.setMessage(R.string.login_to_continue);
+                    alertDialogBuilder.setPositiveButton(R.string.alert_button_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            doLogout();
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton(R.string.alert_button_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialogBuilder.show();
+                } else {
+                    addToCart();
+                }
+            }
+        }
+    }
+
+    private void doLogout() {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.edit().clear().apply();
+//        TwitterUtil.getInstance().resetTwitterRequestToken();
+
+        Intent homeIntent = new Intent(this, LoginActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
+        finish();
+    }
+
+    @Override
+    public void onItemClickReview(View view, int position) {
+
+    }
 }
