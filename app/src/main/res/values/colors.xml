@@ -28,4 +28,6 @@
     <color name="trans">#00BD0621</color>
     <color name="golden">#FBB040</color>
     <color name="pink">#FFEBEE</color>
+    <color name="in_stock">#46AB62</color>
+    <color name="out_of_stock">#BD0621</color>
 </resources>

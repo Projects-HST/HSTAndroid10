@@ -38,7 +38,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         @Override
         public void onClick(View v) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(v, getAdapterPosition());
+                onItemClickListener.onItemAdvertisementClick(v, getAdapterPosition());
             }
 //            else {
 //                onClickListener.onClick(Selecttick);
@@ -53,7 +53,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        public void onItemAdvertisementClick(View view, int position);
     }
 
 

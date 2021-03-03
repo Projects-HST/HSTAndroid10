@@ -195,7 +195,7 @@ public class BestSellingFragment extends Fragment implements IServiceListener, D
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClickBestSelling(View view, int position) {
 //        d(TAG, "onEvent list item click" + position);
 //        Category category = null;
 //        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {

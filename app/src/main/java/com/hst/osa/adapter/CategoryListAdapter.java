@@ -38,7 +38,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         @Override
         public void onClick(View v) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(v, getAdapterPosition());
+                onItemClickListener.onItemClickCategory(v, getAdapterPosition());
             }
 //            else {
 //                onClickListener.onClick(Selecttick);
@@ -53,7 +53,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        public void onItemClickCategory(View view, int position);
     }
 
 

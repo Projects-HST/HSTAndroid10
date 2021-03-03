@@ -49,7 +49,7 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
         @Override
         public void onClick(View v) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(v, getAdapterPosition());
+                onItemClickListener.onItemClickBestSelling(v, getAdapterPosition());
             }
 //            else {
 //                onClickListener.onClick(Selecttick);
@@ -64,7 +64,7 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        public void onItemClickBestSelling(View view, int position);
     }
 
 

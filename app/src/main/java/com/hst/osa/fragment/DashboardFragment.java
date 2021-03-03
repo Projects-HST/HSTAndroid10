@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.activity.CategoryActivity;
+import com.hst.osa.activity.ProductDetailActivity;
+import com.hst.osa.activity.SubCategoryActivity;
 import com.hst.osa.adapter.AdvertisementListAdapter;
 import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.BestSellingListAdapter;
@@ -278,20 +280,37 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-//        d(TAG, "onEvent list item click" + position);
-//        Category category = null;
-//        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
-//            d(TAG, "while searching");
-//            int actualindex = categoryListAdapter.getActualEventPos(position);
-//            d(TAG, "actual index" + actualindex);
-//            category = categoryArrayList.get(actualindex);
-//        } else {
-//            category = categoryArrayList.get(position);
-//        }
-//        intent = new Intent(getActivity(), SubCategoryActivity.class);
-//        intent.putExtra("cat", category);
-//        startActivity(intent);
+    public void onItemClickCategory(View view, int position) {
+        Category category = null;
+        category = categoryArrayList.get(position);
+        Intent intent;
+        intent = new Intent(getActivity(), SubCategoryActivity.class);
+        intent.putExtra("categoryObj", category.getid());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemClickBestSelling(View view, int position) {
+        Product product = null;
+        product = productArrayList.get(position);
+        Intent intent;
+        intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra("productObj", product.getid());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemClickNewArrivals(View view, int position) {
+        Product product = null;
+        product = productArrayList1.get(position);
+        Intent intent;
+        intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra("productObj", product.getid());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemAdvertisementClick(View view, int position) {
 
     }
 
