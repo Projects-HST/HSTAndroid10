@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.activity.ProductDetailActivity;
 import com.hst.osa.adapter.AdvertisementListAdapter;
 import com.hst.osa.adapter.BestSellingListAdapter;
 import com.hst.osa.adapter.CategoryHorizontalListAdapter;
@@ -196,20 +197,12 @@ public class BestSellingFragment extends Fragment implements IServiceListener, D
 
     @Override
     public void onItemClickBestSelling(View view, int position) {
-//        d(TAG, "onEvent list item click" + position);
-//        Category category = null;
-//        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
-//            d(TAG, "while searching");
-//            int actualindex = categoryListAdapter.getActualEventPos(position);
-//            d(TAG, "actual index" + actualindex);
-//            category = categoryArrayList.get(actualindex);
-//        } else {
-//            category = categoryArrayList.get(position);
-//        }
-//        intent = new Intent(getActivity(), SubCategoryActivity.class);
-//        intent.putExtra("cat", category);
-//        startActivity(intent);
-
+        Product product = null;
+        product = productArrayList.get(position);
+        Intent intent;
+        intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra("productObj", product.getid());
+        startActivity(intent);
     }
 
     private void getDashboardServices() {

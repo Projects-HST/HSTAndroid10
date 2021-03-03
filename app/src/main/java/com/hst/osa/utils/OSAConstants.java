@@ -20,7 +20,17 @@ public class OSAConstants {
 
     public static final String SUB_CATEGORY_LIST = "sub_cat_list/";
 
-    public static final String PRODUCT_LIST = "sub_cat_list/";
+    public static final String PRODUCT_LIST = "product_list/";
+
+    public static final String PRODUCT_DETAIL = "product_details/";
+
+    public static final String GET_PRODUCT_SIZE = "get_product_size/";
+
+    public static final String GET_PRODUCT_COLOUR = "get_product_color/";
+
+    public static final String GET_PRODUCT_REVIEWS = "product_reviews/";
+
+    public static final String ADD_TO_CART = "product_cart/";
 
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
@@ -71,6 +81,12 @@ public class OSAConstants {
     public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";
     public static String VERSION_VALUE = "1";
+
+    //      SharedPref
+    public static final String PARAMS_PROD_ID = "product_id";
+    public static final String PARAMS_SIZE_ID = "size_id";
+    public static final String PARAMS_COMBINED_ID = "product_comb_id";
+    public static final String PARAMS_QUANTITY = "quantity";
 
     public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
 

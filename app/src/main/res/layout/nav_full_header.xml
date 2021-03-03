@@ -79,7 +79,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/background_pink_side_menu"
-                    android:src="@drawable/ic_side_menu_dashboard"
+                    android:src="@drawable/ic_side_menu_edit_profile"
                     android:padding="15dp"/>
 
                 <TextView

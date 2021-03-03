@@ -1,6 +1,7 @@
 package com.hst.osa.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.activity.ProductDetailActivity;
 import com.hst.osa.adapter.NewArrivalsListAdapter;
 import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.ProductList;
@@ -164,24 +166,6 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
 
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-//        d(TAG, "onEvent list item click" + position);
-//        Category category = null;
-//        if ((categoryListAdapter != null) && (categoryListAdapter.ismSearching())) {
-//            d(TAG, "while searching");
-//            int actualindex = categoryListAdapter.getActualEventPos(position);
-//            d(TAG, "actual index" + actualindex);
-//            category = categoryArrayList.get(actualindex);
-//        } else {
-//            category = categoryArrayList.get(position);
-//        }
-//        intent = new Intent(getActivity(), SubCategoryActivity.class);
-//        intent.putExtra("cat", category);
-//        startActivity(intent);
-
-    }
-
     private void getDashboardServices() {
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(getActivity());
@@ -204,4 +188,13 @@ public class NewArrivalsFragment extends Fragment implements IServiceListener, D
         transaction.commit();
     }
 
+    @Override
+    public void onItemClickNewArrivals(View view, int position) {
+        Product product = null;
+        product = productArrayList.get(position);
+        Intent intent;
+        intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra("productObj", product.getid());
+        startActivity(intent);
+    }
 }
