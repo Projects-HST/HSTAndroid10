@@ -7,7 +7,7 @@ public class SubCategory {
     private String category_name;
     private String category_image;
     private String category_desc;
-    private int size = 7;
+    private int size = 3;
 
     public SubCategory(String id, String category_name){
         this.id = id;

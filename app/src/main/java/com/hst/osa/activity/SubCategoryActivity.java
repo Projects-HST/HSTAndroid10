@@ -1,6 +1,8 @@
 package com.hst.osa.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,20 +12,19 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonSyntaxException;
 import com.hst.osa.R;
 
-import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.SubCatProductListAdapter;
 import com.hst.osa.adapter.SubCategoryListAdapter;
 import com.hst.osa.bean.support.Category;
-import com.hst.osa.bean.support.CategoryList;
 import com.hst.osa.bean.support.Product;
-import com.hst.osa.bean.support.ProductList;
 import com.hst.osa.bean.support.SubCategory;
 import com.hst.osa.bean.support.SubCategoryList;
-import com.hst.osa.fragment.BestSellingFragment;
+import com.hst.osa.bean.support.SubProductList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
+import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
@@ -32,24 +33,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 import static android.util.Log.d;
 
-public class SubCategoryActivity extends AppCompatActivity implements IServiceListener, SubCategoryListAdapter.OnItemClickListener, BestSellingListAdapter.OnItemClickListener {
+public class SubCategoryActivity extends AppCompatActivity implements IServiceListener, SubCategoryListAdapter.OnItemClickListener, DialogClickListener, SubCatProductListAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
 
     private ArrayList<SubCategory> subCategoryArrayList = new ArrayList<>();
+    SubCategoryList subCategoryList;
     private SubCategoryListAdapter mAdapter;
 
     private ArrayList<Product> productArrayList = new ArrayList<>();
-    ProductList productList;
+    SubProductList productList;
 
     private RecyclerView recyclerViewPopularProduct;
     private RecyclerView recyclerViewSubCategory;
@@ -63,8 +62,18 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_category);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_left_arrow));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         recyclerViewSubCategory = (RecyclerView) findViewById(R.id.sub_cat);
-        recyclerViewPopularProduct = (RecyclerView)findViewById(R.id.sub_product_list);
+        recyclerViewPopularProduct = (RecyclerView) findViewById(R.id.sub_product_list);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewSubCategory.setLayoutManager(mLayoutManager);
@@ -75,12 +84,12 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
 
         progressDialogHelper = new ProgressDialogHelper(this);
 
-        catId = getIntent().getStringExtra("cat");
+        catId = getIntent().getStringExtra("categoryObj");
 
         showSubCategory();
     }
 
-    private void showSubCategory(){
+    private void showSubCategory() {
 
         serviceCall = "sub_category";
 
@@ -94,7 +103,7 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
     }
 
-    private boolean validateSignInResponse(JSONObject response){
+    private boolean validateSignInResponse(JSONObject response) {
 
         boolean signInSuccess = false;
         if ((response != null)) {
@@ -124,18 +133,8 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
     @Override
     public void onResponse(JSONObject response) {
 
-        if (validateSignInResponse(response)){
-            try{
-//                Gson gson = new Gson();
-//
-//                JSONArray categoryObjData = response.getJSONArray("sub_category_list");
-//                if (categoryObjData.length() > 0) {
-//                    Category[] categories = gson.fromJson(categoryObjData.toString(), SubCategoryList[].class);
-////                    categoryList = gson.fromJson(categoryObjData.toString(), SubCategoryList.class);
-//                    categoryArrayList.addAll(categoryList.getCategoryArrayList());
-//                    mAdapter = new SubCategoryListAdapter(categoryArrayList, this);
-//                    recyclerViewSubCategory.setAdapter(mAdapter);
-//                }
+        if (validateSignInResponse(response)) {
+            try {
                 if (serviceCall.equalsIgnoreCase("sub_category")) {
 
                     JSONArray subCategoryArray = response.getJSONArray("sub_category_list");
@@ -146,7 +145,7 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     String id = "";
                     String txtSubCat = "";
                     subCategoryArrayList = new ArrayList<>();
-                    subCategoryArrayList.add(new SubCategory("0", "ALL"));
+                    subCategoryArrayList.add(new SubCategory("", "ALL"));
 
                     for (int i = 0; i < subCategoryArray.length(); i++) {
 
@@ -157,14 +156,12 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     mAdapter = new SubCategoryListAdapter(subCategoryArrayList, this);
                     recyclerViewSubCategory.setAdapter(mAdapter);
                 }
-                if (serviceCall.equalsIgnoreCase("sub_cat_product_list")){
+                if (serviceCall.equalsIgnoreCase("sub_cat_product_list")) {
 
                     Gson gson = new Gson();
-
-                    JSONObject popularObjData = response.getJSONObject("popular_product_list");
-                    productList = gson.fromJson(popularObjData.toString(), ProductList.class);
+                    productList = gson.fromJson(response.toString(), SubProductList.class);
                     productArrayList.addAll(productList.getProductArrayList());
-                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
+                    SubCatProductListAdapter adasd = new SubCatProductListAdapter(productArrayList, this);
                     GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
                     mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                         @Override
@@ -180,7 +177,6 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
                     recyclerViewPopularProduct.setAdapter(adasd);
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -194,21 +190,22 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
 
     @Override
     public void onItemClick(View view, int position) {
-        d(TAG, "selected Category" + position);
         SubCategory category = null;
-        if (mAdapter != null) {
-            d(TAG, "while clicking");
-            int actualIndex = mAdapter.getItemViewType(position);
-            d(TAG, "actual index" + actualIndex);
-            category = subCategoryArrayList.get(position);
-        } else {
-            category = subCategoryArrayList.get(position);
-        }
+//        if (mAdapter != null) {
+//            d(TAG, "while clicking");
+//            int actualIndex = mAdapter.getItemViewType(position);
+//            d(TAG, "actual index" + actualIndex);
+//            category = subCategoryArrayList.get(position);
+//        } else {
+//            category = subCategoryArrayList.get(position);
+//        }
+        category = subCategoryArrayList.get(position);
         subCatId = category.getId();
+        productArrayList.clear();
         subCatProductList();
     }
 
-    private void subCatProductList(){
+    private void subCatProductList() {
 
         serviceCall = "sub_cat_product_list";
 
@@ -226,6 +223,16 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
 
     @Override
     public void onItemClickBestSelling(View view, int position) {
+
+    }
+
+    @Override
+    public void onAlertPositiveClicked(int tag) {
+
+    }
+
+    @Override
+    public void onAlertNegativeClicked(int tag) {
 
     }
 }

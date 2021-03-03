@@ -55,9 +55,9 @@ public class CategoryActivity extends AppCompatActivity implements IServiceListe
     protected boolean isLoadingForFirstTime = true;
 
     private ArrayList<Category> categoryArrayList = new ArrayList<>();
-    Category category;
     CategoryList categoryList;
     private CategoryListAdapter mAdapter;
+
     private RecyclerView recyclerViewCategory;
     private View rootView;
     private TextView itemCount;
@@ -178,20 +178,12 @@ public class CategoryActivity extends AppCompatActivity implements IServiceListe
 
     @Override
     public void onItemClickCategory(View view, int position) {
-        d(TAG, "onEvent list item click" + position);
         Category category = null;
-        if ((mAdapter != null)) {
-            d(TAG, "while searching");
-            int actualindex = mAdapter.getItemViewType(position);
-            d(TAG, "actual index" + actualindex);
-            category = categoryArrayList.get(actualindex);
-        } else {
-            category = categoryArrayList.get(position);
-        }
-        Intent intent = new Intent(this, SubCategoryActivity.class);
-        intent.putExtra("cat", category.getid());
+        category = categoryArrayList.get(position);
+        Intent intent;
+        intent = new Intent(this, SubCategoryActivity.class);
+        intent.putExtra("categoryObj", category.getid());
         startActivity(intent);
-
     }
 
     private void getDashboardServices() {

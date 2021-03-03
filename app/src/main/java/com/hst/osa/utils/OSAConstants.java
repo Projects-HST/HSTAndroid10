@@ -20,7 +20,7 @@ public class OSAConstants {
 
     public static final String SUB_CATEGORY_LIST = "sub_cat_list/";
 
-    public static final String PRODUCT_LIST = "sub_cat_list/";
+    public static final String PRODUCT_LIST = "product_list/";
 
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
