@@ -20,6 +20,7 @@
     <color name="lite_blue">#4285F4</color>
     <color name="blue">#4267B2</color>
     <color name="text_grey">#E2E2E2</color>
+    <color name="text_sub_cat">#605A65</color>
     <color name="plus_minus_bg">#F8F8F8</color>
     <color name="line_product">#707070</color>
     <color name="line_plus_minus">#505050</color>

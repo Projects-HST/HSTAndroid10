@@ -81,6 +81,8 @@ public class OSAConstants {
     public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";
     public static String VERSION_VALUE = "1";
+    public static String KEY_CAT_ID = "cat_id";
+    public static String KEY_SUB_CAT_ID = "sub_cat_id";
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";
