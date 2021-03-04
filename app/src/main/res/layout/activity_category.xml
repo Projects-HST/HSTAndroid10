@@ -28,6 +28,7 @@
                 android:background="@drawable/gradient_bg" />
 
             <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_dash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -39,6 +40,30 @@
 
         </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/recentCatLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recentSearchCat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/catLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView_best_selling"
         android:layout_width="match_parent"
@@ -46,5 +71,7 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:padding="1dp" />
+
+    </LinearLayout>
 
 </LinearLayout>

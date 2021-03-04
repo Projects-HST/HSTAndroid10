@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
@@ -24,13 +26,14 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
     private SubCategoryListAdapter.OnItemClickListener onItemClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public LinearLayout txtLayout;
         public TextView txtCategoryName;
 
         public MyViewHolder(View view) {
             super(view);
-
+            txtLayout = (LinearLayout) view.findViewById(R.id.txtLay);
+            txtLayout.setOnClickListener(this);
             txtCategoryName = (TextView) view.findViewById(R.id.txt_sub_category);
-            txtCategoryName.setOnClickListener(this);
         }
 
         @Override
@@ -46,6 +49,7 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
 
     public SubCategoryListAdapter(ArrayList<SubCategory> CategoryArrayList, SubCategoryListAdapter.OnItemClickListener onItemClickListener) {
         this.categoryArrayList = CategoryArrayList;
+//        this.context = context;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -65,9 +69,15 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
     @Override
     public void onBindViewHolder(@NonNull SubCategoryListAdapter.MyViewHolder holder, int position) {
 
+//        holder.txtLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                holder.txtLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_sel_sub_cat));
+//            }
+//        });
         SubCategory category = categoryArrayList.get(position);
         holder.txtCategoryName.setText(category.getCategory_name());
-
     }
 
     @Override
@@ -87,4 +97,5 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
         else
             return 1;
     }
+
 }

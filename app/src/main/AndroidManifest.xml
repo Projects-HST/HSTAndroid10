@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OSA"
         android:usesCleartextTraffic="true">
+
         <activity android:name=".activity.EditProfile" />
         <activity android:name=".activity.NotificationActivity" />
 
@@ -75,24 +76,21 @@
             android:label="@string/category"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
-
         <activity
             android:name=".activity.SubCategoryActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
-
         <activity
             android:name=".activity.ProductDetailActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
 
-        <activity
-            android:name=".activity.SubCategoryActivity"
+        <activity android:name=".activity.SearchResultActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/Theme.OSA"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

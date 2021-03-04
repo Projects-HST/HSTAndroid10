@@ -297,7 +297,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void sendGoogleLogin(GoogleSignInAccount account) {
-        whichService = "google";
+        whichService = "sendGoogle";
         String first = "" + account.getGivenName();
         String last = "" + account.getFamilyName();
         String mail = "" + account.getEmail();
@@ -352,18 +352,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            String name = "" + account.getDisplayName();
             String first = "" + account.getGivenName();
             String last = "" + account.getFamilyName();
             String mail = "" + account.getEmail();
             String googleId = "" + account.getId();
             String photoUrl = "" + account.getPhotoUrl();
 
-            Log.d(TAG, "name" + name + "id" + googleId);
+            Log.d(TAG,  "id" + googleId);
             PreferenceStorage.saveSocialNetworkProfilePic(getApplicationContext(), photoUrl);
 
             String GCMKey = PreferenceStorage.getGCM(this);
-            whichService = "google";
+            whichService = "handleGoogle";
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put(OSAConstants.PARAMS_EMAIL, mail);
@@ -530,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent i = new Intent(getApplicationContext(), NumberVerificationActivity.class);
                 startActivity(i);
             }
-            if (whichService.equalsIgnoreCase("google")) {
+            if (whichService.equalsIgnoreCase("handleGoogle")) {
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             }

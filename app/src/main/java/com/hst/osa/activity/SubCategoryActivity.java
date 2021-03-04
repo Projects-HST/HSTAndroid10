@@ -1,22 +1,29 @@
 package com.hst.osa.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
 
 import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.RecentSearchListAdapter;
 import com.hst.osa.adapter.SubCategoryListAdapter;
 import com.hst.osa.bean.support.Product;
+import com.hst.osa.bean.support.RecentSearch;
+import com.hst.osa.bean.support.RecentSearchList;
 import com.hst.osa.bean.support.SubCategory;
 import com.hst.osa.bean.support.SubCategoryList;
 import com.hst.osa.bean.support.SubProductList;
@@ -35,25 +42,29 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class SubCategoryActivity extends AppCompatActivity implements IServiceListener, SubCategoryListAdapter.OnItemClickListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener {
+public class SubCategoryActivity extends AppCompatActivity implements IServiceListener, SubCategoryListAdapter.OnItemClickListener, DialogClickListener, BestSellingListAdapter.OnItemClickListener, RecentSearchListAdapter.OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
 
     private ArrayList<SubCategory> subCategoryArrayList = new ArrayList<>();
-    SubCategoryList subCategoryList;
     private SubCategoryListAdapter mAdapter;
 
     private ArrayList<Product> productArrayList = new ArrayList<>();
     SubProductList productList;
 
-    private RecyclerView recyclerViewPopularProduct;
-    private RecyclerView recyclerViewSubCategory;
+    private ArrayList<RecentSearch> recentSearchArrayList = new ArrayList<>();
+    RecentSearchList searchList;
+    RecentSearchListAdapter recentSearchListAdapter;
 
-    private String catId;
-    private String subCatId;
-    private String serviceCall;
+    private LinearLayout recentSearchLay, subCatLay;
+
+    private RecyclerView recentSearchList, recyclerViewPopularProduct, recyclerViewSubCategory;
+
+    private SearchView mSearchView;
+
+    private String catId, subCatId, serviceCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +81,55 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
             }
         });
 
+        recentSearchLay = (LinearLayout)findViewById(R.id.recentList);
+        subCatLay = (LinearLayout)findViewById(R.id.subCatLay);
+
+        mSearchView = (SearchView)findViewById(R.id.sub_cat_search);
+        mSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchView.setIconified(false);
+                subCatLay.setVisibility(View.GONE);
+                recentSearchLay.setVisibility(View.VISIBLE);
+                getRecentSearch();
+            }
+        });
+
+        mSearchView.setQueryHint("What are you looking");
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                if (query != null){
+                    makeSearch(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//
+//                if (newText.length() == 0) {
+//                    recentSearchListAdapter.clearText();
+//                } else {
+//                    recentSearchList.invalidate();
+//                }
+                return false;
+            }
+        });
+
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                recentSearchLay.setVisibility(View.GONE);
+                subCatLay.setVisibility(View.VISIBLE);
+                recentSearchArrayList.clear();
+                return false;
+            }
+        });
+
+        recentSearchList = (RecyclerView)findViewById(R.id.recent_search);
         recyclerViewSubCategory = (RecyclerView) findViewById(R.id.sub_cat);
         recyclerViewPopularProduct = (RecyclerView) findViewById(R.id.sub_product_list);
 
@@ -146,7 +206,6 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     subCategoryArrayList.add(new SubCategory("", "ALL"));
 
                     for (int i = 0; i < subCategoryArray.length(); i++) {
-
                         id = subCategoryArray.getJSONObject(i).getString("id");
                         txtSubCat = subCategoryArray.getJSONObject(i).getString("category_name");
                         subCategoryArrayList.add(new SubCategory(id, txtSubCat));
@@ -155,7 +214,6 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     recyclerViewSubCategory.setAdapter(mAdapter);
                 }
                 if (serviceCall.equalsIgnoreCase("sub_cat_product_list")) {
-
                     Gson gson = new Gson();
                     productList = gson.fromJson(response.toString(), SubProductList.class);
                     productArrayList.addAll(productList.getProductArrayList());
@@ -174,6 +232,42 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                     });
                     recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
                     recyclerViewPopularProduct.setAdapter(adasd);
+                }
+                if(serviceCall.equalsIgnoreCase("search")){
+                    Gson gson = new Gson();
+                    productList = gson.fromJson(response.toString(), SubProductList.class);
+                    productArrayList.addAll(productList.getProductArrayList());
+//                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
+//                    GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
+//                    mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//                        @Override
+//                        public int getSpanSize(int position) {
+//                            if (adasd.getItemViewType(position) > 0) {
+//                                return adasd.getItemViewType(position);
+//                            } else {
+//                                return 1;
+//                            }
+//                            //return 2;
+//                        }
+//                    });
+//                    recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
+//                    recyclerViewPopularProduct.setAdapter(adasd);
+
+                    Intent intentSearch = new Intent(this, SearchResultActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("searchObj", productArrayList);
+                    intentSearch.putExtras(bundle);
+                    startActivity(intentSearch);
+                }
+                if(serviceCall.equalsIgnoreCase("recentSearch")){
+                    Gson gson = new Gson();
+                    searchList = gson.fromJson(response.toString(), RecentSearchList.class);
+                    recentSearchArrayList.addAll(searchList.getRecentSearchArrayList());
+                    recentSearchListAdapter = new RecentSearchListAdapter(recentSearchArrayList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    recentSearchList.setLayoutManager(linearLayoutManager);
+                    recentSearchList.setAdapter(recentSearchListAdapter);
+                    recentSearchList.invalidate();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -219,6 +313,37 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
     }
 
+    private void makeSearch(String searchName){
+
+        serviceCall = "search";
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.KEY_SEARCH, searchName);
+            jsonObject.put(OSAConstants.KEY_USER_ID, "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
+        String url = OSAConstants.BUILD_URL + OSAConstants.SEARCH_PRODUCT;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void getRecentSearch(){
+
+//        recentSearchLay.setVisibility(View.VISIBLE);
+        serviceCall = "recentSearch";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, "0");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
+        String url = OSAConstants.BUILD_URL + OSAConstants.RECENT_SEARCH;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
     @Override
     public void onItemClickBestSelling(View view, int position) {
 
@@ -231,6 +356,11 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
 
     @Override
     public void onAlertNegativeClicked(int tag) {
+
+    }
+
+    @Override
+    public void onItemClickRecentSearch(View view, int position) {
 
     }
 }
