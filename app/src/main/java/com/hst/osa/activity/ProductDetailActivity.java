@@ -207,8 +207,9 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                             (status.equalsIgnoreCase("notRegistered")) || (status.equalsIgnoreCase("error")))) {
                         signInSuccess = false;
                         d(TAG, "Show error dialog");
-                        AlertDialogHelper.showSimpleAlertDialog(this, msg);
-
+                        if (!resFor.equalsIgnoreCase("review")) {
+                            AlertDialogHelper.showSimpleAlertDialog(this, msg);
+                        }
                     } else {
                         signInSuccess = true;
                     }

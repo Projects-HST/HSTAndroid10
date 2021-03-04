@@ -247,6 +247,7 @@
                                 android:fontFamily="@font/regular"
                                 android:gravity="center"
                                 android:paddingHorizontal="20dp"
+                                android:visibility="gone"
                                 android:text="@string/fbLogIn"
                                 android:textAllCaps="false"
                                 android:textColor="@color/blue"
@@ -260,6 +261,7 @@
                                 android:layout_below="@id/btn_fb_login"
                                 android:layout_marginStart="40dp"
                                 android:fontFamily="@font/light"
+                                android:layout_marginTop="20dp"
                                 android:text="@string/create"
                                 android:textColor="@color/text_black"
                                 android:textSize="14sp" />
@@ -270,6 +272,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/btn_fb_login"
                                 android:layout_toEndOf="@id/tryLog"
+                                android:layout_marginTop="20dp"
                                 android:fontFamily="@font/regular"
                                 android:paddingHorizontal="5dp"
                                 android:text="@string/signUp"
