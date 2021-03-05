@@ -2,11 +2,14 @@ package com.hst.osa.activity;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +20,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,53 +28,136 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.adapter.RecentSearchListAdapter;
+import com.hst.osa.bean.support.Product;
+import com.hst.osa.bean.support.RecentSearch;
+import com.hst.osa.bean.support.RecentSearchList;
+import com.hst.osa.bean.support.SubProductList;
+import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.fragment.CategoryFragment;
 import com.hst.osa.fragment.DashboardFragment;
+import com.hst.osa.helpers.AlertDialogHelper;
+import com.hst.osa.helpers.ProgressDialogHelper;
+import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.interfaces.OnBackPressedListener;
+import com.hst.osa.servicehelpers.ServiceHelper;
+import com.hst.osa.serviceinterfaces.IServiceListener;
+import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnBackPressedListener {
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import static android.util.Log.d;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnBackPressedListener, IServiceListener, DialogClickListener, RecentSearchListAdapter.OnItemClickListener {
+
+    private static final String TAG = MainActivity.class.getName();
     Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private LinearLayout sideDash, sideProfile, sideCat, sideWish, sideOrder, sideWallet, sideAddress, sideSettings, sideLogout;
+    private LinearLayout sideDash, sideProfile, sideCat, sideWish, sideOrder, sideWallet, sideAddress, sideSettings, sideLogout, recentSearchLay;
+    private FrameLayout mainLay;
     private TextView name, mailId;
+    private SearchView mSearchView;
+    private RecyclerView recentSearchList;
     private boolean doubleBackToExitPressedOnce = false;
     private ImageView profilePic;
     NavigationView navigationView;
-    public String page = "", productID = "";
+    private String page = "", serviceCall;
+
+    private ServiceHelper serviceHelper;
+    private ProgressDialogHelper progressDialogHelper;
+
+    private ArrayList<Product> productArrayList = new ArrayList<>();
+    SubProductList productList;
+    private ArrayList<RecentSearch> recentSearchArrayList = new ArrayList<>();
+    RecentSearchList searchList;
+    RecentSearchListAdapter recentSearchListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        page = getIntent().getExtras().getString("page");
-//        productID = getIntent().getExtras().getString("productObj");
         toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
+
+        serviceHelper = new ServiceHelper(this);
+        serviceHelper.setServiceListener(this);
+
+        progressDialogHelper = new ProgressDialogHelper(this);
         initializeNavigationDrawer();
         initializeIDs();
     }
 
     private void initializeIDs() {
 
+        recentSearchLay = (LinearLayout)findViewById(R.id.recentMainLay);
+        mainLay = (FrameLayout)findViewById(R.id.fragmentContainer);
+        recentSearchList = (RecyclerView)findViewById(R.id.recentSearchMain);
+        mSearchView = (SearchView)findViewById(R.id.search_main);
         navigationView = findViewById(R.id.nav_view);
         profilePic = navigationView.getHeaderView(0).findViewById(R.id.user_img);
         name = navigationView.getHeaderView(0).findViewById(R.id.full_name);
         mailId = navigationView.getHeaderView(0).findViewById(R.id.area);
+
+
+        mSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchView.setIconified(false);
+                mainLay.setVisibility(View.GONE);
+                recentSearchLay.setVisibility(View.VISIBLE);
+                getRecentSearch();
+            }
+        });
+
+        mSearchView.setQueryHint("What are you looking");
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                if (query != null){
+                    makeSearch(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//
+//                if (newText.length() == 0) {
+//                    recentSearchListAdapter.clearText();
+//                } else {
+//                    recentSearchList.invalidate();
+//                }
+                return false;
+            }
+        });
+
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                recentSearchLay.setVisibility(View.GONE);
+                mainLay.setVisibility(View.VISIBLE);
+                recentSearchArrayList.clear();
+                return false;
+            }
+        });
+
         if(PreferenceStorage.getName(this).equalsIgnoreCase("") || PreferenceStorage.getName(this).isEmpty()) {
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //What to do on back clicked
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                    i.putExtra("page", "dash");
-                    i.putExtra("productObj", "");
                     startActivity(i);
                 }
             });
@@ -104,12 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sideLogout.setOnClickListener(this);
 
         changePage(0);
-        if (page.equalsIgnoreCase("product")) {
-            Intent homeIntent;
-            homeIntent = new Intent(getApplicationContext(), ProductDetailActivity.class);
-            homeIntent.putExtra("productObj", productID);
-            startActivity(homeIntent);
-        }
 
     }
 
@@ -278,5 +359,129 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }if (view == sideLogout) {
             logout();
         }
+    }
+
+    private void makeSearch(String searchName){
+
+        serviceCall = "search";
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.KEY_SEARCH, searchName);
+            jsonObject.put(OSAConstants.KEY_USER_ID, "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
+        String url = OSAConstants.BUILD_URL + OSAConstants.SEARCH_PRODUCT;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void getRecentSearch(){
+
+//        recentSearchLay.setVisibility(View.VISIBLE);
+        serviceCall = "recentSearch";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, "0");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
+        String url = OSAConstants.BUILD_URL + OSAConstants.RECENT_SEARCH;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private boolean validateSignInResponse(JSONObject response) {
+        boolean signInSuccess = false;
+        if ((response != null)) {
+            try {
+                String status = response.getString("status");
+                String msg = response.getString(OSAConstants.PARAM_MESSAGE);
+                d(TAG, "status val" + status + "msg" + msg);
+
+                if ((status != null)) {
+                    if (((status.equalsIgnoreCase("activationError")) || (status.equalsIgnoreCase("alreadyRegistered")) ||
+                            (status.equalsIgnoreCase("notRegistered")) || (status.equalsIgnoreCase("error")))) {
+                        signInSuccess = false;
+                        d(TAG, "Show error dialog");
+                        AlertDialogHelper.showSimpleAlertDialog(this, msg);
+
+                    } else {
+                        signInSuccess = true;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return signInSuccess;
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        progressDialogHelper.hideProgressDialog();
+        if (validateSignInResponse(response)) {
+            try {
+                if (serviceCall.equalsIgnoreCase("search")) {
+                    Gson gson = new Gson();
+                    productList = gson.fromJson(response.toString(), SubProductList.class);
+                    productArrayList.addAll(productList.getProductArrayList());
+//                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
+//                    GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
+//                    mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//                        @Override
+//                        public int getSpanSize(int position) {
+//                            if (adasd.getItemViewType(position) > 0) {
+//                                return adasd.getItemViewType(position);
+//                            } else {
+//                                return 1;
+//                            }
+//                            //return 2;
+//                        }
+//                    });
+//                    recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
+//                    recyclerViewPopularProduct.setAdapter(adasd);
+
+                    Intent intentSearch = new Intent(this, SearchResultActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("searchObj", productArrayList);
+                    intentSearch.putExtras(bundle);
+                    startActivity(intentSearch);
+                }
+                if(serviceCall.equalsIgnoreCase("recentSearch")){
+                    Gson gson = new Gson();
+                    searchList = gson.fromJson(response.toString(), RecentSearchList.class);
+                    recentSearchArrayList.addAll(searchList.getRecentSearchArrayList());
+                    recentSearchListAdapter = new RecentSearchListAdapter(recentSearchArrayList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    recentSearchList.setLayoutManager(linearLayoutManager);
+                    recentSearchList.setAdapter(recentSearchListAdapter);
+                    recentSearchList.invalidate();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onError(String error) {
+
+    }
+
+    @Override
+    public void onAlertPositiveClicked(int tag) {
+
+    }
+
+    @Override
+    public void onAlertNegativeClicked(int tag) {
+
+    }
+
+    @Override
+    public void onItemClickRecentSearch(View view, int position) {
+
     }
 }

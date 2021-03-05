@@ -32,6 +32,10 @@ public class OSAConstants {
 
     public static final String ADD_TO_CART = "product_cart/";
 
+    public static final String SEARCH_PRODUCT = "search_product/";
+
+    public static final String RECENT_SEARCH = "recent_search_list/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
@@ -83,6 +87,7 @@ public class OSAConstants {
     public static String VERSION_VALUE = "1";
     public static String KEY_CAT_ID = "cat_id";
     public static String KEY_SUB_CAT_ID = "sub_cat_id";
+    public static String KEY_SEARCH = "search_name";
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";

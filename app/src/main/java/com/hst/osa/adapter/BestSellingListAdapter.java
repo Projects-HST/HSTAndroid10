@@ -91,14 +91,20 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
             holder.txtProductMRP.setText("₹" + product.getprod_mrp_price());
             holder.txtProductMRP.setPaintFlags(holder.txtProductMRP.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
-        holder.productRating.setRating(Float.parseFloat(product.getReview_average()));
+        if (OSAValidator.checkNullString(product.getReview_average())) {
+            holder.productRating.setVisibility(View.VISIBLE);
+            holder.productRating.setRating(Float.parseFloat(product.getReview_average()));
+        }else {
+            holder.productRating.setVisibility(View.GONE);
+        }
 
 
         if (OSAValidator.checkNullString(product.getproduct_cover_img())) {
             Picasso.get().load(product.getproduct_cover_img()).into(holder.productBanner);
-        } else {
-//            newsImage.setImageResource(R.drawable.news_banner);
         }
+//        else {
+//            holder.productBanner.setImageResource(R.drawable.imgsample);
+//        }
     }
 
     @Override
