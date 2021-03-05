@@ -47,7 +47,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class CartActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener {
+public class CartActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, CartItemListAdapter.OnItemClickListener {
 
     private static final String TAG = CartActivity.class.getName();
     Context context;
@@ -60,7 +60,7 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
 
     private RecyclerView recyclerViewCategory;
     private View rootView;
-    private TextView itemCount;
+    private TextView totalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
         });
 
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
-//        itemCount = (TextView) findViewById(R.id.item_count);
+        totalPrice = (TextView) findViewById(R.id.total_price);
         initiateServices();
         getDashboardServices();
 
@@ -92,14 +92,12 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
         try {
-//            jsonObject.put(SkilExConstants.USER_MASTER_ID, PreferenceStorage.getUserId(this));
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-//        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
-        String url = OSAConstants.BUILD_URL + OSAConstants.DASHBOARD;
+        String url = OSAConstants.BUILD_URL + OSAConstants.CART_LIST;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
@@ -170,6 +168,11 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
         return signInSuccess;
     }
 
+    public void reLoadPage() {
+        finish();
+        startActivity(getIntent());
+    }
+
     @Override
     public void onResponse(final JSONObject response) {
         progressDialogHelper.hideProgressDialog();
@@ -180,11 +183,11 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
                 JSONObject categoryObjData = response.getJSONObject("cart_payment");
                 cartItemList = gson.fromJson(response.toString(), CartItemList.class);
                 cartItemArrayList.addAll(cartItemList.getCartItemArrayList());
-//                mAdapter = new CategoryListAdapter(categoryArrayList, this);
+                mAdapter = new CartItemListAdapter(this, cartItemArrayList, this);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
                 recyclerViewCategory.setLayoutManager(mLayoutManager);
                 recyclerViewCategory.setAdapter(mAdapter);
-//                itemCount.setText(categoryArrayList.size() + " Items");
+                totalPrice.setText("₹" + categoryObjData.getString("cart_payment"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -196,6 +199,11 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
 
     @Override
     public void onError(String error) {
+
+    }
+
+    @Override
+    public void onItemClickCart(View view, int position) {
 
     }
 }

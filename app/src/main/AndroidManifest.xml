@@ -87,6 +87,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
 
+        <activity
+            android:name=".activity.CartActivity"
+            android:label="@string/cart"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA" />
+
         <activity android:name=".activity.SearchResultActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"

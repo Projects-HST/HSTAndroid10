@@ -65,7 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
     Context context;
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
-    private String productID, sizeID = "0", colourID;
+    private String productID, sizeID = "0", colourID = "0";
     AViewFlipper aViewFlipper;
 
     private LinearLayout dotsLayout;
@@ -499,9 +499,9 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                         }
                     });
                     alertDialogBuilder.show();
-                } else {
-                    addToCart();
                 }
+            } else {
+                addToCart();
             }
         }
     }
