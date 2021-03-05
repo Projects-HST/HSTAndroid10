@@ -89,7 +89,7 @@
             android:theme="@style/Theme.OSA" />
 
         <activity
-            android:name=".activity.SubCategoryActivity"
+            android:name=".activity.CartActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />

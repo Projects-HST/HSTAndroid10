@@ -42,12 +42,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean doubleBackToExitPressedOnce = false;
     private ImageView profilePic;
     NavigationView navigationView;
-    String page = "";
+    public String page = "", productID = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        page = getIntent().getExtras().getString("page");
+//        productID = getIntent().getExtras().getString("productObj");
         toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         initializeNavigationDrawer();
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(View v) {
                     //What to do on back clicked
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    i.putExtra("page", "dash");
+                    i.putExtra("productObj", "");
                     startActivity(i);
                 }
             });
@@ -99,6 +104,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sideLogout.setOnClickListener(this);
 
         changePage(0);
+        if (page.equalsIgnoreCase("product")) {
+            Intent homeIntent;
+            homeIntent = new Intent(getApplicationContext(), ProductDetailActivity.class);
+            homeIntent.putExtra("productObj", productID);
+            startActivity(homeIntent);
+        }
 
     }
 

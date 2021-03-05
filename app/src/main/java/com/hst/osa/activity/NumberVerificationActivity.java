@@ -62,11 +62,15 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
     private ProgressDialogHelper progressDialogHelper;
     private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
     private SmsBrReceiver smsReceiver;
+    String page = "", productID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numberverification);
+
+        productID = getIntent().getExtras().getString("productObj");
+        page = getIntent().getExtras().getString("page");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
@@ -284,12 +288,16 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
                     PreferenceStorage.saveProfilePic(getApplicationContext(), profilePic);
                     PreferenceStorage.saveEmail(getApplicationContext(), email);
 
-                    PreferenceStorage.saveUserId(getApplicationContext(), userId);
-                    Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent homeIntent;
+                    if (page.equalsIgnoreCase("product")) {
+                        homeIntent = new Intent(getApplicationContext(), ProductDetailActivity.class);
+                        homeIntent.putExtra("productObj", productID);
+                    } else {
+                        homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 ////                    homeIntent.putExtra("profile_state", "new");
+                    }
                     startActivity(homeIntent);
-//                    this.finish();
                     finish();
 
                 }

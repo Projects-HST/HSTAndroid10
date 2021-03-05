@@ -229,18 +229,8 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
                         productArrayList.add(b, productList.getProductArrayList().get(b));
                     }
                     BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
-                    GridLayoutManager  mLayoutManager = new GridLayoutManager(getActivity(), 4);
-                    mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                        @Override
-                        public int getSpanSize(int position) {
-                            if (adasd.getItemViewType(position) > 0) {
-                                return adasd.getItemViewType(position);
-                            } else {
-                                return 1;
-                            }
-                            //return 2;
-                        }
-                    });
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
                     recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
                     recyclerViewPopularProduct.setAdapter(adasd);
 

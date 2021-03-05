@@ -22,17 +22,22 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.ColourListAdapter;
 import com.hst.osa.adapter.ReviewListAdapter;
 import com.hst.osa.adapter.SizeListAdapter;
+import com.hst.osa.bean.support.CategoryList;
 import com.hst.osa.bean.support.Colour;
 import com.hst.osa.bean.support.ColourList;
 import com.hst.osa.bean.support.Product;
+import com.hst.osa.bean.support.RelatedProductList;
 import com.hst.osa.bean.support.Review;
 import com.hst.osa.bean.support.ReviewList;
 import com.hst.osa.bean.support.Size;
@@ -54,7 +59,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class ProductDetailActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, SizeListAdapter.OnItemClickListener, ColourListAdapter.OnItemClickListener, View.OnClickListener, ReviewListAdapter.OnItemClickListener {
+public class ProductDetailActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, SizeListAdapter.OnItemClickListener, ColourListAdapter.OnItemClickListener, View.OnClickListener, ReviewListAdapter.OnItemClickListener, BestSellingListAdapter.OnItemClickListener {
 
     private static final String TAG = ProductDetailActivity.class.getName();
     Context context;
@@ -69,7 +74,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
 
     private RelativeLayout sizeLayout, colourLayout, reviewLayout;
     public RatingBar productRating;
-    public TextView productName, productPrice, productShare, productQuantity;
+    public TextView productName, productPrice, productShare, productQuantity, productStockStatus;
     public ImageView btnPlus, btnMinus;
     public EditText deliverCode;
     public TextView checkCode;
@@ -92,8 +97,14 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
     Review review;
     ReviewList reviewList;
 
+    private ArrayList<Product> productArrayList = new ArrayList<>();
+    private RecyclerView recyclerViewRelatedProduct;
+    Product product;
+    RelatedProductList relatedProductList;
+
     String resFor = "";
     float currentPrice = 0;
+    int stockCount = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,12 +130,14 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         recyclerViewSize = (RecyclerView) findViewById(R.id.listView_size);
         recyclerViewColour = (RecyclerView) findViewById(R.id.listView_colors);
         recyclerViewReview = (RecyclerView) findViewById(R.id.listView_reviews);
+        recyclerViewRelatedProduct = (RecyclerView) findViewById(R.id.listView_related);
 
         productRating = (RatingBar) findViewById(R.id.ratingBar);
         productName = (TextView) findViewById(R.id.product_name);
         productPrice = (TextView) findViewById(R.id.product_price);
         productShare = (TextView) findViewById(R.id.share);
         productQuantity = (TextView) findViewById(R.id.quantity);
+        productStockStatus = (TextView) findViewById(R.id.stock_status);
         btnMinus = (ImageView) findViewById(R.id.minus);
         btnMinus.setOnClickListener(this);
         deliverCode = (EditText) findViewById(R.id.pincode);
@@ -234,13 +247,32 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     productDetail.setText(productDetails.getString("product_description"));
                     productPrice.setText("Rs." + productDetails.getString("prod_actual_price"));
                     currentPrice = Float.parseFloat(productDetails.getString("prod_actual_price"));
+                    stockCount = Integer.parseInt(productDetails.getString("stocks_left"));
+                    if (stockCount == 0) {
+                        productStockStatus.setText(getString(R.string.out_stock));
+                        productStockStatus.setTextColor(ContextCompat.getColor(this, R.color.out_of_stock));
+                    }
+                    calculatePrice(1);
+
+                    if (response.getJSONArray("related_products").length()>0) {
+                        Gson gson = new Gson();
+                        relatedProductList = null;
+                        relatedProductList = gson.fromJson(response.toString(), RelatedProductList.class);
+                        productArrayList.addAll(relatedProductList.getProductArrayList());
+                        BestSellingListAdapter adapter = new BestSellingListAdapter(productArrayList, this);
+//                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                        recyclerViewRelatedProduct.setLayoutManager(layoutManager);
+//                    mRecyclerView.setLayoutManager(mLayoutManager);
+                        recyclerViewRelatedProduct.setAdapter(adapter);
+                    }
 
                     if (response.getJSONObject("product_review").getString("status").equalsIgnoreCase("success")) {
                         if (!response.getJSONObject("product_review").getJSONObject("product_review").getString("review_count").equalsIgnoreCase("0")) {
                             JSONObject reviewDetails = response.getJSONObject("product_review").getJSONObject("product_review");
                             productRating.setRating(Float.parseFloat(reviewDetails.getString("average")));
                         }
-                        productReviews.setText(getString(R.string.reviews) + "(" + response.getJSONObject("product_review").getJSONObject("product_review").getString("review_count") + ")");
+                        productReviews.setText(getString(R.string.reviews) + " (" + response.getJSONObject("product_review").getJSONObject("product_review").getString("review_count") + ")");
                     }
                     if (productDetails.getString("combined_status").equalsIgnoreCase("0")) {
                         sizeLayout.setVisibility(View.GONE);
@@ -260,6 +292,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     recyclerViewSize.setLayoutManager(layoutManager);
                     recyclerViewSize.setAdapter(mAdapter);
                     sizeID = sizeArrayList.get(0).getid();
+                    stockCount = Integer.parseInt(sizeArrayList.get(0).getstocks_left());
                     getProductColour();
                 } else if (resFor.equalsIgnoreCase("colour")) {
                     Gson gson = new Gson();
@@ -274,6 +307,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     productPrice.setText("Rs." + colourArrayList.get(0).getProd_actual_price());
                     currentPrice = Float.parseFloat(colourArrayList.get(0).getProd_actual_price());
                     colourID = colourArrayList.get(0).getid();
+                    stockCount = Integer.parseInt(colourArrayList.get(0).getstocks_left());
                     calculatePrice(Integer.parseInt(productQuantity.getText().toString()));
                     getProductReviews();
                 } else if (resFor.equalsIgnoreCase("review")) {
@@ -287,7 +321,8 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     recyclerViewReview.setLayoutManager(layoutManager);
                     recyclerViewReview.setAdapter(adapter);
                 } else if (resFor.equalsIgnoreCase("addCart")) {
-
+                    Intent intent = new Intent(this, CartActivity.class);
+                    startActivity(intent);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -427,6 +462,10 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                 currentVal--;
                 productQuantity.setText(String.valueOf(currentVal));
                 calculatePrice(currentVal);
+                if (currentVal <= stockCount) {
+                    productStockStatus.setText(getString(R.string.in_stock));
+                    productStockStatus.setTextColor(ContextCompat.getColor(this, R.color.in_stock));
+                }
             }
         }
         if (view == btnPlus) {
@@ -435,6 +474,10 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                 currentVal++;
                 productQuantity.setText(String.valueOf(currentVal));
                 calculatePrice(currentVal);
+                if (currentVal > stockCount) {
+                    productStockStatus.setText(getString(R.string.out_stock));
+                    productStockStatus.setTextColor(ContextCompat.getColor(this, R.color.out_of_stock));
+                }
             }
         }
         if (view == addCart) {
@@ -471,12 +514,19 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
 
         Intent homeIntent = new Intent(this, LoginActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        homeIntent.putExtra("page", "product");
+        homeIntent.putExtra("productObj", productID);
         startActivity(homeIntent);
         finish();
     }
 
     @Override
     public void onItemClickReview(View view, int position) {
+
+    }
+
+    @Override
+    public void onItemClickBestSelling(View view, int position) {
 
     }
 }

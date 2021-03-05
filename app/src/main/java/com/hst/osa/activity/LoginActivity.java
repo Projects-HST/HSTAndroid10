@@ -80,10 +80,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private RelativeLayout layoutNumber, layoutEmail;
 
+    String page = "", productID = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        page = getIntent().getExtras().getString("page");
+        productID = getIntent().getExtras().getString("productObj");
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -93,9 +99,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ProductDetailActivity.class);
+                i.putExtra("productObj", productID);
+                startActivity(i);
                 finish();
             }
         });
+
 
         txtUseEmail = findViewById(R.id.mail_login);
         txtUseNumber = findViewById(R.id.ph_login);
@@ -215,6 +225,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if (v == txtSignUp) {
             Intent i = new Intent(getApplicationContext(), SignupActivity.class);
+            i.putExtra("page", page);
+            i.putExtra("product_id", productID);
             startActivity(i);
         }
     }
@@ -239,15 +251,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             tiEmail.setError(getString(R.string.error_email));
             requestFocus(txtEmail);
             return false;
-        } if (!OSAValidator.checkNullString(this.txtEmail.getText().toString().trim())) {
+        }
+        if (!OSAValidator.checkNullString(this.txtEmail.getText().toString().trim())) {
             tiEmail.setError(getString(R.string.error_email));
             requestFocus(txtEmail);
             return false;
-        } if (!OSAValidator.checkNullString(this.txtPassword.getText().toString().trim())) {
+        }
+        if (!OSAValidator.checkNullString(this.txtPassword.getText().toString().trim())) {
             tiPassword.setError(getString(R.string.error_password));
             requestFocus(txtPassword);
             return false;
-        } if (!OSAValidator.checkStringMinLength(6, this.txtPassword.getText().toString().trim())) {
+        }
+        if (!OSAValidator.checkStringMinLength(6, this.txtPassword.getText().toString().trim())) {
             tiPassword.setError(getString(R.string.error_password_min));
             requestFocus(txtPassword);
             return false;
@@ -304,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String ggId = "" + account.getId();
         String photoUrl = "" + account.getPhotoUrl();
 
-        Log.d( TAG, "id" + ggId);
+        Log.d(TAG, "id" + ggId);
         PreferenceStorage.saveSocialNetworkProfilePic(getApplicationContext(), photoUrl);
 
         String GCMKey = PreferenceStorage.getGCM(this);
@@ -528,11 +543,54 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (validateResponse(response)) {
             if (whichService.equalsIgnoreCase("mobile")) {
                 Intent i = new Intent(getApplicationContext(), NumberVerificationActivity.class);
+                i.putExtra("page", page);
+                i.putExtra("productObj", productID);
                 startActivity(i);
             }
             if (whichService.equalsIgnoreCase("google")) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                Intent i;
+                if (page.equalsIgnoreCase("product")) {
+                    i = new Intent(getApplicationContext(), ProductDetailActivity.class);
+                    i.putExtra("productObj", productID);
+                } else {
+                    i = new Intent(getApplicationContext(), MainActivity.class);
+                }
                 startActivity(i);
+                finish();
+            }
+            if (whichService.equalsIgnoreCase("email")) {
+                PreferenceStorage.setFirstTimeLaunch(getApplicationContext(), false);
+//                    Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
+                JSONObject data = null;
+                try {
+                    data = response.getJSONObject("userData");
+                    String userId = data.getString("customer_id");
+                    String fullName = data.getString("first_name");
+                    String gender = data.getString("gender");
+                    String profilePic = data.getString("profile_picture");
+                    String email = data.getString("email");
+
+                    PreferenceStorage.saveUserId(getApplicationContext(), userId);
+                    PreferenceStorage.saveName(getApplicationContext(), fullName);
+                    PreferenceStorage.saveGender(getApplicationContext(), gender);
+                    PreferenceStorage.saveProfilePic(getApplicationContext(), profilePic);
+                    PreferenceStorage.saveEmail(getApplicationContext(), email);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Intent homeIntent;
+                if (page.equalsIgnoreCase("product")) {
+                    homeIntent = new Intent(getApplicationContext(), ProductDetailActivity.class);
+                    homeIntent.putExtra("productObj", productID);
+                } else {
+                    homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////                    homeIntent.putExtra("profile_state", "new");
+                }
+                startActivity(homeIntent);
+                finish();
+
             }
         }
 
