@@ -54,12 +54,12 @@ public class CartItemListAdapter extends RecyclerView.Adapter<CartItemListAdapte
             String status = response.getString("status");
             if (status.equalsIgnoreCase("success")) {
                 if (resFor.equalsIgnoreCase("quantity")) {
-                    ((CartActivity)mContext).reLoadPage();
                 } else {
                     productArrayList.remove(pos);
                     notifyItemRemoved(pos);
                     notifyDataSetChanged();
                 }
+                ((CartActivity)mContext).reLoadPage();
             }
         } catch (JSONException e) {
             e.printStackTrace();
