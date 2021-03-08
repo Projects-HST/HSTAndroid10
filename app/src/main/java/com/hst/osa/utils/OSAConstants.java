@@ -38,6 +38,8 @@ public class OSAConstants {
 
     public static final String CART_LIST = "view_cart_items/";
 
+    public static final String ORDER_DETAILS = "order_details/";
+
     public static final String SEARCH_PRODUCT = "search_product/";
 
     public static final String RECENT_SEARCH = "recent_search_list/";

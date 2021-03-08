@@ -125,4 +125,22 @@
     <string name="address1">Address Line1</string>
     <string name="address2">Address Line 2</string>
 
+    <!-- Product Checkout -->
+
+    <string name="your_delivery">Your Delivery Address</string>
+    <string name="change_delivery">Change Delivery Address</string>
+    <string name="apply_promo">Apply Promo Code</string>
+    <string name="enter_promo">Enter Promo Code</string>
+    <string name="apply">Apply</string>
+    <string name="bank_offer">Bank Offer</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="saved_cards">Saved Cards </string>
+    <string name="credit_card">Credit Card</string>
+    <string name="card_number">Card Number</string>
+    <string name="card_name">Name on Card</string>
+    <string name="debit_card">Debit Card</string>
+    <string name="items">Items</string>
+    <string name="offer">Offer</string>
+    <string name="review_order">Review your Order</string>
+
 </resources>
