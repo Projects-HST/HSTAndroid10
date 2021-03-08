@@ -53,7 +53,7 @@ import static android.util.Log.d;
 
 public class CategoryActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, CategoryListAdapter.OnItemClickListener, RecentSearchListAdapter.OnItemClickListener {
 
-    private static final String TAG = BestSellingFragment.class.getName();
+    private static final String TAG = CategoryActivity.class.getName();
     Context context;
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;

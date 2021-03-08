@@ -32,6 +32,12 @@ public class OSAConstants {
 
     public static final String ADD_TO_CART = "product_cart/";
 
+    public static final String DELETE_FROM__CART = "product_cart_remove/";
+
+    public static final String UPDATE_QUANTITY = "cart_quantity/";
+
+    public static final String CART_LIST = "view_cart_items/";
+
     public static final String SEARCH_PRODUCT = "search_product/";
 
     public static final String RECENT_SEARCH = "recent_search_list/";
@@ -117,6 +123,7 @@ public class OSAConstants {
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";
+    public static final String PARAMS_CART_ID = "cart_id";
     public static final String PARAMS_SIZE_ID = "size_id";
     public static final String PARAMS_COMBINED_ID = "product_comb_id";
     public static final String PARAMS_QUANTITY = "quantity";

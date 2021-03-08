@@ -5,13 +5,11 @@
     <item android:id="@+id/menu_cart"
         android:title="@string/cart"
         android:icon="@drawable/ic_cart"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"/>
 
     <item android:id="@+id/menu_notification"
         android:title="@string/notification"
         android:icon="@drawable/ic_notification"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"/>
 
 </menu>

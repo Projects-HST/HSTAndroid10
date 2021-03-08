@@ -387,6 +387,40 @@
                     </LinearLayout>
 
                     <RelativeLayout
+                        android:id="@+id/related_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background_grey">
+
+                        <TextView
+                            android:id="@+id/txt_related"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/regular"
+                            android:text="@string/related"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listView_related"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_below="@+id/txt_related"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:padding="1dp" />
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
                         android:id="@+id/review_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -445,27 +479,27 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
             android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txt_price"
                 android:layout_width="wrap_content"
-                android:textSize="12sp"
-                android:textColor="@color/price_text"
-                android:textAllCaps="true"
+                android:layout_height="wrap_content"
                 android:text="@string/price"
-                android:layout_height="wrap_content"/>
+                android:textAllCaps="true"
+                android:textColor="@color/price_text"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/total_price"
                 android:layout_width="wrap_content"
-                android:textColor="@color/out_of_stock"
-                android:textSize="18sp"
+                android:layout_height="wrap_content"
                 android:text="450"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/out_of_stock"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -473,15 +507,15 @@
             android:id="@+id/add_to_cart"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:background="@drawable/btn_size_color"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:background="@drawable/btn_size_color"
             android:fontFamily="@font/medium"
+            android:gravity="center"
             android:text="@string/add_cart"
-            android:gravity="center"/>
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 
