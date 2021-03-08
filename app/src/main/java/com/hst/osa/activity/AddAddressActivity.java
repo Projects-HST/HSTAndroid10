@@ -49,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.PipedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -421,19 +422,21 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
 
         JSONObject jsonObject = new JSONObject();
 
+        String id  = PreferenceStorage.getUserId(this);
+
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, "");
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
             jsonObject.put(OSAConstants.KEY_COUNTRY_ID, "1");
             jsonObject.put(OSAConstants.KEY_STATE, state.getText().toString());
             jsonObject.put(OSAConstants.KEY_CITY, area.getText().toString());
             jsonObject.put(OSAConstants.KEY_PIN_CODE, pinCode.getText().toString());
             jsonObject.put(OSAConstants.KEY_ADD_1, address1.getText().toString());
             jsonObject.put(OSAConstants.KEY_ADD_2, address2.getText().toString());
-            jsonObject.put(OSAConstants.KEY_LANDMARK, "bjchcbsagf");
+            jsonObject.put(OSAConstants.KEY_LANDMARK, "");
             jsonObject.put(OSAConstants.KEY_FULL_NAME, cus_name.getText().toString());
             jsonObject.put(OSAConstants.KEY_MOB_NUM, cus_mobile.getText().toString());
-            jsonObject.put(OSAConstants.KEY_ALT_MOB_NUM, "07876875441");
-            jsonObject.put(OSAConstants.KEY_EMAIL_ADDRESS, "afdgfzdfrexversg");
+            jsonObject.put(OSAConstants.KEY_ALT_MOB_NUM, "");
+            jsonObject.put(OSAConstants.KEY_EMAIL_ADDRESS, "");
             jsonObject.put(OSAConstants.KEY_ADDRESS_TYPE, OSAConstants.TYPE_HOME);
             jsonObject.put(OSAConstants.KEY_ADDRESS_MODE, "0");
         } catch (JSONException e) {

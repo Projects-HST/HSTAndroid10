@@ -124,5 +124,7 @@
     <string name="code">Pincode</string>
     <string name="address1">Address Line1</string>
     <string name="address2">Address Line 2</string>
+    <string name="btnDelete">Delete</string>
+    <string name="btnEdit">Edit</string>
 
 </resources>
