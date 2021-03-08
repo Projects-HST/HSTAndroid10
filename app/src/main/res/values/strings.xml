@@ -105,4 +105,21 @@
     <string name="add_cart">Add to Cart</string>
     <string name="sub_category">ALL</string>
 
+    <!-- Address -->
+    <string name="address">Address List</string>
+    <string name="new_add">Add New</string>
+    <string name="locate">Use my current location</string>
+    <string name="save_address">Save Delivery Address</string>
+    <string name="default_add">Set Default Address</string>
+    <string name="title_location_permission">Location Permission</string>
+    <string name="text_location_permission">Allow app to access your location?</string>
+    <string name="cityName">City</string>
+    <string name="stateName">State</string>
+    <string name="empty_entry">Field cannot be empty</string>
+    <string name="empty_locality">Enter proper locality or pin location on map</string>
+    <string name="empty_address">Click on location to get address</string>
+    <string name="code">Pincode</string>
+    <string name="address1">Address Line1</string>
+    <string name="address2">Address Line 2</string>
+
 </resources>

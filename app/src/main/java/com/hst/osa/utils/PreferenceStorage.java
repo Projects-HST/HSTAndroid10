@@ -213,4 +213,57 @@ public class PreferenceStorage {
     }
     /*End*/
 
+    // LatLng
+    public static void saveLat(Context context, String lat) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_LAT, lat);
+        editor.apply();
+    }
+
+    public static String getLat(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_LAT, "");
+        return userId;
+    }
+    /*End*/
+
+    // LatLng
+    public static void saveLng(Context context, String lng) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_LNG, lng);
+        editor.apply();
+    }
+
+    public static String getLng(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_LNG, "");
+        return userId;
+    }
+    /*End*/
+
+    // LatLng
+    public static void saveAddressId(Context context, String addId) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_USER_PROFILE_PIC, addId);
+        editor.apply();
+    }
+
+    public static String getAddressId(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.KEY_USER_PROFILE_PIC, "");
+        return userId;
+    }
+    /*End*/
 }

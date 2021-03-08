@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hst.osa">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -86,11 +88,21 @@
             android:label="@string/category"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
-
-        <activity android:name=".activity.SearchResultActivity"
+        <activity
+            android:name=".activity.SearchResultActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA"/>
+            android:theme="@style/Theme.OSA" />
+        <activity
+            android:name=".activity.ShippingAddressActivity"
+            android:label="@string/address"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.OSA" />
+
+        <activity android:name=".activity.AddAddressActivity"
+            android:label="@string/address"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarLogin"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
