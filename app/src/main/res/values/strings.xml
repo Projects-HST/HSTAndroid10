@@ -108,4 +108,10 @@
     <string name="check_out">Check Out</string>
     <string name="sub_category">ALL</string>
 
+    <!-- Product Checkout -->
+    <string name="your_delivery">Your Delivery Address</string>
+    <string name="change_delivery">Change Delivery Address</string>
+    <string name="apply_promo">Apply Promo Code</string>
+
+
 </resources>
