@@ -42,6 +42,10 @@ public class OSAConstants {
 
     public static final String RECENT_SEARCH = "recent_search_list/";
 
+    public static final String ADD_ADDRESS = "address_create/";
+
+    public static final String ADDRESS_LIST = "address_list/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
@@ -94,6 +98,28 @@ public class OSAConstants {
     public static String KEY_CAT_ID = "cat_id";
     public static String KEY_SUB_CAT_ID = "sub_cat_id";
     public static String KEY_SEARCH = "search_name";
+
+
+    //    ADDRESS PARAMS
+    public static String KEY_LAT = "lat";
+    public static String KEY_LNG = "lng";
+    public static String KEY_COUNTRY_ID = "country_id";
+    public static String KEY_STATE = "state";
+    public static String KEY_CITY = "city";
+    public static String KEY_PIN_CODE = "pincode";
+    public static String KEY_ADD_1 = "house_no";
+    public static String KEY_ADD_2 = "street";
+    public static String KEY_LANDMARK = "landmark";
+    public static String KEY_FULL_NAME = "full_name";
+    public static String KEY_MOB_NUM = "mobile_number";
+    public static String KEY_ALT_MOB_NUM = "alternative_mobile_number";
+    public static String KEY_EMAIL_ADDRESS = "email_address";
+    public static String KEY_ADDRESS_TYPE = "address_type_id";
+    public static String KEY_ADDRESS_MODE = "address_mode";
+
+    //    ADDRESS TYPE
+    public static String TYPE_HOME = "1";
+    public static String TYPE_OFFICE = "2";
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";

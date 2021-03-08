@@ -35,4 +35,7 @@
     <color name="price_text">#929292</color>
     <color name="colour_border">#CE3E3E</color>
     <color name="sel_sub_cat">#900319</color>
+    <color name="btn_add">#E5E5E5</color>
+    <color name="txt_red">#E50027</color>
+    <color name="txt_grey">#34283E</color>
 </resources>

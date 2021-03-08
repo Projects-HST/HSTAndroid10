@@ -389,6 +389,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }if (view == sideWallet) {
 
         }if (view == sideAddress) {
+            Intent i = new Intent(this, ShippingAddressActivity.class);
+            startActivity(i);
 
         }if (view == sideSettings) {
 
