@@ -1,9 +1,13 @@
 package com.hst.osa.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,6 +21,7 @@ import com.hst.osa.R;
 import com.hst.osa.adapter.CartItemListAdapter;
 import com.hst.osa.bean.support.Address;
 import com.hst.osa.bean.support.AddressList;
+import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartItemList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
@@ -34,7 +39,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class CheckoutActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener {
+public class ReviewOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener {
 
     private static final String TAG = CheckoutActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -42,11 +47,8 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
     private String resCheck = "";
     private String addressID = "";
     private String orderID = "";
-    private String purchaseOrderID = "";
     private TextView name, phone, address;
-    private EditText promoCode;
-    private TextView checkPromo;
-    private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, reviewOrder;
+    private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, placeOrder;
 
     AddressList addressList;
     ArrayList<Address> addressArrayList = new ArrayList<>();
@@ -69,9 +71,9 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
         name = (TextView) findViewById(R.id.name);
         phone = (TextView) findViewById(R.id.mobile);
         address = (TextView) findViewById(R.id.address);
-        promoCode = (EditText) findViewById(R.id.promo_code);
-        checkPromo = (TextView) findViewById(R.id.apply_promo);
-        checkPromo.setOnClickListener(this);
+//        promoCode = (EditText) findViewById(R.id.promo_code);
+//        checkPromo = (TextView) findViewById(R.id.apply_promo);
+//        checkPromo.setOnClickListener(this);
 
         itemPrice = (TextView) findViewById(R.id.item_price);
 
@@ -81,9 +83,6 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
         deliveryPrice = (TextView) findViewById(R.id.delivery_price);
         offerPrice = (TextView) findViewById(R.id.offer_price);
         totalPrice = (TextView) findViewById(R.id.total_price);
-
-        reviewOrder = (TextView) findViewById(R.id.review_order);
-        reviewOrder.setOnClickListener(this);
 
         initiateServices();
         getAddressList();
@@ -133,21 +132,6 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
             e.printStackTrace();
         }
         String url = OSAConstants.BUILD_URL + OSAConstants.ORDER_DETAILS;
-        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
-    }
-
-    private void checkPromoCode() {
-        resCheck = "detail";
-        JSONObject jsonObject = new JSONObject();
-        String id = PreferenceStorage.getUserId(this);
-        try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.PARAMS_PURCHASE_ORDER_ID, purchaseOrderID);
-            jsonObject.put(OSAConstants.PARAMS_ADDRESS_ID, addressID);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String url = OSAConstants.BUILD_URL + OSAConstants.APPLY_PROMO;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
@@ -218,7 +202,6 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
                     JSONArray orderObjData = response.getJSONArray("order_details");
 
                     JSONObject data = orderObjData.getJSONObject(0);
-                    purchaseOrderID = data.getString("purchse_order_id");
                     String nameString = data.getString("full_name");
                     String mobileString = data.getString("mobile_number");
                     String houseString = data.getString("house_no");
@@ -266,14 +249,8 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
 
     @Override
     public void onClick(View view) {
-        if (view == checkPromo) {
-            if (!promoCode.getText().toString().isEmpty()) {
-                checkPromoCode();
-            }
-        }
-        if (view == reviewOrder) {
-            Intent i = new Intent(this, ReviewOrderActivity.class);
-            startActivity(i);
-        }
+//        if (view == checkPromo) {
+//
+//        }
     }
 }

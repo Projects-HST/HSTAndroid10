@@ -8,6 +8,16 @@ public class OSAConstants {
 
     public static final String BUILD_URL = BASE_URL + JOINT_URL + "mobileapi/";
 
+
+    //Payment Gateway
+    public static final String API_ADVANCE_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/customer_advance.php";
+    //    public static final String API_ADVANCE_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/ccavResponseHandler.php";
+    public static final String API_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/service_net_amount.php";
+    public static final String API_WALLET_URL = BASE_URL + JOINT_URL + "ccavenue_app/adding_money_to_wallet.php";
+    public static final String API_RSA_URL = BASE_URL + JOINT_URL + "ccavenue_app/GetRSA.php";
+    public static final String SUCCESSFUL_PAYMENT = BASE_URL + JOINT_URL + "";
+
+
     public static final String FB_GPLUS_LOGIN = "socialLogin/";
 
     public static final String MOBILE_VERIFY = "login_mobile/";
@@ -41,6 +51,8 @@ public class OSAConstants {
     public static final String PLACE_ORDER = "place_order/";
 
     public static final String ORDER_DETAILS = "order_details/";
+
+    public static final String APPLY_PROMO = "apply_promo_code/";
 
     public static final String SEARCH_PRODUCT = "search_product/";
 
@@ -139,6 +151,7 @@ public class OSAConstants {
     public static final String PARAMS_COMBINED_ID = "product_comb_id";
     public static final String PARAMS_QUANTITY = "quantity";
     public static final String PARAMS_ORDER_ID = "order_id";
+    public static final String PARAMS_PURCHASE_ORDER_ID = "purchse_order_id";
 
     public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
 

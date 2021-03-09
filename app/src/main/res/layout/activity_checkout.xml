@@ -59,7 +59,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/medium"
                     android:textColor="@color/text_black"
                     android:textSize="14sp"
@@ -70,7 +69,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:fontFamily="@font/light"
                     android:textColor="@color/text_black"
@@ -80,6 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_size_color"
@@ -128,6 +127,8 @@
                         android:layout_height="40dp"
                         android:layout_alignParentStart="true"
                         android:background="@drawable/btn_round_light_broder"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@font/regular"
                         android:hint="@string/enter_promo"
                         android:paddingStart="10dp"
@@ -240,6 +241,8 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/btn_round_light_broder"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@font/regular"
 
                         android:hint="@string/enter_promo"
@@ -263,6 +266,8 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/btn_round_light_broder"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@font/regular"
                         android:hint="@string/enter_promo"
                         android:paddingStart="10dp"
@@ -306,6 +311,8 @@
                                     android:layout_marginEnd="10dp"
                                     android:layout_weight="0.5"
                                     android:background="@drawable/btn_round_light_broder"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
                                     android:fontFamily="@font/regular"
                                     android:hint="@string/enter_month"
                                     android:paddingStart="10dp"
@@ -336,6 +343,8 @@
                                     android:layout_marginEnd="20dp"
                                     android:layout_weight="0.5"
                                     android:background="@drawable/btn_round_light_broder"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
                                     android:fontFamily="@font/regular"
                                     android:hint="@string/enter_year"
                                     android:paddingStart="10dp"
@@ -369,6 +378,8 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="@drawable/btn_round_light_broder"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:fontFamily="@font/regular"
                                 android:hint="@string/enter_cvv"
                                 android:paddingStart="10dp"
@@ -430,6 +441,8 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/btn_round_light_broder"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@font/regular"
 
                         android:hint="@string/enter_promo"
@@ -453,6 +466,8 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/btn_round_light_broder"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@font/regular"
                         android:hint="@string/enter_promo"
                         android:paddingStart="10dp"
@@ -496,6 +511,8 @@
                                     android:layout_marginEnd="10dp"
                                     android:layout_weight="0.5"
                                     android:background="@drawable/btn_round_light_broder"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
                                     android:fontFamily="@font/regular"
                                     android:hint="@string/enter_month"
                                     android:paddingStart="10dp"
@@ -526,6 +543,8 @@
                                     android:layout_marginEnd="20dp"
                                     android:layout_weight="0.5"
                                     android:background="@drawable/btn_round_light_broder"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
                                     android:fontFamily="@font/regular"
                                     android:hint="@string/enter_year"
                                     android:paddingStart="10dp"
@@ -559,6 +578,8 @@
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="20dp"
                                 android:background="@drawable/btn_round_light_broder"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:fontFamily="@font/regular"
                                 android:hint="@string/enter_cvv"
                                 android:paddingStart="10dp"
@@ -601,6 +622,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:visibility="gone"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/btn_round_light_broder"
                     android:orientation="horizontal">
@@ -611,6 +633,8 @@
                         android:layout_height="40dp"
                         android:layout_alignParentStart="true"
                         android:background="@drawable/btn_round_light_broder"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:fontFamily="@font/regular"
                         android:hint="@string/enter_upi"
                         android:paddingStart="10dp"
@@ -645,6 +669,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     android:drawablePadding="10dp"
@@ -655,11 +680,14 @@
                     android:textStyle="bold"
                     app:drawableStartCompat="@drawable/ic_pay_wallet" />
 
-                <RadioButton
+                <ImageView
                     android:id="@+id/wallet_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_check_mark_unchecked"
+                    android:layout_centerVertical="true" />
 
 
             </RelativeLayout>
@@ -677,6 +705,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
                     android:drawablePadding="10dp"
+                    android:layout_centerVertical="true"
                     android:fontFamily="@font/medium"
                     android:text="@string/cash"
                     android:textColor="@color/text_black"
@@ -684,11 +713,14 @@
                     android:textStyle="bold"
                     app:drawableStartCompat="@drawable/ic_cash_on_delivery" />
 
-                <RadioButton
+                <ImageView
                     android:id="@+id/cash_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_check_mark_unchecked"
+                    android:layout_centerVertical="true" />
 
 
             </RelativeLayout>
@@ -800,6 +832,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/review_order"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/txt_total"

@@ -111,6 +111,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"/>
 
+        <activity android:name=".activity.CheckoutActivity"
+            android:label="@string/address"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:theme="@style/AppThemeNoActionBarLogin"/>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
