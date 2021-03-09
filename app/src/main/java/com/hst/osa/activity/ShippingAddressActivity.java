@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -46,7 +47,8 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     AddressList addressList;
     AddressListAdapter mAdapter;
     private Context context;
-
+    RadioButton radioButton;
+    int selectRadio;
     RecyclerView recyclerAddList;
     private Button add,next;
 
@@ -128,7 +130,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
                 Gson gson = new Gson();
                 addressList = gson.fromJson(response.toString(), AddressList.class);
                 addressArrayList.addAll(addressList.getAddressArrayList());
-                AddressListAdapter aladapter = new AddressListAdapter(addressArrayList, this);
+                AddressListAdapter aladapter = new AddressListAdapter(this, addressArrayList, this);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 recyclerAddList.setLayoutManager(layoutManager);
                 recyclerAddList.setAdapter(aladapter);
