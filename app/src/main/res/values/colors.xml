@@ -24,6 +24,7 @@
     <color name="plus_minus_bg">#F8F8F8</color>
     <color name="line_product">#707070</color>
     <color name="line_plus_minus">#505050</color>
+    <color name="line_border">#CFCFCF</color>
     <color name="btn_grey">#313131</color>
     <color name="trans">#00BD0621</color>
     <color name="transparent">#F4F3F4</color>

@@ -2,6 +2,7 @@ package com.hst.osa.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -60,7 +61,7 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
 
     private RecyclerView recyclerViewCategory;
     private View rootView;
-    private TextView totalPrice;
+    private TextView totalPrice, btnCheckout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,8 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
 
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
         totalPrice = (TextView) findViewById(R.id.total_price);
+        btnCheckout = (TextView) findViewById(R.id.checkout);
+        btnCheckout.setOnClickListener(this);
         initiateServices();
         getDashboardServices();
 
@@ -103,7 +106,10 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
 
     @Override
     public void onClick(View v) {
-
+        if (v == btnCheckout) {
+            Intent i = new Intent(this, CheckoutActivity.class);
+            startActivity(i);
+        }
     }
 
     @Override
