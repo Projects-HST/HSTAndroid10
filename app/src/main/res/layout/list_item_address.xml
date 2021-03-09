@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="20dp"
-    android:background="@color/trans"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="10dp"
+    android:background="@color/transparent"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/customerName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:text="@string/address1"
             android:textColor="@color/black"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.9"/>
 
 <!--        <TextView-->
 <!--            android:id="@+id/address_type"-->
@@ -31,8 +34,7 @@
             android:id="@+id/sel_address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="end" />
+            android:layout_weight="0.10" />
 
 
     </LinearLayout>
@@ -48,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
             android:text="@string/address1"
             android:textColor="@color/txt_grey"
             android:textSize="12sp" />
@@ -57,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/cusAddress1"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:text="@string/address1"
             android:textColor="@color/txt_grey"
@@ -67,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/cusAddress2"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:text="@string/address1"
             android:textColor="@color/txt_grey"
@@ -90,32 +95,49 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/pinCode"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
             android:text="@string/address1"
             android:textColor="@color/txt_grey"
             android:textSize="12sp" />
 
+        <View
+            android:id="@+id/horView"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lite_grey"
+            android:layout_below="@id/mobNum" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/mobNum"
-            android:layout_marginTop="10dp"
+            android:layout_below="@id/horView"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/btnEdit"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.495"
                 android:background="@drawable/grey_bg_btn"
                 android:gravity="center"
-                android:text="@string/address1" />
+                android:text="@string/btnEdit" />
+
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.001"
+                android:background="@color/lite_grey" />
+
 
             <TextView
+                android:id="@+id/btnDelete"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.495"
                 android:background="@drawable/grey_bg_btn"
                 android:gravity="center"
-                android:text="@string/address1" />
+                android:text="@string/btnDelete" />
 
         </LinearLayout>
 

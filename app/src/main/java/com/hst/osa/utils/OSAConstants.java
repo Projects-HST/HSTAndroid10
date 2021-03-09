@@ -50,6 +50,10 @@ public class OSAConstants {
 
     public static final String ADDRESS_LIST = "address_list/";
 
+    public static final String EDIT_ADDRESS = "address_update/";
+
+    public static final String DEFAULT_ADDRESS = "address_set_default/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
@@ -118,8 +122,10 @@ public class OSAConstants {
     public static String KEY_MOB_NUM = "mobile_number";
     public static String KEY_ALT_MOB_NUM = "alternative_mobile_number";
     public static String KEY_EMAIL_ADDRESS = "email_address";
-    public static String KEY_ADDRESS_TYPE = "address_type_id";
+    public static String KEY_ADDRESS_TYPE = "address_type";
     public static String KEY_ADDRESS_MODE = "address_mode";
+    public static String KEY_STATUS = "status";
+    public static String KEY_ADDRESS_ID = "address_id";
 
     //    ADDRESS TYPE
     public static String TYPE_HOME = "1";

@@ -3,13 +3,25 @@ package com.hst.osa.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.hst.osa.R;
+import com.hst.osa.adapter.AddressListAdapter;
+import com.hst.osa.bean.support.Address;
+import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
@@ -21,13 +33,23 @@ import com.hst.osa.utils.OSAConstants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import static android.util.Log.d;
 
-public class ShippingAddressActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener {
+public class ShippingAddressActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, AddressListAdapter.OnItemClickListener {
 
     private static final String TAG = ShippingAddressActivity.class.getName();
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
+
+    private ArrayList<Address> addressArrayList = new ArrayList<>();
+    AddressList addressList;
+    AddressListAdapter mAdapter;
+    private Context context;
+    RadioButton radioButton;
+    int selectRadio;
+    RecyclerView recyclerAddList;
     private Button add,next;
 
     @Override
@@ -47,6 +69,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
 
         add = (Button)findViewById(R.id.btnAdd);
         next = (Button)findViewById(R.id.cont);
+        recyclerAddList = (RecyclerView)findViewById(R.id.addList);
 
         add.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -81,7 +104,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
                 String msg = response.getString(OSAConstants.PARAM_MESSAGE);
                 d(TAG, "status val" + status + "msg" + msg);
 
-                if ((status != null)) {
+                    if ((status != null)) {
                     if (((status.equalsIgnoreCase("activationError")) || (status.equalsIgnoreCase("alreadyRegistered")) ||
                             (status.equalsIgnoreCase("notRegistered")) || (status.equalsIgnoreCase("error")))) {
                         signInSuccess = false;
@@ -103,9 +126,18 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     public void onResponse(JSONObject response) {
 
         if (validateSignInResponse(response)){
-
+            try{
+                Gson gson = new Gson();
+                addressList = gson.fromJson(response.toString(), AddressList.class);
+                addressArrayList.addAll(addressList.getAddressArrayList());
+                AddressListAdapter aladapter = new AddressListAdapter(this, addressArrayList, this);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                recyclerAddList.setLayoutManager(layoutManager);
+                recyclerAddList.setAdapter(aladapter);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     @Override
@@ -130,5 +162,15 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
             Intent addInt = new Intent(this, AddAddressActivity.class);
             startActivity(addInt);
         }
+    }
+
+    @Override
+    public void onItemClickAddress(View view, int position) {
+
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.list_item_address, null);
+
+
+
     }
 }
