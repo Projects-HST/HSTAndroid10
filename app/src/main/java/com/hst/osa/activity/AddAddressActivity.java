@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hst.osa.R;
 import com.hst.osa.activity.ShippingAddressActivity;
+import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -74,11 +75,20 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
     private ArrayList<String> permissions = new ArrayList<>();
     private List<Address> addressList;
 
-    private ArrayList<Address> addressArrayList = new ArrayList<>();
+    private AddressList addressArrayList;
 
     String lat, lng;
     private String resStr = "";
     private String addId = "";
+    private String fullName = "";
+    private String mobNum = "";
+    private String addDetailLine1 = "";
+    private String addDetailLine2 = "";
+    private String cityDetail = "";
+    private String stateDetail = "";
+    private String postalCode = "";
+
+    int pos;
 
     Geocoder geocoder;
     private FusedLocationProviderClient fusedLocationClient;
@@ -111,20 +121,20 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
         location = (TextView) findViewById(R.id.location);
         cus_name = (TextInputEditText) findViewById(R.id.txt_name);
 //        cus_name.setEnabled(false);
-        cus_mobile = (TextInputEditText)findViewById(R.id.txt_mobile_number);
+        cus_mobile = (TextInputEditText) findViewById(R.id.txt_mobile_number);
 //        cus_mobile.setEnabled(false);
         address1 = (TextInputEditText) findViewById(R.id.addLine1);
 //        address1.setEnabled(false);
-        address2 = (TextInputEditText)findViewById(R.id.addLine2);
+        address2 = (TextInputEditText) findViewById(R.id.addLine2);
 //        address2.setEnabled(false);
-        area = (TextInputEditText)findViewById(R.id.st_name);
+        area = (TextInputEditText) findViewById(R.id.st_name);
 //        area.setEnabled(false);
-        state = (TextInputEditText)findViewById(R.id.city_name);
+        state = (TextInputEditText) findViewById(R.id.city_name);
 //        state.setEnabled(false);
-        pinCode = (TextInputEditText)findViewById(R.id.pincode);
+        pinCode = (TextInputEditText) findViewById(R.id.pincode);
 //        pinCode.setEnabled(false);
-        defaultAddress = (SwitchCompat)findViewById(R.id.def_address);
-        save = (TextView)findViewById(R.id.save);
+        defaultAddress = (SwitchCompat) findViewById(R.id.def_address);
+        save = (TextView) findViewById(R.id.save);
 
         save.setOnClickListener(this);
         location.setOnClickListener(this);
@@ -148,7 +158,26 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
 
         Intent get = getIntent();
         Bundle bundle = get.getExtras();
-        addressArrayList =( ArrayList<Address>)bundle.getSerializable("addressObj");
+        if (bundle != null) {
+            addressArrayList = (AddressList)bundle.getSerializable("addressObj");
+            addId = addressArrayList.getId();
+            fullName = addressArrayList.getFull_name();
+            cus_name.setText(fullName);
+            mobNum = addressArrayList.getMobile_number();
+            cus_mobile.setText(mobNum);
+            addDetailLine1 = addressArrayList.getHouse_no();
+            address1.setText(addDetailLine1);
+            addDetailLine2 = addressArrayList.getStreet();
+            address2.setText(addDetailLine2);
+            cityDetail = addressArrayList.getCity();
+            area.setText(cityDetail);
+            stateDetail = addressArrayList.getState();
+            state.setText(stateDetail);
+            postalCode = addressArrayList.getPincode();
+            pinCode.setText(postalCode);
+            defaultAddress.setVisibility(View.GONE);
+        }
+
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         checkPermissions();
     }
@@ -179,18 +208,13 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
         }
     }
 
-    private void addAddress(){
+    private void addAddress() {
         resStr = "addAddress";
         if (validateFields()) {
             JSONObject jsonObject = new JSONObject();
-            boolean defState = defaultAddress.isChecked();
-            String status = "";
-            if(defState){
-                status = "1";
-            }
             String id = PreferenceStorage.getUserId(this);
             try {
-                jsonObject.put(OSAConstants.KEY_USER_ID, id);
+                jsonObject.put(OSAConstants.KEY_USER_ID, "3");
                 jsonObject.put(OSAConstants.KEY_COUNTRY_ID, "1");
                 jsonObject.put(OSAConstants.KEY_STATE, state.getText().toString());
                 jsonObject.put(OSAConstants.KEY_CITY, area.getText().toString());
@@ -203,7 +227,6 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
                 jsonObject.put(OSAConstants.KEY_ALT_MOB_NUM, "");
                 jsonObject.put(OSAConstants.KEY_EMAIL_ADDRESS, "");
                 jsonObject.put(OSAConstants.KEY_ADDRESS_TYPE, OSAConstants.TYPE_HOME);
-                jsonObject.put(OSAConstants.KEY_ADDRESS_MODE, status);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -212,22 +235,15 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
         }
     }
 
-    private void editAddress(){
+    private void editAddress() {
         resStr = "editAddress";
+//        defaultAddress.setVisibility(View.GONE);
         if (validateFields()) {
 //            addId = getIntent().getStringExtra("addressObj");
-            boolean addState = defaultAddress.isChecked();
-            String status = "";
-            if (addState){
-                status = "1";
-            } else {
-                status = "0";
-            }
-
             JSONObject jsonObject = new JSONObject();
             String id = PreferenceStorage.getUserId(this);
             try {
-                jsonObject.put(OSAConstants.KEY_USER_ID, id);
+                jsonObject.put(OSAConstants.KEY_USER_ID, "3");
                 jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addId);
                 jsonObject.put(OSAConstants.KEY_COUNTRY_ID, "1");
                 jsonObject.put(OSAConstants.KEY_STATE, state.getText().toString());
@@ -241,7 +257,6 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
                 jsonObject.put(OSAConstants.KEY_ALT_MOB_NUM, "");
                 jsonObject.put(OSAConstants.KEY_EMAIL_ADDRESS, "");
                 jsonObject.put(OSAConstants.KEY_ADDRESS_TYPE, OSAConstants.TYPE_HOME);
-                jsonObject.put(OSAConstants.KEY_ADDRESS_MODE, status);
                 jsonObject.put(OSAConstants.KEY_STATUS, "");
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -250,27 +265,6 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
             serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
         }
     }
-
-//    private void getDefaultAddress(){
-//        resStr = "sel_def_address";
-//        JSONObject jsonObject = new JSONObject();
-//        boolean state = defaultAddress.isChecked();
-//        String status = "";
-//
-//        if (state){
-//            status = "1";
-//        } else {
-//            status = "0";
-//        }
-//        try {
-//            jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addId);
-//            jsonObject.put(OSAConstants.KEY_ADDRESS_MODE, status);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        String url = OSAConstants.BUILD_URL + OSAConstants.DEFAULT_ADDRESS;
-//        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
-//    }
 
     public class MyLocationListener implements LocationListener {
 
@@ -433,11 +427,11 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
                 startActivity(addressInt);
             }
         }
-        if (resStr.equalsIgnoreCase("editAddress")){
+        if (resStr.equalsIgnoreCase("editAddress")) {
             Intent addressInt = new Intent(this, ShippingAddressActivity.class);
             startActivity(addressInt);
         }
-        if (resStr.equalsIgnoreCase("sel_def_address")){
+        if (resStr.equalsIgnoreCase("sel_def_address")) {
             Log.d(TAG, response.toString());
         }
     }
@@ -461,11 +455,11 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
     public void onClick(View v) {
 
         if (v == location) {
-          getCurrentLocation();
+            getCurrentLocation();
         }
 
-        if (v == save){
-            if (addId != null) {
+        if (v == save) {
+            if (!addId.equals("")) {
                 editAddress();
             }
             else {
@@ -510,7 +504,7 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
     }
 
-    private boolean checkPermissions(){
+    private boolean checkPermissions() {
 
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);

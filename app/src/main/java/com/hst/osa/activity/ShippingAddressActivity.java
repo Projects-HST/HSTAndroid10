@@ -12,17 +12,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.hst.osa.R;
 import com.hst.osa.adapter.AddressListAdapter;
-import com.hst.osa.bean.support.Address;
+import com.hst.osa.bean.support.AddressArrayList;
 import com.hst.osa.bean.support.AddressList;
-import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -43,9 +40,9 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
 
-    private ArrayList<Address> addressArrayList = new ArrayList<>();
-    AddressList addressList;
-    AddressListAdapter mAdapter;
+    private ArrayList<AddressList> addressArrayList = new ArrayList<>();
+    AddressArrayList arrayList;
+
     private Context context;
     RadioButton radioButton;
     int selectRadio;
@@ -87,7 +84,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
 //        serviceCall = "recentSearch";
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, "");
+            jsonObject.put(OSAConstants.KEY_USER_ID, "3");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -122,14 +119,19 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
         return signInSuccess;
     }
 
+    public void reLoadPage() {
+        finish();
+        startActivity(getIntent());
+    }
+
     @Override
     public void onResponse(JSONObject response) {
 
         if (validateSignInResponse(response)){
             try{
                 Gson gson = new Gson();
-                addressList = gson.fromJson(response.toString(), AddressList.class);
-                addressArrayList.addAll(addressList.getAddressArrayList());
+                arrayList = gson.fromJson(response.toString(), AddressArrayList.class);
+                addressArrayList.addAll(arrayList.getAddressArrayList());
                 AddressListAdapter aladapter = new AddressListAdapter(this, addressArrayList, this);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 recyclerAddList.setLayoutManager(layoutManager);
@@ -166,11 +168,6 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
 
     @Override
     public void onItemClickAddress(View view, int position) {
-
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.list_item_address, null);
-
-
 
     }
 }

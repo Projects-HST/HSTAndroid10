@@ -126,6 +126,8 @@
     <string name="address2">Address Line 2</string>
     <string name="btnDelete">Delete</string>
     <string name="btnEdit">Edit</string>
+    <string name="title_delete">Delete a Address</string>
+    <string name="txt_delete">Are you sure to delete this address</string>
 
     <!-- Product Checkout -->
 

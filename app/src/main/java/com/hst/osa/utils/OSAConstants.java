@@ -52,6 +52,8 @@ public class OSAConstants {
 
     public static final String DEFAULT_ADDRESS = "address_set_default/";
 
+    public static final String DELETE_ADDRESS = "address_delete/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
