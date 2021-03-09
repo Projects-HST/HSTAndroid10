@@ -38,6 +38,8 @@ public class OSAConstants {
 
     public static final String CART_LIST = "view_cart_items/";
 
+    public static final String PLACE_ORDER = "place_order/";
+
     public static final String ORDER_DETAILS = "order_details/";
 
     public static final String SEARCH_PRODUCT = "search_product/";
@@ -125,10 +127,12 @@ public class OSAConstants {
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";
+    public static final String PARAMS_ADDRESS_ID = "address_id";
     public static final String PARAMS_CART_ID = "cart_id";
     public static final String PARAMS_SIZE_ID = "size_id";
     public static final String PARAMS_COMBINED_ID = "product_comb_id";
     public static final String PARAMS_QUANTITY = "quantity";
+    public static final String PARAMS_ORDER_ID = "order_id";
 
     public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
 

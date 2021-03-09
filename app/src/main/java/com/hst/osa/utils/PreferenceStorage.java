@@ -254,7 +254,7 @@ public class PreferenceStorage {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(OSAConstants.KEY_USER_PROFILE_PIC, addId);
+        editor.putString(OSAConstants.PARAMS_ADDRESS_ID, addId);
         editor.apply();
     }
 
@@ -262,7 +262,7 @@ public class PreferenceStorage {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         String userId;
-        userId = sharedPreferences.getString(OSAConstants.KEY_USER_PROFILE_PIC, "");
+        userId = sharedPreferences.getString(OSAConstants.PARAMS_ADDRESS_ID, "");
         return userId;
     }
     /*End*/
