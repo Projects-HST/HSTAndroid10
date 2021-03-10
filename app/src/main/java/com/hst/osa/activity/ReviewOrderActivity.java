@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.adapter.CartItemListAdapter;
-import com.hst.osa.bean.support.Address;
 import com.hst.osa.bean.support.AddressList;
+import com.hst.osa.bean.support.AddressArrayList;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartItemList;
 import com.hst.osa.helpers.AlertDialogHelper;
@@ -50,8 +50,8 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
     private TextView name, phone, address;
     private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, placeOrder;
 
-    AddressList addressList;
-    ArrayList<Address> addressArrayList = new ArrayList<>();
+    AddressArrayList addressList;
+    ArrayList<AddressList> addressArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +185,7 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
                     Gson gson = new Gson();
 
                     JSONArray categoryObjData = response.getJSONArray("address_list");
-                    addressList = gson.fromJson(response.toString(), AddressList.class);
+                    addressList = gson.fromJson(response.toString(), AddressArrayList.class);
                     addressArrayList.addAll(addressList.getAddressArrayList());
                     addressID = addressArrayList.get(0).getId();
 //                for (int i = 0; i < addressArrayList.size(); i++) {

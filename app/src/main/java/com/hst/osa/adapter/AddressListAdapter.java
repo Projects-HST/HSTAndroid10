@@ -47,11 +47,12 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
     public void onResponse(JSONObject response) {
         try {
             String status = response.getString("status");
+
             if (status.equalsIgnoreCase("success")) {
+
                 addressList.remove(indexPos);
                 notifyItemRemoved(indexPos);
                 notifyDataSetChanged();
-
                 ((ShippingAddressActivity) mContext).reLoadPage();
             }
 
@@ -86,18 +87,18 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                 @Override
                 public void onClick(View v) {
                     indexPos = getAdapterPosition();
-                    boolean checked = selectAddress.isClickable();
-                    for (int i = 0; i < addressList.size(); i++) {
-                        AddressList address = addressList.get(i);
-                        if (checked) {
-                            address.setAddress_mode("1");
-                        }else {
-                            address.setAddress_mode("0");
-                        }
-                        notifyItemChanged(i);
-                        notifyDataSetChanged();
-                    }
-                    ((ShippingAddressActivity)mContext).reLoadPage();
+                    AddressList address = addressList.get(indexPos);
+//                    boolean checked = selectAddress.isClickable();
+//                    for (int i = 0; i < addressList.size(); i++) {
+//                        if (checked) {
+//                            address.setAddress_mode("1");
+//                        }else {
+//                            address.setAddress_mode("0");
+//                        }
+//                        notifyItemChanged(i);
+//                        notifyDataSetChanged();
+//                    }
+//                    ((ShippingAddressActivity)mContext).reLoadPage();
                 }
             });
             btnEdit = (TextView) itemView.findViewById(R.id.btnEdit);
@@ -164,11 +165,24 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         }
 
         private void deleteAddress() {
-
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addressId);
                 jsonObject.put(OSAConstants.KEY_USER_ID, "3");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String url = OSAConstants.BUILD_URL + OSAConstants.DELETE_ADDRESS;
+            serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+        }
+
+        private void setDefaultAddress() {
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addressId);
+                jsonObject.put(OSAConstants.KEY_ADDRESS_MODE, "3");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
