@@ -158,9 +158,10 @@
     <string name="items">Items</string>
     <string name="offer">Offer</string>
     <string name="review_order">Review your Order</string>
+    <string name="place_order">Place Order</string>
 
     <string name="access_code">Access Code</string>
-    <string name="access_code_value">AVQM86GG76CA98MQAC</string>
+    <string name="access_code_value">AVAU84GD83BV10UAVB</string>
     <string name="pay_button">Pay</string>
     <string name="pay_button_online">Pay Online</string>
     <string name="pay_button_cash">Pay by Cash</string>
@@ -169,13 +170,14 @@
     <string name="merchant_id_value">216134</string>
     <string name="currency">Currency</string>
     <string name="amount">Amount</string>
-    <string name="redirect_url_advance">https://www.skilex.in/development/ccavenue_app/customer_advance.php</string>
-    <string name="redirect_url">https://www.skilex.in/development/ccavenue_app/service_net_amount.php</string>
+    <string name="enter_amount">Enter the Amount</string>
+    <string name="redirect_url_advance">https://www.happysanztech.com/shopping/customer_advance.php</string>
+    <string name="redirect_url">https://www.happysanztech.com/shopping/service_net_amount.php</string>
     <!--    <string name="redirect_url_advance">https://www.skilex.in/ccavenue_app/customer_advance.php</string>-->
     <!--    <string name="redirect_url">https://www.skilex.in/ccavenue_app/service_net_amount.php</string>-->
     <string name="cancel_url">Cancel Url</string>
     <string name="rsa_url">RSA Key Url</string>
-    <string name="rsa_url_value">https://www.skilex.in/development/ccavenue_app/GetRSA.php</string>
+    <string name="rsa_url_value">https://www.happysanztech.com/shopping/ccavenue_app/GetRSA.php</string>
     <!--    <string name="rsa_url_value">https://www.skilex.in/ccavenue_app/GetRSA.php</string>-->
 
     <string name="advance_payment">Payment</string>
@@ -185,8 +187,10 @@
     <string name="booking_failed">Sorry!</string>
     <string name="booking_success_comment">Your booking completed \n successfully</string>
     <string name="booking_failed_comment">Your booking failed</string>
-    <string name="wallet_amt">Wallet Balance</string>
-    <string name="wallet_add">Add Money to Wallet</string>
+    <string name="wallet_amt">Your Wallet Balance</string>
+    <string name="wallet_add">Add Money</string>
+    <string name="enter_wallet_money">₹   Enter Amount</string>
+    <string name="proceed_add_money">Add money to</string>
     <string name="wallet_success_comment">Money added to wallet \n successfully</string>
     <string name="wallet_failed_comment">Your transaction failed</string>
     <string name="points_earned_success">Your amount for points earned is </string>

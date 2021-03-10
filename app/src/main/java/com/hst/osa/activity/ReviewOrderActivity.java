@@ -23,6 +23,7 @@ import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.AddressArrayList;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartItemList;
+import com.hst.osa.bean.support.CartOrderList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class ReviewOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener {
+public class ReviewOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, CartItemListAdapter.OnItemClickListener {
 
     private static final String TAG = CheckoutActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -53,10 +54,17 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
     AddressArrayList addressList;
     ArrayList<AddressList> addressArrayList = new ArrayList<>();
 
+
+    private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
+    CartOrderList cartItemList;
+    private CartItemListAdapter mAdapter;
+
+    private RecyclerView recyclerViewCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkout);
+        setContentView(R.layout.activity_review_order);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
@@ -68,6 +76,7 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
             }
         });
 
+        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
         name = (TextView) findViewById(R.id.name);
         phone = (TextView) findViewById(R.id.mobile);
         address = (TextView) findViewById(R.id.address);
@@ -85,7 +94,7 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
         totalPrice = (TextView) findViewById(R.id.total_price);
 
         initiateServices();
-        getAddressList();
+        getOrderDetails();
     }
 
     public void initiateServices() {
@@ -94,40 +103,14 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-    private void getAddressList() {
-        resCheck = "address";
-        JSONObject jsonObject = new JSONObject();
-        String id = PreferenceStorage.getUserId(this);
-        try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, id);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String url = OSAConstants.BUILD_URL + OSAConstants.ADDRESS_LIST;
-        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
-    }
-
-    private void placeOrder() {
-        resCheck = "place";
-        JSONObject jsonObject = new JSONObject();
-        String id = PreferenceStorage.getUserId(this);
-        try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.PARAMS_ADDRESS_ID, addressID);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String url = OSAConstants.BUILD_URL + OSAConstants.PLACE_ORDER;
-        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
-    }
-
     private void getOrderDetails() {
         resCheck = "detail";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
+        String oid = PreferenceStorage.getOrderId(this);
         try {
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, orderID);
+            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, oid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -181,23 +164,6 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
         progressDialogHelper.hideProgressDialog();
         if (validateSignInResponse(response)) {
             try {
-                if (resCheck.equalsIgnoreCase("address")) {
-                    Gson gson = new Gson();
-
-                    JSONArray categoryObjData = response.getJSONArray("address_list");
-                    addressList = gson.fromJson(response.toString(), AddressArrayList.class);
-                    addressArrayList.addAll(addressList.getAddressArrayList());
-                    addressID = addressArrayList.get(0).getId();
-//                for (int i = 0; i < addressArrayList.size(); i++) {
-//                    if (addressArrayList.get(i).get)
-//                }
-                    placeOrder();
-                }
-                if (resCheck.equalsIgnoreCase("place")) {
-                    orderID = response.getString("order_id");
-                    PreferenceStorage.saveOrderId(this, orderID);
-                    getOrderDetails();
-                }
                 if (resCheck.equalsIgnoreCase("detail")) {
                     JSONArray orderObjData = response.getJSONArray("order_details");
 
@@ -231,6 +197,15 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
                     offerPrice.setText(promoFinal);
                     totalPrice.setText(paidFinal);
 
+                    Gson gson = new Gson();
+
+                    cartItemList = gson.fromJson(response.toString(), CartOrderList.class);
+                    cartItemArrayList.addAll(cartItemList.getCartItemArrayList());
+                    mAdapter = new CartItemListAdapter(this, cartItemArrayList, this);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+                    recyclerViewCategory.setLayoutManager(mLayoutManager);
+                    recyclerViewCategory.setAdapter(mAdapter);
+
                 }
 
             } catch (JSONException e) {
@@ -252,5 +227,10 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
 //        if (view == checkPromo) {
 //
 //        }
+    }
+
+    @Override
+    public void onItemClickCart(View view, int position) {
+
     }
 }

@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(View v) {
                     //What to do on back clicked
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    i.putExtra("page", "dash");
                     startActivity(i);
                 }
             });
@@ -387,7 +388,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }if (view == sideOrder) {
 
         }if (view == sideWallet) {
-
+            Intent i = new Intent(this, WalletActivity.class);
+            startActivity(i);
         }if (view == sideAddress) {
             Intent i = new Intent(this, ShippingAddressActivity.class);
             startActivity(i);

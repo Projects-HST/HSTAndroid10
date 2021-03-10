@@ -20,6 +20,7 @@
     <color name="lite_blue">#4285F4</color>
     <color name="blue">#4267B2</color>
     <color name="text_grey">#E2E2E2</color>
+    <color name="text_grey_wallet">#515151</color>
     <color name="text_sub_cat">#605A65</color>
     <color name="plus_minus_bg">#F8F8F8</color>
     <color name="line_product">#707070</color>
@@ -40,4 +41,6 @@
     <color name="btn_add">#E5E5E5</color>
     <color name="txt_red">#E50027</color>
     <color name="txt_grey">#34283E</color>
+    <color name="wallet_green">#4CAF50</color>
+    <color name="wallet_red">#BD0621</color>
 </resources>
