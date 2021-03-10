@@ -33,6 +33,7 @@ import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
+import com.hst.osa.utils.PreferenceStorage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -302,8 +303,9 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         serviceCall = "sub_cat_product_list";
 
         JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, "");
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
             jsonObject.put(OSAConstants.KEY_CAT_ID, catId);
             jsonObject.put(OSAConstants.KEY_SUB_CAT_ID, subCatId);
         } catch (JSONException e) {
@@ -318,9 +320,10 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         serviceCall = "search";
 
         JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
         try {
             jsonObject.put(OSAConstants.KEY_SEARCH, searchName);
-            jsonObject.put(OSAConstants.KEY_USER_ID, "");
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -334,8 +337,9 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
 //        recentSearchLay.setVisibility(View.VISIBLE);
         serviceCall = "recentSearch";
         JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, "0");
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
