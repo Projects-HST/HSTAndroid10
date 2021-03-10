@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
@@ -26,6 +27,7 @@ import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.OSAValidator;
+import com.hst.osa.utils.PreferenceStorage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +51,6 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             String status = response.getString("status");
 
             if (status.equalsIgnoreCase("success")) {
-
                 addressList.remove(indexPos);
                 notifyItemRemoved(indexPos);
                 notifyDataSetChanged();
@@ -82,23 +83,24 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             txtPinCode = (TextView) itemView.findViewById(R.id.pinCode);
             txtMobNumber = (TextView) itemView.findViewById(R.id.mobNum);
             selectAddress = (ImageView) itemView.findViewById(R.id.sel_address);
-            selectAddress.setClickable(true);
             selectAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     indexPos = getAdapterPosition();
-                    AddressList address = addressList.get(indexPos);
 //                    boolean checked = selectAddress.isClickable();
-//                    for (int i = 0; i < addressList.size(); i++) {
-//                        if (checked) {
-//                            address.setAddress_mode("1");
-//                        }else {
-//                            address.setAddress_mode("0");
+                    for (int i = 0; i < addressList.size(); i++) {
+//                    AddressList address = addressList.get(indexPos);
+//                        if ((i == indexPos)) {
+                            addressList.get(i).setAddress_mode("0");
 //                        }
-//                        notifyItemChanged(i);
-//                        notifyDataSetChanged();
-//                    }
+                    }
+                    addressList.get(indexPos).setAddress_mode("1");
+                    notifyItemChanged(indexPos);
+                    notifyDataSetChanged();
 //                    ((ShippingAddressActivity)mContext).reLoadPage();
+//                    Intent refInt = new Intent("addressMode");
+//                    refInt.putExtra("addId", addressList);
+//                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(refInt);
                 }
             });
             btnEdit = (TextView) itemView.findViewById(R.id.btnEdit);
@@ -166,9 +168,10 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
         private void deleteAddress() {
             JSONObject jsonObject = new JSONObject();
+            String id = PreferenceStorage.getUserId(mContext);
             try {
                 jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addressId);
-                jsonObject.put(OSAConstants.KEY_USER_ID, "3");
+                jsonObject.put(OSAConstants.KEY_USER_ID, id);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -181,13 +184,13 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
             JSONObject jsonObject = new JSONObject();
             try {
+                jsonObject.put(OSAConstants.KEY_USER_ID, "3");
                 jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addressId);
-                jsonObject.put(OSAConstants.KEY_ADDRESS_MODE, "3");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            String url = OSAConstants.BUILD_URL + OSAConstants.DELETE_ADDRESS;
+            String url = OSAConstants.BUILD_URL + OSAConstants.DEFAULT_ADDRESS;
             serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
         }
     }
@@ -232,10 +235,10 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         holder.txtPinCode.setText(address.getPincode());
         holder.txtMobNumber.setText(address.getMobile_number());
 
-        if ((address.getAddress_mode() != null) && address.getAddress_mode().equalsIgnoreCase("1")) {
-            holder.selectAddress.setImageResource(R.drawable.ic_check_mark_checked);
-        } else {
+        if (address.getAddress_mode().equalsIgnoreCase("0")) {
             holder.selectAddress.setImageResource(R.drawable.ic_check_mark_unchecked);
+        } else {
+            holder.selectAddress.setImageResource(R.drawable.ic_check_mark_checked);
         }
     }
 

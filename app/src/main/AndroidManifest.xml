@@ -3,7 +3,7 @@
     package="com.hst.osa">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -16,7 +16,6 @@
         android:theme="@style/Theme.OSA"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".activity.EditProfile" />
         <activity android:name=".activity.NotificationActivity" />
 
         <uses-library
@@ -106,16 +105,25 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
 
-        <activity android:name=".activity.AddAddressActivity"
+        <activity
+            android:name=".activity.AddAddressActivity"
             android:label="@string/address"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBarLogin"/>
+            android:theme="@style/AppThemeNoActionBarLogin" />
 
-        <activity android:name=".activity.CheckoutActivity"
+        <activity
+            android:name=".activity.CheckoutActivity"
             android:label="@string/address"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppThemeNoActionBarLogin"/>
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".activity.EditProfile"
+            android:label="@string/address"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

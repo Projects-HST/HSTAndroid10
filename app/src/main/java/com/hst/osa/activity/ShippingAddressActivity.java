@@ -3,11 +3,14 @@ package com.hst.osa.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
+import com.hst.osa.utils.PreferenceStorage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,18 +47,21 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     private ArrayList<AddressList> addressArrayList = new ArrayList<>();
     AddressArrayList arrayList;
 
+    private String addressId;
+    private String resStr;
+    private String page;
     private Context context;
     RadioButton radioButton;
-    int selectRadio;
+    int pos;
     RecyclerView recyclerAddList;
-    private Button add,next;
+    private Button add, next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipping_address);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_left_arrow));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -64,9 +71,14 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
             }
         });
 
-        add = (Button)findViewById(R.id.btnAdd);
-        next = (Button)findViewById(R.id.cont);
-        recyclerAddList = (RecyclerView)findViewById(R.id.addList);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+//                new IntentFilter("addressMode"));
+        page = getIntent().getExtras().getString("page");
+        addressId = PreferenceStorage.getAddressId(this);
+
+        add = (Button) findViewById(R.id.btnAdd);
+        next = (Button) findViewById(R.id.cont);
+        recyclerAddList = (RecyclerView) findViewById(R.id.addList);
 
         add.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -78,18 +90,42 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
         showAddressList();
     }
 
-    private void showAddressList(){
+//    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//
+//            addressId = intent.getStringExtra("addId");
+//        }
+//    };
 
+    private void showAddressList() {
+        resStr = "addressList";
 //        recentSearchLay.setVisibility(View.VISIBLE);
 //        serviceCall = "recentSearch";
         JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, "3");
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 //        progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
         String url = OSAConstants.BUILD_URL + OSAConstants.ADDRESS_LIST;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void setDefaultAddress() {
+        resStr = "setDefault";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addressId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.DEFAULT_ADDRESS;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
@@ -101,7 +137,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
                 String msg = response.getString(OSAConstants.PARAM_MESSAGE);
                 d(TAG, "status val" + status + "msg" + msg);
 
-                    if ((status != null)) {
+                if ((status != null)) {
                     if (((status.equalsIgnoreCase("activationError")) || (status.equalsIgnoreCase("alreadyRegistered")) ||
                             (status.equalsIgnoreCase("notRegistered")) || (status.equalsIgnoreCase("error")))) {
                         signInSuccess = false;
@@ -127,17 +163,30 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     @Override
     public void onResponse(JSONObject response) {
 
-        if (validateSignInResponse(response)){
-            try{
-                Gson gson = new Gson();
-                arrayList = gson.fromJson(response.toString(), AddressArrayList.class);
-                addressArrayList.addAll(arrayList.getAddressArrayList());
-                AddressListAdapter aladapter = new AddressListAdapter(this, addressArrayList, this);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                recyclerAddList.setLayoutManager(layoutManager);
-                recyclerAddList.setAdapter(aladapter);
-            } catch (JsonSyntaxException e) {
-                e.printStackTrace();
+        if (validateSignInResponse(response)) {
+            if (resStr.equalsIgnoreCase("addressList")) {
+                try {
+                    Gson gson = new Gson();
+                    arrayList = gson.fromJson(response.toString(), AddressArrayList.class);
+                    addressArrayList.addAll(arrayList.getAddressArrayList());
+                    AddressListAdapter aladapter = new AddressListAdapter(this, addressArrayList, this);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    recyclerAddList.setLayoutManager(layoutManager);
+                    recyclerAddList.setAdapter(aladapter);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (resStr.equalsIgnoreCase("setDefault")) {
+//                AddressList addressList = null;
+//                addressList = addressArrayList.get(pos);
+                Intent checkInt;
+                if (page.equalsIgnoreCase("shippingAddress")) {
+                    checkInt = new Intent(this, MainActivity.class);
+                    checkInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(checkInt);
+                    finish();
+                }
             }
         }
     }
@@ -160,9 +209,13 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     @Override
     public void onClick(View v) {
 
-        if (v == add){
+        if (v == add) {
             Intent addInt = new Intent(this, AddAddressActivity.class);
             startActivity(addInt);
+        }
+
+        if (v == next) {
+            setDefaultAddress();
         }
     }
 

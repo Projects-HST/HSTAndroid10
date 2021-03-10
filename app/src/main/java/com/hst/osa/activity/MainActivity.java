@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(View v) {
                     //What to do on back clicked
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    i.putExtra("page", "dash");
                     startActivity(i);
                 }
             });
@@ -390,6 +391,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }if (view == sideAddress) {
             Intent i = new Intent(this, ShippingAddressActivity.class);
+            i.putExtra("page", "shippingAddress");
             startActivity(i);
 
         }if (view == sideSettings) {
@@ -420,8 +422,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        recentSearchLay.setVisibility(View.VISIBLE);
         serviceCall = "recentSearch";
         JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, "0");
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
         } catch (JSONException e) {
             e.printStackTrace();
         }

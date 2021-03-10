@@ -201,5 +201,6 @@
     <string name="failed">Failed</string>
     <string name="completed">Completed</string>
     <string name="view_bill">View Bill</string>
+    <string name="update">Update Profile</string>
 
 </resources>

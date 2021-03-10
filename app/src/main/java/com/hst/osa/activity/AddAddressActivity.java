@@ -214,7 +214,7 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
             JSONObject jsonObject = new JSONObject();
             String id = PreferenceStorage.getUserId(this);
             try {
-                jsonObject.put(OSAConstants.KEY_USER_ID, "3");
+                jsonObject.put(OSAConstants.KEY_USER_ID, id);
                 jsonObject.put(OSAConstants.KEY_COUNTRY_ID, "1");
                 jsonObject.put(OSAConstants.KEY_STATE, state.getText().toString());
                 jsonObject.put(OSAConstants.KEY_CITY, area.getText().toString());
@@ -243,7 +243,7 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
             JSONObject jsonObject = new JSONObject();
             String id = PreferenceStorage.getUserId(this);
             try {
-                jsonObject.put(OSAConstants.KEY_USER_ID, "3");
+                jsonObject.put(OSAConstants.KEY_USER_ID, id);
                 jsonObject.put(OSAConstants.KEY_ADDRESS_ID, addId);
                 jsonObject.put(OSAConstants.KEY_COUNTRY_ID, "1");
                 jsonObject.put(OSAConstants.KEY_STATE, state.getText().toString());

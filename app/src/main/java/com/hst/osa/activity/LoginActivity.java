@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         page = getIntent().getExtras().getString("page");
         productID = getIntent().getExtras().getString("productObj");
 
