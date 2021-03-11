@@ -30,10 +30,10 @@
             android:orientation="vertical" />
 
         <androidx.cardview.widget.CardView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_centerInParent="true"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="70dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="4dp">
 
@@ -48,121 +48,108 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/name"
-                app:boxStrokeColor="@color/lite_grey"
-                app:hintTextColor="@color/text_black">
+                android:layout_height="match_parent"
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_name"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ti_name"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLength="30"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/name"
+                    app:boxStrokeColor="@color/lite_grey"
+                    app:hintTextColor="@color/text_black">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_mail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/address1"
-                app:boxStrokeColor="@color/lite_grey"
-                app:hintTextColor="@color/text_black">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLength="30"
+                        android:textColor="@color/grey"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_mail"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ti_mail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLength="30"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/address1"
+                    app:boxStrokeColor="@color/lite_grey"
+                    app:hintTextColor="@color/text_black">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_mail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLength="30"
+                        android:textColor="@color/grey"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_mobile_number"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/mobile"
-                app:boxStrokeColor="@color/lite_grey"
-                app:hintTextColor="@color/text_black"
-                app:prefixText="+91">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_mobile_number"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ti_mobile_number"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:textColor="@color/grey"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/mobile"
+                    app:boxStrokeColor="@color/lite_grey"
+                    app:hintTextColor="@color/text_black"
+                    app:prefixText="+91">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/update"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/medium"
+                    android:background="@drawable/btn_red_bg"
+                    android:text="@string/update"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
                     android:textSize="16sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_passWord"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/address2"
-                app:boxStrokeColor="@color/lite_grey"
-                app:hintTextColor="@color/text_black"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/update"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:fontFamily="@font/medium"
-                android:background="@drawable/btn_red_bg"
-                android:text="@string/update"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
+
 
 
 

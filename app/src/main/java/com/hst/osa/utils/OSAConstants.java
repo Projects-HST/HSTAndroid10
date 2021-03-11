@@ -68,6 +68,12 @@ public class OSAConstants {
 
     public static final String DELETE_ADDRESS = "address_delete/";
 
+    public static final String PROFILE_PIC = "update_profilepic/";
+
+    public static final String PROFILE_UPDATE = "update_profile_details/";
+
+    public static final String GET_PROFILE_DETAILS = "get_profile_details/";
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
@@ -97,6 +103,10 @@ public class OSAConstants {
     //      Profile Params
     public static final String PARAMS_FIRST_NAME = "first_name";
     public static final String PARAMS_LAST_NAME = "last_name";
+    public static String KEY_PROFILE_PIC = "profile_picture";
+    public static String KEY_PHONE_NO = "phone_number";
+    public static String KEY_DOB = "dob";
+    public static String KEY_NEWS_STATUS = "newsletter_status";
 
     //      Alert Dialog Constants
     public static String ALERT_DIALOG_TITLE = "alertDialogTitle";
@@ -113,7 +123,7 @@ public class OSAConstants {
     public static String KEY_NAME = "name";
     public static String KEY_GENDER = "gender";
     public static String KEY_EMAIL = "email";
-    public static String KEY_USER_PROFILE_PIC = "profile_pic";
+    public static String KEY_USER_PROFILE_PIC = "picture_url";
     public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";
     public static String VERSION_VALUE = "1";

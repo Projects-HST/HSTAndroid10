@@ -1,13 +1,5 @@
 package com.hst.osa.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -30,15 +22,17 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hst.osa.R;
-import com.hst.osa.activity.ShippingAddressActivity;
 import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
@@ -48,13 +42,11 @@ import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
-import com.nostra13.universalimageloader.utils.L;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.PipedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -339,7 +331,7 @@ public class AddAddressActivity extends AppCompatActivity implements IServiceLis
 
     private boolean validateFields() {
         if (!OSAValidator.checkMobileNumLength(this.cus_mobile.getText().toString().trim())) {
-            cus_mobile.setError(getString(R.string.error_number));
+            cus_mobile.setError(getString(R.string.empty_entry));
             requestFocus(cus_mobile);
             return false;
         }

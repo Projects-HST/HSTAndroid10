@@ -3,7 +3,6 @@ package com.hst.osa.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.system.Os;
 
 public class PreferenceStorage {
 
@@ -124,7 +123,25 @@ public class PreferenceStorage {
         return userId;
     }
 
-    // UserId
+    // UserFullName
+    public static void saveFullName(Context context, String userId) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.PARAMS_FIRST_NAME, userId);
+        editor.apply();
+    }
+
+    public static String getFullName(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String userId;
+        userId = sharedPreferences.getString(OSAConstants.PARAMS_FIRST_NAME, "");
+        return userId;
+    }
+
+
+    // Gender
     public static void saveGender(Context context, String userId) {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -177,7 +194,6 @@ public class PreferenceStorage {
     }
     /*End*/
 
-
     public static void saveSocialNetworkProfilePic(Context context, String url) {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -193,6 +209,25 @@ public class PreferenceStorage {
         return url;
 
     }
+
+    /*To store phone number*/
+    public static void savePhoneNo(Context context, String type) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(OSAConstants.KEY_PHONE_NO, type);
+        editor.apply();
+    }
+
+    public static String getPhoneNo(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String mobileNo;
+        mobileNo = sharedPreferences.getString(OSAConstants.KEY_PHONE_NO, "");
+        return mobileNo;
+    }
+    /*End*/
+
 
 
     /*To store mobile number*/
