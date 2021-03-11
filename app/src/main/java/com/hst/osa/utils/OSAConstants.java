@@ -42,6 +42,10 @@ public class OSAConstants {
 
     public static final String ADD_TO_CART = "product_cart/";
 
+    public static final String ADD_TO_WISHLIST = "add_wishlist/";
+
+    public static final String DELETE_WISHLIST = "remove_wishlist/";
+
     public static final String DELETE_FROM__CART = "product_cart_remove/";
 
     public static final String UPDATE_QUANTITY = "cart_quantity/";
@@ -52,7 +56,13 @@ public class OSAConstants {
 
     public static final String ORDER_DETAILS = "order_details/";
 
+    public static final String ORDER_HISTORY = "view_orders/";
+
     public static final String APPLY_PROMO = "apply_promo_code/";
+
+    public static final String WALLET_DETAIL = "customer_wallet_history/";
+
+    public static final String WALLET_ADD_MONEY = "add_money_wallet/";
 
     public static final String SEARCH_PRODUCT = "search_product/";
 
@@ -153,6 +163,9 @@ public class OSAConstants {
     //    ADDRESS TYPE
     public static String TYPE_HOME = "1";
     public static String TYPE_OFFICE = "2";
+
+    //    WALLET PARAMS
+    public static String KEY_AMOUNT = "amount";
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";
