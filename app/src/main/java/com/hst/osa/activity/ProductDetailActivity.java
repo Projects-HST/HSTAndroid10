@@ -102,6 +102,9 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
     Product product;
     RelatedProductList relatedProductList;
 
+    ImageView imgLike;
+    boolean likeClick = false;
+
     String resFor = "";
     float currentPrice = 0;
     int stockCount = 0;
@@ -138,6 +141,8 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         productShare = (TextView) findViewById(R.id.share);
         productQuantity = (TextView) findViewById(R.id.quantity);
         productStockStatus = (TextView) findViewById(R.id.stock_status);
+        imgLike = (ImageView) findViewById(R.id.product_like);
+        imgLike.setOnClickListener(this);
         btnMinus = (ImageView) findViewById(R.id.minus);
         btnMinus.setOnClickListener(this);
         deliverCode = (EditText) findViewById(R.id.pincode);
@@ -254,7 +259,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     }
                     calculatePrice(1);
 
-                    if (response.getJSONArray("related_products").length()>0) {
+                    if (response.getJSONArray("related_products").length() > 0) {
                         Gson gson = new Gson();
                         relatedProductList = null;
                         relatedProductList = gson.fromJson(response.toString(), RelatedProductList.class);
@@ -323,6 +328,12 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                 } else if (resFor.equalsIgnoreCase("addCart")) {
                     Intent intent = new Intent(this, CartActivity.class);
                     startActivity(intent);
+                } else if (resFor.equalsIgnoreCase("addWish")) {
+                    likeClick = true;
+                    imgLike.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_heart_filled));
+                } else if (resFor.equalsIgnoreCase("removeCart")) {
+                    likeClick = false;
+                    imgLike.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_heart));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -419,6 +430,34 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
+    private void addToWishlist() {
+        resFor = "addWish";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
+            jsonObject.put(OSAConstants.KEY_USER_ID, PreferenceStorage.getUserId(this));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.ADD_TO_WISHLIST;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void removeWishlist() {
+        resFor = "removeWish";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, productID);
+            jsonObject.put(OSAConstants.KEY_USER_ID, PreferenceStorage.getUserId(this));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = OSAConstants.BUILD_URL + OSAConstants.DELETE_WISHLIST;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
     @Override
     public void onItemClickSize(View view, int position) {
         Size size = null;
@@ -502,6 +541,34 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                 }
             } else {
                 addToCart();
+            }
+        }
+        if (view == imgLike) {
+            if (PreferenceStorage.getUserId(this).isEmpty()) {
+                if (PreferenceStorage.getUserId(this).equalsIgnoreCase("")) {
+                    android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle(R.string.login);
+                    alertDialogBuilder.setMessage(R.string.login_to_continue);
+                    alertDialogBuilder.setPositiveButton(R.string.alert_button_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            doLogout();
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton(R.string.alert_button_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialogBuilder.show();
+                }
+            } else {
+                if (!likeClick) {
+                    addToWishlist();
+                } else {
+                    removeWishlist();
+                }
             }
         }
     }

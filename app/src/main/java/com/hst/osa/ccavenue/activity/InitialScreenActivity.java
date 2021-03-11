@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 
 import com.hst.osa.R;
@@ -83,10 +84,12 @@ public class InitialScreenActivity extends AppCompatActivity implements IService
         amount.setText(adv);
         orderId.setText(PreferenceStorage.getOrderId(this));
 
-        findViewById(R.id.back_btn).setOnClickListener(new View.OnClickListener() {
+        Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_left_arrow));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(getApplicationContext());
                 alertDialogBuilder.setTitle("Payment");
                 alertDialogBuilder.setMessage("Are you sure you want to cancel your order?");
@@ -118,9 +121,10 @@ public class InitialScreenActivity extends AppCompatActivity implements IService
         serviceHelper = new ServiceHelper(this);
         serviceHelper.setServiceListener(this);
         progressDialogHelper = new ProgressDialogHelper(this);
+        onClick();
     }
 
-    public void onClick(View view) {
+    public void onClick() {
         //Mandatory parameters. Other parameters can be added if required.
         String vAccessCode = ServiceUtility.chkNull(accessCode.getText()).toString().trim();
         String vMerchantId = ServiceUtility.chkNull(merchantId.getText()).toString().trim();

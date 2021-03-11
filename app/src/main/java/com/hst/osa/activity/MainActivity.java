@@ -381,7 +381,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }if (view == sideOrder) {
 
         }if (view == sideWallet) {
-
+            Intent i = new Intent(this, WalletActivity.class);
+            startActivity(i);
         }if (view == sideAddress) {
             Intent i = new Intent(this, ShippingAddressActivity.class);
             i.putExtra("page", "shippingAddress");

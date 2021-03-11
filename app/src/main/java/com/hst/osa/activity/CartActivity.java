@@ -162,9 +162,10 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
                         signInSuccess = false;
                         d(TAG, "Show error dialog");
                         AlertDialogHelper.showSimpleAlertDialog(this, msg);
-
+                        btnCheckout.setClickable(false);
                     } else {
                         signInSuccess = true;
+                        btnCheckout.setClickable(true);
                     }
                 }
             } catch (JSONException e) {

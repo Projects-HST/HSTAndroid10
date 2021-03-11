@@ -156,7 +156,7 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
     }
 
     private void checkPromoCode() {
-        resCheck = "detail";
+        resCheck = "promo";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
         try {
@@ -268,7 +268,10 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
                     totalPrice.setText(paidFinal);
 
                 }
-
+                if (resCheck.equalsIgnoreCase("promo")) {
+                    startActivity(getIntent());
+                    finish();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
