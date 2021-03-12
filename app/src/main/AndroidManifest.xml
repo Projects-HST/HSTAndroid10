@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OSA"
         android:usesCleartextTraffic="true">
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -92,87 +93,84 @@
             android:label="@string/category"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
-
         <activity
             android:name=".activity.CartActivity"
             android:label="@string/cart"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
-
         <activity
             android:name=".activity.ShippingAddressActivity"
             android:label="@string/address"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.OSA" />
-
         <activity
             android:name=".activity.AddAddressActivity"
             android:label="@string/address"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin" />
-        <activity android:name=".activity.CheckoutActivity"
+        <activity
+            android:name=".activity.CheckoutActivity"
             android:label="@string/check_out"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppThemeNoActionBarLogin"/>
-
-        <activity android:name=".activity.ReviewOrderActivity"
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.ReviewOrderActivity"
             android:label="@string/review_order"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppThemeNoActionBarLogin"/>
-
-        <activity android:name=".activity.WalletActivity"
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.WalletActivity"
             android:label="@string/wallet"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppThemeNoActionBarLogin"/>
-
-        <activity android:name=".activity.WalletAddMoneyActivity"
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.WalletAddMoneyActivity"
             android:label="@string/wallet"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppThemeNoActionBarLogin"/>
-
-
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ccavenue.activity.InitialScreenActivity"
             android:label="@string/payment"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".ccavenue.activity.MainActivity"
             android:label="@string/payment"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".ccavenue.activity.StatusActivity"
             android:label="@string/payment"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".ccavenue.activity.WebViewActivity"
             android:label="@string/payment"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
-            android:name=".activity.EditProfile"
-            android:label="@string/address"
+            android:name=".activity.WishListActivity"
+            android:label="@string/favourite"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
+        <activity
+            android:name=".activity.EditProfile"
+            android:label="@string/profile"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.NotificationActivity"
-            android:label="@string/address"
+            android:label="@string/notification"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateAlwaysHidden" />

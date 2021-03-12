@@ -46,6 +46,8 @@ public class OSAConstants {
 
     public static final String DELETE_WISHLIST = "remove_wishlist/";
 
+    public static final String VIEW_WISHLIST = "view_wishlist/";
+
     public static final String DELETE_FROM__CART = "product_cart_remove/";
 
     public static final String UPDATE_QUANTITY = "cart_quantity/";

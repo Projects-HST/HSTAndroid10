@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sideDash = navigationView.getHeaderView(0).findViewById(R.id.side_dashboard);
         sideProfile = navigationView.getHeaderView(0).findViewById(R.id.side_profile);
         sideCat = navigationView.getHeaderView(0).findViewById(R.id.side_category);
+        sideWish = navigationView.getHeaderView(0).findViewById(R.id.side_wishlist);
         sideOrder = navigationView.getHeaderView(0).findViewById(R.id.side_order_history);
         sideWallet = navigationView.getHeaderView(0).findViewById(R.id.side_wallet);
         sideAddress = navigationView.getHeaderView(0).findViewById(R.id.side_address);
@@ -211,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sideDash.setOnClickListener(this);
         sideProfile.setOnClickListener(this);
         sideCat.setOnClickListener(this);
+        sideWish.setOnClickListener(this);
         sideOrder.setOnClickListener(this);
         sideWallet.setOnClickListener(this);
         sideAddress.setOnClickListener(this);
@@ -378,6 +380,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(this, CategoryActivity.class);
             startActivity(i);
 //            changePage(1);
+        }if (view == sideWish){
+            Intent i = new Intent(this, WishListActivity.class);
+            startActivity(i);
         }if (view == sideOrder) {
 
         }if (view == sideWallet) {

@@ -19,7 +19,6 @@ import android.widget.ViewFlipper;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,8 +28,8 @@ import com.hst.osa.activity.CategoryActivity;
 import com.hst.osa.activity.ProductDetailActivity;
 import com.hst.osa.activity.SubCategoryActivity;
 import com.hst.osa.adapter.AdvertisementListAdapter;
-import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.BestSellingListAdapter;
+import com.hst.osa.adapter.CategoryHorizontalListAdapter;
 import com.hst.osa.adapter.NewArrivalsListAdapter;
 import com.hst.osa.bean.support.Advertisement;
 import com.hst.osa.bean.support.AdvertisementList;
@@ -228,7 +227,7 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
                     for (int b = 0; b <=1; b++) {
                         productArrayList.add(b, productList.getProductArrayList().get(b));
                     }
-                    BestSellingListAdapter adasd = new BestSellingListAdapter(productArrayList, this);
+                    BestSellingListAdapter adasd = new BestSellingListAdapter(getActivity(),productArrayList, this);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
                     recyclerViewPopularProduct.setLayoutManager(mLayoutManager);

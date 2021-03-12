@@ -1,6 +1,7 @@
 package com.hst.osa.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +15,49 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
 import com.hst.osa.bean.support.Product;
+import com.hst.osa.helpers.ProgressDialogHelper;
+import com.hst.osa.servicehelpers.ServiceHelper;
+import com.hst.osa.serviceinterfaces.IServiceListener;
+import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.OSAValidator;
+import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingListAdapter.MyViewHolder> {
+import java.util.ArrayList;
+
+public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingListAdapter.MyViewHolder> implements IServiceListener {
 
     private ArrayList<Product> productArrayList;
-    Context context;
+    Context mContext;
     private OnItemClickListener onItemClickListener;
+    private ServiceHelper serviceHelper;
+    private ProgressDialogHelper progressDialogHelper;
+    boolean likeClick = false;
+    private String resFor;
+    private int pos;
+
+    @Override
+    public void onResponse(JSONObject response) {
+        try {
+            String status = response.getString("status");
+            if (status.equalsIgnoreCase("success")) {
+                if (resFor.equalsIgnoreCase("addWish")) {
+                }
+                if (resFor.equalsIgnoreCase("removeWish")) {
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onError(String error) {
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txtProductOffer, txtProductName, txtProductPrice, txtProductMRP;
@@ -37,7 +69,37 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
             productLayout = (LinearLayout) view.findViewById(R.id.product_layout);
             productBanner = (ImageView) view.findViewById(R.id.product_img);
             productLike = (ImageView) view.findViewById(R.id.product_like);
-            productLike.setOnClickListener(this);
+            productLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pos = getAdapterPosition();
+                    if (PreferenceStorage.getUserId(mContext).isEmpty()) {
+                        if (PreferenceStorage.getUserId(mContext).equalsIgnoreCase("")) {
+                            android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(mContext);
+                            alertDialogBuilder.setTitle(R.string.login);
+                            alertDialogBuilder.setMessage(R.string.login_to_continue);
+                            alertDialogBuilder.setPositiveButton(R.string.alert_button_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                }
+                            });
+                            alertDialogBuilder.setNegativeButton(R.string.alert_button_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alertDialogBuilder.show();
+                        }
+                    } else {
+                        if (!likeClick) {
+                            addToWishlist();
+                        } else {
+                            removeWishlist();
+                        }
+                    }
+                }
+            });
             productLayout.setOnClickListener(this);
             txtProductOffer = (TextView) view.findViewById(R.id.offer);
             txtProductName = (TextView) view.findViewById(R.id.product_name);
@@ -57,8 +119,37 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
         }
     }
 
+    private void addToWishlist() {
+        resFor = "addWish";
+        JSONObject jsonObject = new JSONObject();
+        Product product = productArrayList.get(pos);
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, product.getid());
+            jsonObject.put(OSAConstants.KEY_USER_ID, PreferenceStorage.getUserId(mContext));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-    public BestSellingListAdapter(ArrayList<Product> newsFeedArrayList, OnItemClickListener onItemClickListener) {
+        String url = OSAConstants.BUILD_URL + OSAConstants.ADD_TO_WISHLIST;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void removeWishlist() {
+        resFor = "removeWish";
+        JSONObject jsonObject = new JSONObject();
+        Product product = productArrayList.get(pos);
+        try {
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, product.getid());
+            jsonObject.put(OSAConstants.KEY_USER_ID, PreferenceStorage.getUserId(mContext));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.DELETE_WISHLIST;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    public BestSellingListAdapter(Context context, ArrayList<Product> newsFeedArrayList, OnItemClickListener onItemClickListener) {
+        this.mContext = context;
         this.productArrayList = newsFeedArrayList;
         this.onItemClickListener = onItemClickListener;
     }
@@ -73,12 +164,17 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_grid_product, parent, false);
 
+        serviceHelper = new ServiceHelper(itemView.getContext());
+        serviceHelper.setServiceListener(this);
+        progressDialogHelper = new ProgressDialogHelper(itemView.getContext());
+
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Product product = productArrayList.get(position);
+//        likeClick = holder.productLike.performClick();
 
         holder.txtProductName.setText(product.getproduct_name());
         if (product.getOffer_status().equalsIgnoreCase("0")) {
@@ -97,6 +193,12 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
         }else {
             holder.productRating.setVisibility(View.GONE);
         }
+//        if (likeClick){
+//            holder.productLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_heart_filled));
+//        }
+//        else {
+//            holder.productLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_heart));
+//        }
 
 
         if (OSAValidator.checkNullString(product.getproduct_cover_img())) {
@@ -124,5 +226,4 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
         else
             return 1;
     }
-
 }

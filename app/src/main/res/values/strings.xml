@@ -206,5 +206,7 @@
     <string name="completed">Completed</string>
     <string name="view_bill">View Bill</string>
     <string name="update">Update Profile</string>
+    <string name="favourite">Favourites</string>
+    <string name="profile">Edit Profile</string>
 
 </resources>
