@@ -151,6 +151,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".activity.OrderHistoryActivity"
+            android:label="@string/go_orders"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBarLogin"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
         <activity
             android:name=".ccavenue.activity.InitialScreenActivity"
             android:label="@string/payment"
@@ -204,7 +212,7 @@
             android:label="@string/side_menu_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarLogin"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

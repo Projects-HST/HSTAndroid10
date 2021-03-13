@@ -97,24 +97,6 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
         codImg = (ImageView) findViewById(R.id.cash_radio);
         codImg.setOnClickListener(this);
 
-        Intent get = getIntent();
-        Bundle bundle = get.getExtras();
-        if (bundle != null) {
-            addressArrayList = (ArrayList<AddressList>)bundle.getSerializable("addObj");
-//            addList = (AddressList) bundle.getSerializable("addObj");
-            String cusName = "";
-            String cusMob = "";
-            String cusAdd = "";
-            for (int i=0; i < addressArrayList.size(); i++) {
-                cusName = addressArrayList.get(i).getFull_name();
-                cusMob = addressArrayList.get(i).getMobile_number();
-                cusAdd = addressArrayList.get(i).getHouse_no();
-            }
-            name.setText(cusName);
-            phone.setText(cusMob);
-            address.setText(cusAdd);
-        }
-
         initiateServices();
         getAddressList();
     }
