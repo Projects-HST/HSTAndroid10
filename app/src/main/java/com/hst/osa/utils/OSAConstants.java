@@ -12,7 +12,7 @@ public class OSAConstants {
     //Payment Gateway
     public static final String API_ADVANCE_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/customer_advance.php";
     //    public static final String API_ADVANCE_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/ccavResponseHandler.php";
-    public static final String API_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/service_net_amount.php";
+    public static final String API_PAYMENT_URL = BASE_URL + JOINT_URL + "ccavenue_app/confirm_order.php";
     public static final String API_WALLET_URL = BASE_URL + JOINT_URL + "ccavenue_app/adding_money_to_wallet.php";
     public static final String API_RSA_URL = BASE_URL + JOINT_URL + "ccavenue_app/GetRSA.php";
     public static final String SUCCESSFUL_PAYMENT = BASE_URL + JOINT_URL + "";
@@ -62,6 +62,8 @@ public class OSAConstants {
 
     public static final String ORDER_HISTORY = "view_orders/";
 
+    public static final String ORDER_HISTORY_DETAIL = "view_order_cart_details/";
+
     public static final String APPLY_PROMO = "apply_promo_code/";
 
     public static final String WALLET_DETAIL = "customer_wallet_history/";
@@ -98,6 +100,12 @@ public class OSAConstants {
 
     public static final String NOTIFICATION_HISTORY = "";
 
+
+    public static final String USE_WALLET = "use_wallet/";
+
+    public static final String REMOVE_WALLET = "remove_wallet/";
+
+    public static final String PAY_COD = "payby_cod/";
 
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
@@ -182,6 +190,8 @@ public class OSAConstants {
 
     //    WALLET PARAMS
     public static String KEY_AMOUNT = "amount";
+    public static String KEY_PROMO = "promo_code";
+
 
     //      SharedPref
     public static final String PARAMS_PROD_ID = "product_id";
@@ -191,7 +201,7 @@ public class OSAConstants {
     public static final String PARAMS_COMBINED_ID = "product_comb_id";
     public static final String PARAMS_QUANTITY = "quantity";
     public static final String PARAMS_ORDER_ID = "order_id";
-    public static final String PARAMS_PURCHASE_ORDER_ID = "purchse_order_id";
+    public static final String PARAMS_PURCHASE_ORDER_ID = "purchase_order_id";
 
     public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
 
