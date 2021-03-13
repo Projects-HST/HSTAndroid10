@@ -138,4 +138,18 @@ public class OrderHistory implements Serializable {
         this.order_status = order_status;
     }
 
+    /**
+     * @return The total_amount
+     */
+    public String getTotal_amount() {
+        return total_amount;
+    }
+
+    /**
+     * @param total_amount The total_amount
+     */
+    public void setTotal_amount(String total_amount) {
+        this.total_amount = total_amount;
+    }
+
 }

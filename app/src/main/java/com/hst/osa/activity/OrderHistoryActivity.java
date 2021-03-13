@@ -1,13 +1,8 @@
 package com.hst.osa.activity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.adapter.OrderHistoryListAdapter;
 import com.hst.osa.adapter.ReviewOrderListAdapter;
-import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
+import com.hst.osa.bean.support.OrderHistory;
+import com.hst.osa.bean.support.OrderHistoryList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -29,7 +26,6 @@ import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,9 +41,9 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
 
     private TextView delivered, transit;
 
-    private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
-    CartOrderList cartItemList;
-    private ReviewOrderListAdapter mAdapter;
+    private ArrayList<OrderHistory> orderHistoryArrayList = new ArrayList<>();
+    OrderHistoryList orderHistoryList;
+    private OrderHistoryListAdapter mAdapter;
     private RecyclerView recyclerViewCategory;
 
     @Override
@@ -151,8 +147,8 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
                 String count = response.getString("order_count");
                 Gson gson = new Gson();
 
-                cartItemList = gson.fromJson(response.toString(), CartOrderList.class);
-                cartItemArrayList.addAll(cartItemList.getCartItemArrayList());
+                orderHistoryList = gson.fromJson(response.toString(), OrderHistoryList.class);
+                orderHistoryArrayList.addAll(orderHistoryList.getOrderHistoryArrayList());
 //                mAdapter = new ReviewOrderListAdapter(this, cartItemArrayList, this);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
                 recyclerViewCategory.setLayoutManager(mLayoutManager);
