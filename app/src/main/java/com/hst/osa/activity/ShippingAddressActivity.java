@@ -1,21 +1,20 @@
 package com.hst.osa.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -46,6 +45,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
 
     private ArrayList<AddressList> addressArrayList = new ArrayList<>();
     AddressArrayList arrayList;
+    AddressList addressList;
 
     private String addressId;
     private String resStr;
@@ -71,10 +71,7 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
             }
         });
 
-//        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-//                new IntentFilter("addressMode"));
-        page = getIntent().getExtras().getString("page");
-        addressId = PreferenceStorage.getAddressId(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("addressMode"));
 
         add = (Button) findViewById(R.id.btnAdd);
         next = (Button) findViewById(R.id.cont);
@@ -90,13 +87,13 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
         showAddressList();
     }
 
-//    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//
-//            addressId = intent.getStringExtra("addId");
-//        }
-//    };
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            addressId = intent.getStringExtra("addId");
+        }
+    };
 
     private void showAddressList() {
         resStr = "addressList";
@@ -115,6 +112,13 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
     }
 
     private void setDefaultAddress() {
+
+//        Intent get =  getIntent();
+//        Bundle bundle = get.getExtras();
+//        if (bundle != null){
+//            addressList = (AddressList)bundle.getSerializable("addressObj");
+//            addressId = addressList.getId();
+//        }
         resStr = "setDefault";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
@@ -178,15 +182,13 @@ public class ShippingAddressActivity extends AppCompatActivity implements IServi
                 }
             }
             if (resStr.equalsIgnoreCase("setDefault")) {
-//                AddressList addressList = null;
-//                addressList = addressArrayList.get(pos);
                 Intent checkInt;
-                if (page.equalsIgnoreCase("shippingAddress")) {
+//                if (resStr.equalsIgnoreCase("shippingAddress")) {
                     checkInt = new Intent(this, MainActivity.class);
                     checkInt.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(checkInt);
                     finish();
-                }
+//                }
             }
         }
     }

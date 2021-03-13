@@ -55,6 +55,8 @@ public class AddressList implements Serializable {
     @Expose
     private String address_mode;
 
+    private int size = 3;
+
     public String getId() {
         return id;
     }
@@ -149,5 +151,13 @@ public class AddressList implements Serializable {
 
     public void setAddress_mode(String address_mode) {
         this.address_mode = address_mode;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

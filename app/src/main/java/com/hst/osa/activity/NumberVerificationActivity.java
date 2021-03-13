@@ -273,6 +273,7 @@ public class NumberVerificationActivity extends AppCompatActivity implements Vie
 
                 } else if (checkVerify.equalsIgnoreCase("Confirm") || checkVerify.equalsIgnoreCase("verified")) {
                     PreferenceStorage.setFirstTimeLaunch(getApplicationContext(), false);
+                    PreferenceStorage.setMobileLogin(getApplicationContext(), true);
 //                    Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
                     JSONObject data = response.getJSONObject("userData");
 

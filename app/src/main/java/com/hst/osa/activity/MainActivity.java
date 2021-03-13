@@ -1,37 +1,29 @@
 package com.hst.osa.activity;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
@@ -41,7 +33,6 @@ import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.RecentSearch;
 import com.hst.osa.bean.support.RecentSearchList;
 import com.hst.osa.bean.support.SubProductList;
-import com.hst.osa.fragment.BestSellingFragment;
 import com.hst.osa.fragment.CategoryFragment;
 import com.hst.osa.fragment.DashboardFragment;
 import com.hst.osa.helpers.AlertDialogHelper;
@@ -58,7 +49,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static android.util.Log.d;
@@ -212,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sideDash = navigationView.getHeaderView(0).findViewById(R.id.side_dashboard);
         sideProfile = navigationView.getHeaderView(0).findViewById(R.id.side_profile);
         sideCat = navigationView.getHeaderView(0).findViewById(R.id.side_category);
+        sideWish = navigationView.getHeaderView(0).findViewById(R.id.side_wishlist);
         sideOrder = navigationView.getHeaderView(0).findViewById(R.id.side_order_history);
         sideWallet = navigationView.getHeaderView(0).findViewById(R.id.side_wallet);
         sideAddress = navigationView.getHeaderView(0).findViewById(R.id.side_address);
@@ -221,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sideDash.setOnClickListener(this);
         sideProfile.setOnClickListener(this);
         sideCat.setOnClickListener(this);
+        sideWish.setOnClickListener(this);
         sideOrder.setOnClickListener(this);
         sideWallet.setOnClickListener(this);
         sideAddress.setOnClickListener(this);
@@ -381,10 +373,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (view == sideDash) {
             changePage(0);
         }if (view == sideProfile) {
+            Intent i = new Intent(this, EditProfile.class);
+//            i.putExtra("page", "editProfile");
+            startActivity(i);
         }if (view == sideCat) {
             Intent i = new Intent(this, CategoryActivity.class);
             startActivity(i);
 //            changePage(1);
+        }if (view == sideWish){
+            Intent i = new Intent(this, WishListActivity.class);
+            startActivity(i);
         }if (view == sideOrder) {
 
         }if (view == sideWallet) {
@@ -396,7 +394,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
 
         }if (view == sideSettings) {
-
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
         }if (view == sideLogout) {
             logout();
         }

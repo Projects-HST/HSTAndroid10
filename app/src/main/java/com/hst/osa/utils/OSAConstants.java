@@ -24,6 +24,8 @@ public class OSAConstants {
 
     public static final String NUMBER_LOGIN = "login_mobileotp/";
 
+    public static final String REGISTER = "registration/";
+
     public static final String EMAIL_LOGIN = "login/";
 
     public static final String DASHBOARD = "home_page/";
@@ -46,6 +48,8 @@ public class OSAConstants {
 
     public static final String DELETE_WISHLIST = "remove_wishlist/";
 
+    public static final String VIEW_WISHLIST = "view_wishlist/";
+
     public static final String DELETE_FROM__CART = "product_cart_remove/";
 
     public static final String UPDATE_QUANTITY = "cart_quantity/";
@@ -62,6 +66,10 @@ public class OSAConstants {
 
     public static final String APPLY_PROMO = "apply_promo_code/";
 
+    public static final String WALLET_DETAIL = "customer_wallet_history/";
+
+    public static final String WALLET_ADD_MONEY = "add_money_wallet/";
+
     public static final String SEARCH_PRODUCT = "search_product/";
 
     public static final String RECENT_SEARCH = "recent_search_list/";
@@ -76,9 +84,22 @@ public class OSAConstants {
 
     public static final String DELETE_ADDRESS = "address_delete/";
 
-    public static final String WALLET_DETAIL = "customer_wallet_history/";
+    public static final String PROFILE_PIC = "update_profilepic/";
 
-    public static final String WALLET_ADD_MONEY = "add_money_wallet/";
+    public static final String PROFILE_UPDATE = "update_profile_details/";
+
+    public static final String GET_PROFILE_DETAILS = "get_profile_details/";
+
+    public static final String NOTIFICATION_SUBSCRIPTION = "notification_update/";
+
+    public static final String NEWS_SUBSCRIPTION = "newsletter_update/";
+
+    public static final String CHECK_PASSWORD = "check_password/";
+
+    public static final String CONFIRM_PASSWORD = "password_update/";
+
+    public static final String NOTIFICATION_HISTORY = "";
+
 
     public static final String USE_WALLET = "use_wallet/";
 
@@ -108,6 +129,7 @@ public class OSAConstants {
 
     //      Shared preferences file name
     public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    public static final String IS_MOBILE_LOGIN = "IsFirstTimeLaunch";
 
     //      Shared IMEI No
     public static final String KEY_IMEI = "imei_code";
@@ -115,6 +137,10 @@ public class OSAConstants {
     //      Profile Params
     public static final String PARAMS_FIRST_NAME = "first_name";
     public static final String PARAMS_LAST_NAME = "last_name";
+    public static String KEY_PROFILE_PIC = "profile_picture";
+    public static String KEY_PHONE_NO = "phone_number";
+    public static String KEY_DOB = "dob";
+    public static String KEY_NEWS_STATUS = "newsletter_status";
 
     //      Alert Dialog Constants
     public static String ALERT_DIALOG_TITLE = "alertDialogTitle";
@@ -131,7 +157,7 @@ public class OSAConstants {
     public static String KEY_NAME = "name";
     public static String KEY_GENDER = "gender";
     public static String KEY_EMAIL = "email";
-    public static String KEY_USER_PROFILE_PIC = "profile_pic";
+    public static String KEY_USER_PROFILE_PIC = "picture_url";
     public static String KEY_MOBILE_NO = "mobile_no";
     public static String KEY_VERSION = "version_code";
     public static String VERSION_VALUE = "1";

@@ -1,14 +1,14 @@
 package com.hst.osa.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import com.hst.osa.R;
 import com.hst.osa.adapter.BestSellingListAdapter;
@@ -48,7 +48,7 @@ public class SearchResultActivity extends AppCompatActivity implements BestSelli
 
         if (bundle != null){
             productArrayList = (ArrayList<Product>)bundle.getSerializable("searchObj");
-            BestSellingListAdapter bsAdapter = new BestSellingListAdapter(productArrayList, this);
+            BestSellingListAdapter bsAdapter = new BestSellingListAdapter(this, productArrayList, this);
             GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
             mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
