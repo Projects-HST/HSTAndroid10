@@ -2,8 +2,6 @@ package com.hst.osa.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
@@ -76,31 +74,31 @@ public class ChangePasswordActivity extends AppCompatActivity implements IServic
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-    private boolean validateFields() {
-
-        cfmPass.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                txt1 = newPass.getText().toString().trim();
-                txt2 = cfmPass.getText().toString().trim();
-                if (txt1.equals(txt2)) {
-                    cfmPass.setError(getString(R.string.password_match));
-                } else {
-                    newPass.setError(getString(R.string.password_error));
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        return false;
-    }
+//    private boolean validateFields() {
+//
+//        cfmPass.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                txt1 = newPass.getText().toString().trim();
+//                txt2 = cfmPass.getText().toString().trim();
+//                if (txt1.equals(txt2)) {
+//                    cfmPass.setError(getString(R.string.password_match));
+//                } else {
+//                    newPass.setError(getString(R.string.password_error));
+//                }
+//            }
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+//        return false;
+//    }
 
 //    private void reqFocus(View view) {
 //        if (view.requestFocus()) {
@@ -126,7 +124,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements IServic
         reStr = "changePassword";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
-        if (validateFields()) {
+//        if (validateFields()) {
             try {
                 jsonObject.put(OSAConstants.KEY_USER_ID, id);
                 jsonObject.put(OSAConstants.PARAMS_PASSWORD, txt1);
@@ -136,7 +134,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements IServic
             }
             String serverUrl = OSAConstants.BUILD_URL + OSAConstants.CONFIRM_PASSWORD;
             serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
-        }
+//        }
     }
 
     private boolean validateSignInResponse(JSONObject response) {
