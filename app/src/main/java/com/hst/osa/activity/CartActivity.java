@@ -109,6 +109,7 @@ public class CartActivity extends AppCompatActivity implements IServiceListener,
         if (v == btnCheckout) {
             Intent i = new Intent(this, CheckoutActivity.class);
             startActivity(i);
+            finish();
         }
     }
 

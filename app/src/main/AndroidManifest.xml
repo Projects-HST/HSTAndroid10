@@ -134,6 +134,12 @@
             android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/AppThemeNoActionBarLogin"/>
 
+        <activity android:name=".activity.OrderHistoryActivity"
+            android:label="@string/go_orders"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:theme="@style/AppThemeNoActionBarLogin"/>
+
 
         <activity
             android:name=".ccavenue.activity.InitialScreenActivity"

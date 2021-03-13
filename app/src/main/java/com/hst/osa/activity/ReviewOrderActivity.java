@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,16 +20,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.adapter.CartItemListAdapter;
+import com.hst.osa.adapter.ReviewOrderListAdapter;
 import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.AddressArrayList;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartItemList;
 import com.hst.osa.bean.support.CartOrderList;
+import com.hst.osa.ccavenue.activity.InitialScreenActivity;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
+import com.hst.osa.utils.CommonUtils;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
 
@@ -40,7 +44,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class ReviewOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, CartItemListAdapter.OnItemClickListener {
+public class ReviewOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, ReviewOrderListAdapter.OnItemClickListener {
 
     private static final String TAG = CheckoutActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -48,17 +52,17 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
     private String resCheck = "";
     private String addressID = "";
     private String orderID = "";
+    private TextView paymentMethod;
     private TextView name, phone, address;
-    private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, placeOrder;
-
+    private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, placeOrder, continueShopping, goToOrders;
+    private RelativeLayout originalLayout, orderPlacedLayout;
     AddressArrayList addressList;
     ArrayList<AddressList> addressArrayList = new ArrayList<>();
 
 
     private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
     CartOrderList cartItemList;
-    private CartItemListAdapter mAdapter;
-
+    private ReviewOrderListAdapter mAdapter;
     private RecyclerView recyclerViewCategory;
 
     @Override
@@ -76,13 +80,21 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
             }
         });
 
+        originalLayout = (RelativeLayout) findViewById(R.id.original_layout);
+        orderPlacedLayout = (RelativeLayout) findViewById(R.id.order_played_layout);
+        continueShopping = (TextView) findViewById(R.id.continue_shopping);
+        continueShopping.setOnClickListener(this);
+        goToOrders = (TextView) findViewById(R.id.go_to_orders);
+        goToOrders.setOnClickListener(this);
+
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
+        paymentMethod = (TextView) findViewById(R.id.payment_method);
         name = (TextView) findViewById(R.id.name);
         phone = (TextView) findViewById(R.id.mobile);
         address = (TextView) findViewById(R.id.address);
 //        promoCode = (EditText) findViewById(R.id.promo_code);
-//        checkPromo = (TextView) findViewById(R.id.apply_promo);
-//        checkPromo.setOnClickListener(this);
+        placeOrder = (TextView) findViewById(R.id.place_order);
+        placeOrder.setOnClickListener(this);
 
         itemPrice = (TextView) findViewById(R.id.item_price);
 
@@ -115,6 +127,21 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
             e.printStackTrace();
         }
         String url = OSAConstants.BUILD_URL + OSAConstants.ORDER_DETAILS;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void cashPayment() {
+        resCheck = "COD";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        String oid = PreferenceStorage.getOrderId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, oid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.PAY_COD;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
@@ -154,11 +181,6 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
         return signInSuccess;
     }
 
-    public void reLoadPage() {
-        finish();
-        startActivity(getIntent());
-    }
-
     @Override
     public void onResponse(final JSONObject response) {
         progressDialogHelper.hideProgressDialog();
@@ -188,6 +210,12 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
                     String walletFinal = ("₹").concat(walletString);
                     String paidFinal = ("₹").concat(paidString);
 
+                    String payment = getIntent().getExtras().getString("payment");
+                    if (payment.equalsIgnoreCase("")) {
+                        paymentMethod.setText("Online Payment");
+                    } else {
+                        paymentMethod.setText(payment);
+                    }
                     name.setText(nameString);
                     phone.setText(mobileFinal);
                     address.setText(addressFinal);
@@ -201,11 +229,14 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
 
                     cartItemList = gson.fromJson(response.toString(), CartOrderList.class);
                     cartItemArrayList.addAll(cartItemList.getCartItemArrayList());
-                    mAdapter = new CartItemListAdapter(this, cartItemArrayList, this);
+                    mAdapter = new ReviewOrderListAdapter(this, cartItemArrayList, this);
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
                     recyclerViewCategory.setLayoutManager(mLayoutManager);
                     recyclerViewCategory.setAdapter(mAdapter);
 
+                }
+                if (resCheck.equalsIgnoreCase("COD")) {
+                    layoutVisible();
                 }
 
             } catch (JSONException e) {
@@ -224,9 +255,38 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
 
     @Override
     public void onClick(View view) {
-//        if (view == checkPromo) {
-//
-//        }
+        if (view == placeOrder) {
+            if (paymentMethod.getText().toString().equalsIgnoreCase("Online Payment")) {
+                String orderID = PreferenceStorage.getOrderId(this);
+                Intent i = new Intent(this, InitialScreenActivity.class);
+                i.putExtra("advpay", totalPrice.getText().toString());
+                i.putExtra("page", "payment");
+                startActivity(i);
+                finish();
+            } else if (paymentMethod.getText().toString().equalsIgnoreCase("Wallet")) {
+                layoutVisible();
+            } else if (paymentMethod.getText().toString().equalsIgnoreCase("COD")) {
+                cashPayment();
+            }
+        } if (view == continueShopping) {
+            Intent homeIntent = new Intent(this, MainActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
+            finish();
+        } if (view == goToOrders) {
+            Intent homeIntent = new Intent(this, MainActivity.class);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
+            finish();
+        }
+    }
+
+    private void layoutVisible() {
+        orderPlacedLayout.setVisibility(View.VISIBLE);
+        originalLayout.setClickable(false);
+        originalLayout.setFocusable(false);
+        placeOrder.setClickable(false);
+        placeOrder.setFocusable(false);
     }
 
     @Override
