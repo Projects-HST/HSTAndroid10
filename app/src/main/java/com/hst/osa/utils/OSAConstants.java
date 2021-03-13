@@ -24,6 +24,8 @@ public class OSAConstants {
 
     public static final String NUMBER_LOGIN = "login_mobileotp/";
 
+    public static final String REGISTER = "registration/";
+
     public static final String EMAIL_LOGIN = "login/";
 
     public static final String DASHBOARD = "home_page/";
@@ -86,6 +88,17 @@ public class OSAConstants {
 
     public static final String GET_PROFILE_DETAILS = "get_profile_details/";
 
+    public static final String NOTIFICATION_SUBSCRIPTION = "notification_update/";
+
+    public static final String NEWS_SUBSCRIPTION = "newsletter_update/";
+
+    public static final String CHECK_PASSWORD = "check_password/";
+
+    public static final String CONFIRM_PASSWORD = "password_update/";
+
+    public static final String NOTIFICATION_HISTORY = "";
+
+
     //      SignIn Params
     public static final String PARAMS_USERNAME = "username";
     public static final String PARAMS_LOGIN_TYPE = "login_type";
@@ -108,6 +121,7 @@ public class OSAConstants {
 
     //      Shared preferences file name
     public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    public static final String IS_MOBILE_LOGIN = "IsFirstTimeLaunch";
 
     //      Shared IMEI No
     public static final String KEY_IMEI = "imei_code";

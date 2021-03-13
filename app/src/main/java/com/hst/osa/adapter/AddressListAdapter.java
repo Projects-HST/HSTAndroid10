@@ -1,6 +1,5 @@
 package com.hst.osa.adapter;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,13 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -98,9 +94,9 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                     notifyItemChanged(indexPos);
                     notifyDataSetChanged();
 //                    ((ShippingAddressActivity)mContext).reLoadPage();
-//                    Intent refInt = new Intent("addressMode");
-//                    refInt.putExtra("addId", addressList);
-//                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(refInt);
+                    Intent refInt = new Intent("addressMode");
+                    refInt.putExtra("addId", addressList.get(indexPos).getId());
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(refInt);
                 }
             });
             btnEdit = (TextView) itemView.findViewById(R.id.btnEdit);
@@ -111,7 +107,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                     AddressList address = addressList.get(indexPos);
                     Intent editInt = new Intent(mContext, AddAddressActivity.class);
                     Bundle bundle = new Bundle();
-//                    editInt.putExtra("addressObj", address.getId());
+//                    editInt.putExtra("addId", address.getId());
                     bundle.putSerializable("addressObj", address);
                     editInt.putExtras(bundle);
                     mContext.startActivity(editInt);
@@ -145,16 +141,6 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                 }
             });
         }
-
-//        public void bind(Address address, OnItemClickListener listener) {
-//
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                    listener.onItemClickAddress(address, getAdapterPosition());
-//                }
-//            });
 
         @Override
         public void onClick(View v) {

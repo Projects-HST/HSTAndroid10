@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
@@ -93,8 +94,11 @@ public class BestSellingListAdapter extends RecyclerView.Adapter<BestSellingList
                         }
                     } else {
                         if (!likeClick) {
+                            productLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_heart_filled));
                             addToWishlist();
                         } else {
+                            likeClick = false;
+                            productLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_heart));
                             removeWishlist();
                         }
                     }

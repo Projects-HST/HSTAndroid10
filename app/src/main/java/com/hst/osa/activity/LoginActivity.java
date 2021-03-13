@@ -23,14 +23,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -74,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int RC_SIGN_IN = 9001;
     private int mSelectedLoginMode = 0;
     private String whichService = "", url = "", loginMethod = "number";
+    private boolean isMobileLogin = true;
 
     private Button btnContinue;
     private EditText txtNumber, txtEmail, txtPassword;
@@ -545,6 +543,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 i.putExtra("page", page);
                 i.putExtra("productObj", productID);
                 startActivity(i);
+
             }
             if (whichService.equalsIgnoreCase("google")) {
                 Intent i;

@@ -394,7 +394,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
 
         }if (view == sideSettings) {
-
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
         }if (view == sideLogout) {
             logout();
         }

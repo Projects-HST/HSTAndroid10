@@ -22,6 +22,24 @@ public class PreferenceStorage {
     }
     /*End*/
 
+    /*To check  user mode of login*/
+    public static void setMobileLogin(Context context, boolean mobileLogin) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(OSAConstants.IS_MOBILE_LOGIN, mobileLogin);
+        editor.apply();
+    }
+
+    public static boolean isMobileLogin(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return sharedPreferences.getBoolean(OSAConstants.IS_MOBILE_LOGIN, false);
+    }
+    /*End*/
+
+
+
 
     /*To save FCM key locally*/
     public static void saveGCM(Context context, String gcmId) {

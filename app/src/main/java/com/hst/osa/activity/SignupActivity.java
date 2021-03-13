@@ -3,11 +3,8 @@ package com.hst.osa.activity;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,20 +15,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
-import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hst.osa.R;
 import com.hst.osa.customview.CustomOtpEditText;
@@ -119,8 +109,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                      checkVerify = "Confirm";
                      JSONObject jsonObject = new JSONObject();
                      try {
-                         jsonObject.put(OSAConstants.KEY_NAME, PreferenceStorage.getMobileNo(getApplicationContext()));
-                         jsonObject.put(OSAConstants.PARAMS_MOBILE_NUMBER, PreferenceStorage.getMobileNo(getApplicationContext()));
+                         jsonObject.put(OSAConstants.KEY_NAME, txtName.getText().toString());
+                         jsonObject.put(OSAConstants.PARAMS_MOBILE_NUMBER, txtNumber.getText().toString());
                          jsonObject.put(OSAConstants.PARAMS_EMAIL, txtEmail.getText().toString());
                          jsonObject.put(OSAConstants.PARAMS_PASSWORD, txtPassword.getText().toString());
 
@@ -129,7 +119,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                      }
 
                      progressDialogHelper.showProgressDialog(getString(R.string.progress_loading));
-                     String url = OSAConstants.BUILD_URL + OSAConstants.NUMBER_LOGIN;
+                     String url = OSAConstants.BUILD_URL + OSAConstants.REGISTER;
                      serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
                  }
              }
@@ -225,7 +215,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
                     Toast.makeText(getApplicationContext(), "OTP resent successfully", Toast.LENGTH_SHORT).show();
 
-                } else if (checkVerify.equalsIgnoreCase("Confirm") || checkVerify.equalsIgnoreCase("verified")) {
+                } else if (checkVerify.equalsIgnoreCase("Confirm")) {
                     PreferenceStorage.setFirstTimeLaunch(getApplicationContext(), false);
 //                    Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
                     JSONObject data = response.getJSONObject("userData");
@@ -245,7 +235,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     PreferenceStorage.saveUserId(getApplicationContext(), userId);
                     Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
                     homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////                    homeIntent.putExtra("profile_state", "new");
+//                    homeIntent.putExtra("profile_state", "new");
                     startActivity(homeIntent);
 //                    this.finish();
                     finish();

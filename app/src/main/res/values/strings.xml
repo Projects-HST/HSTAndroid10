@@ -50,7 +50,7 @@
     <string name="create_note">Create your account</string>
     <string name="create_msg">After your registration is complete, you can see our products.</string>
     <string name="name">User Name</string>
-    <string name="reset">"Reset Password"</string>
+    <string name="reset">Reset Password</string>
     <string name="check_note">Check your email</string>
     <string name="check_msg">We\'ve sent you instructions on how to reset the password (also check the Spam folder).</string>
 
@@ -208,5 +208,16 @@
     <string name="update">Update Profile</string>
     <string name="favourite">Favourites</string>
     <string name="profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="about">About Us</string>
+    <string name="pri_sec"><![CDATA[Privacy & Security]]></string>
+    <string name="help"><![CDATA[Help & Support]]></string>
+    <string name="receive_notify">Receive Notification</string>
+    <string name="cfm_password">Confirm Password</string>
+    <string name="new_password">New Password</string>
+    <string name="cr_new_password">Your New password must be different from your previous used password</string>
+    <string name="createPassword">Create new password</string>
+    <string name="password_match">Password Match</string>
+    <string name="password_error">Password not Match</string>
 
 </resources>

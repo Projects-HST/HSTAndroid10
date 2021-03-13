@@ -151,7 +151,6 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         addCart = (TextView) findViewById(R.id.add_to_cart);
         addCart.setOnClickListener(this);
 
-
         initiateServices();
         getDashboardServices();
     }
