@@ -26,49 +26,25 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryListAdapter.MyViewHolder> implements IServiceListener {
+public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryListAdapter.MyViewHolder> {
 
     private ArrayList<OrderHistory> orderHistoryArrayList;
     Context mContext;
     private OnItemClickListener onItemClickListener;
     String resFor = "";
-    int pos ;
+    int pos;
     String cartID = "";
     String UserID = "";
     String quantity = "";
     OrderHistory orderHistory;
-    private ServiceHelper serviceHelper;
-    private ProgressDialogHelper progressDialogHelper;
-    OrderHistoryListAdapter.MyViewHolder myViewHolder;
-
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            String status = response.getString("status");
-            if (status.equalsIgnoreCase("success")) {
-                if (resFor.equalsIgnoreCase("quantity")) {
-                } else {
-                    orderHistoryArrayList.remove(pos);
-                    notifyItemRemoved(pos);
-                    notifyDataSetChanged();
-                }
-                ((CartActivity)mContext).reLoadPage();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onError(String error) {
-
-    }
+    MyViewHolder myViewHolder;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txtProductName, txtProductPrice, txtProductMRP, txtProductStock, productQuantity;
         public LinearLayout productLayout;
         public ImageView productBanner, productDelete;
         public ImageView btnPlus, btnMinus;
+
         public MyViewHolder(View view) {
             super(view);
             productLayout = (LinearLayout) view.findViewById(R.id.product_layout);
@@ -83,7 +59,7 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
         @Override
         public void onClick(View v) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClickCart(v, getAdapterPosition());
+                onItemClickListener.onItemClickHistory(v, getAdapterPosition());
             }
 //            else {
 //                onClickListener.onClick(Selecttick);
@@ -91,26 +67,22 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
         }
     }
 
-    public  OrderHistoryListAdapter(Context context, ArrayList<OrderHistory> orderHistoryArrayList, OnItemClickListener onItemClickListener) {
+    public OrderHistoryListAdapter(Context context, ArrayList<OrderHistory> orderHistoryArrayList, OnItemClickListener onItemClickListener) {
         this.mContext = context;
         this.orderHistoryArrayList = orderHistoryArrayList;
         this.onItemClickListener = onItemClickListener;
     }
 
     public interface OnItemClickListener {
-        public void onItemClickCart(View view, int position);
+        public void onItemClickHistory(View view, int position);
     }
 
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_cart, parent, false);
+                .inflate(R.layout.list_item_order_history, parent, false);
 
-
-        serviceHelper = new ServiceHelper(itemView.getContext());
-        serviceHelper.setServiceListener(this);
-        progressDialogHelper = new ProgressDialogHelper(itemView.getContext());
         UserID = PreferenceStorage.getUserId(itemView.getContext());
         return new MyViewHolder(itemView);
     }
@@ -121,6 +93,7 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
         myViewHolder = holder;
         holder.txtProductName.setText(orderHistory.getorder_id());
         holder.txtProductMRP.setVisibility(View.GONE);
+        holder.productQuantity.setVisibility(View.GONE);
         holder.txtProductPrice.setText("₹" + orderHistory.getTotal_amount());
 //        String prodQty = "Quantity: ".concat(orderHistory.getquantity());
 //        holder.productQuantity.setText(prodQty);
