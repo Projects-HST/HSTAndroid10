@@ -41,7 +41,6 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/purple_200" />
 
-
         <activity android:name=".activity.SplashscreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

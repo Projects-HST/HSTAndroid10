@@ -203,8 +203,9 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
                         txtSubCat = subCategoryArray.getJSONObject(i).getString("category_name");
                         subCategoryArrayList.add(new SubCategory(id, txtSubCat));
                     }
-                    mAdapter = new SubCategoryListAdapter(subCategoryArrayList, this);
+                    mAdapter = new SubCategoryListAdapter(this, subCategoryArrayList, this);
                     recyclerViewSubCategory.setAdapter(mAdapter);
+                    subCatProductList();
                 }
                 if (serviceCall.equalsIgnoreCase("sub_cat_product_list")) {
                     Gson gson = new Gson();
@@ -328,6 +329,11 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
     @Override
     public void onItemClickBestSelling(View view, int position) {
 
+        Product product = null;
+        product = productArrayList.get(position);
+        Intent detailInt = new Intent(this, ProductDetailActivity.class);
+        detailInt.putExtra("productObj", product.getid());
+        startActivity(detailInt);
     }
 
     @Override

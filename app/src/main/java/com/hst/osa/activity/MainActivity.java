@@ -193,8 +193,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mailId.setText(PreferenceStorage.getEmail(this));
         }
 
+        if(PreferenceStorage.getFullName(this).equalsIgnoreCase("") || PreferenceStorage.getFullName(this).isEmpty()) {
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //What to do on back clicked
+                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    i.putExtra("page", "dash");
+                    startActivity(i);
+                }
+            });
+        } else {
+            name.setText(PreferenceStorage.getFullName(this));
+            mailId.setText(PreferenceStorage.getEmail(this));
+        }
+
         if (OSAValidator.checkNullString(PreferenceStorage.getProfilePic(this))&&(!PreferenceStorage.getProfilePic(this).isEmpty())) {
             Picasso.get().load(PreferenceStorage.getProfilePic(this)).into(profilePic);
+        } else {
+            profilePic.setImageResource(R.drawable.ic_profile);
+        }
+
+        if (OSAValidator.checkNullString(PreferenceStorage.getSocialNetworkProfileUrl(this))&&
+                (!PreferenceStorage.getSocialNetworkProfileUrl(this).isEmpty())) {
+            Picasso.get().load(PreferenceStorage.getSocialNetworkProfileUrl(this)).into(profilePic);
         } else {
             profilePic.setImageResource(R.drawable.ic_profile);
         }

@@ -187,7 +187,6 @@
                             android:id="@+id/btn_login"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:layout_below="@id/mail_login"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="40dp"
                             android:fontFamily="@font/medium"
@@ -201,7 +200,6 @@
                             android:id="@+id/or"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/btn_login"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginVertical="20dp"
                             android:fontFamily="@font/regular"
@@ -212,7 +210,6 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/or"
                             android:layout_marginHorizontal="40dp"
                             android:gravity="center">
 
@@ -246,7 +243,7 @@
                                 android:fontFamily="@font/regular"
                                 android:gravity="center"
                                 android:paddingHorizontal="20dp"
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:text="@string/fbLogIn"
                                 android:textAllCaps="false"
                                 android:textColor="@color/blue"
