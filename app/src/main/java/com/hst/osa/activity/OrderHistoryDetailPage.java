@@ -1,16 +1,15 @@
 package com.hst.osa.activity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,12 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
-import com.hst.osa.adapter.CartItemListAdapter;
+import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
 import com.hst.osa.adapter.ReviewOrderListAdapter;
-import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.AddressArrayList;
+import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.CartItem;
-import com.hst.osa.bean.support.CartItemList;
 import com.hst.osa.bean.support.CartOrderList;
 import com.hst.osa.ccavenue.activity.InitialScreenActivity;
 import com.hst.osa.helpers.AlertDialogHelper;
@@ -32,7 +30,6 @@ import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
-import com.hst.osa.utils.CommonUtils;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
 
@@ -44,31 +41,34 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class ReviewOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, ReviewOrderListAdapter.OnItemClickListener {
+public class OrderHistoryDetailPage extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, ReviewOrderListAdapter.OnItemClickListener, OrderHistoryDetailListAdapter.OnItemClickListener {
 
-    private static final String TAG = CheckoutActivity.class.getName();
+    private static final String TAG = OrderHistoryDetailPage.class.getName();
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
     private String resCheck = "";
-    private String addressID = "";
-    private String orderID = "";
+    private RatingBar rtbComments;
+    private EditText edtComments;
+    private String reviewID = "", prdName = "";
+    private boolean newReview = true;
     private TextView paymentMethod;
+    private TextView replacement;
     private TextView name, phone, address;
-    private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, placeOrder, continueShopping, goToOrders;
+    private TextView txtOrderId, txtOrderDate, txtOrderTotal, productName;
+    private TextView itemPrice, txtDelivery, deliveryPrice, offerPrice, totalPrice, trackOrder, submitBtn;
     private RelativeLayout originalLayout, orderPlacedLayout;
-    AddressArrayList addressList;
-    ArrayList<AddressList> addressArrayList = new ArrayList<>();
+
 
 
     private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
     CartOrderList cartItemList;
-    private ReviewOrderListAdapter mAdapter;
+    private OrderHistoryDetailListAdapter mAdapter;
     private RecyclerView recyclerViewCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review_order);
+        setContentView(R.layout.activity_order_history_detail);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
@@ -82,19 +82,27 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
 
         originalLayout = (RelativeLayout) findViewById(R.id.original_layout);
         orderPlacedLayout = (RelativeLayout) findViewById(R.id.order_played_layout);
-        continueShopping = (TextView) findViewById(R.id.continue_shopping);
-        continueShopping.setOnClickListener(this);
-        goToOrders = (TextView) findViewById(R.id.go_to_orders);
-        goToOrders.setOnClickListener(this);
+        submitBtn = (TextView) findViewById(R.id.submit_review);
+        submitBtn.setOnClickListener(this);
+
+
+        productName = findViewById(R.id.product_name);
+        rtbComments = findViewById(R.id.ratingBar);
+        edtComments = findViewById(R.id.edtComments);
 
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
         paymentMethod = (TextView) findViewById(R.id.payment_method);
+
+        txtOrderId = (TextView) findViewById(R.id.order_id);
+        txtOrderDate = (TextView) findViewById(R.id.order_date);
+        txtOrderTotal = (TextView) findViewById(R.id.order_total);
+
         name = (TextView) findViewById(R.id.name);
         phone = (TextView) findViewById(R.id.mobile);
         address = (TextView) findViewById(R.id.address);
 //        promoCode = (EditText) findViewById(R.id.promo_code);
-        placeOrder = (TextView) findViewById(R.id.place_order);
-        placeOrder.setOnClickListener(this);
+        trackOrder = (TextView) findViewById(R.id.track_order);
+        trackOrder.setOnClickListener(this);
 
         itemPrice = (TextView) findViewById(R.id.item_price);
 
@@ -104,6 +112,8 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
         deliveryPrice = (TextView) findViewById(R.id.delivery_price);
         offerPrice = (TextView) findViewById(R.id.offer_price);
         totalPrice = (TextView) findViewById(R.id.total_price);
+        replacement = (TextView) findViewById(R.id.replacement);
+        replacement.setOnClickListener(this);
 
         initiateServices();
         getOrderDetails();
@@ -130,18 +140,52 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
-    private void cashPayment() {
-        resCheck = "COD";
+    private void checkReview() {
+        resCheck = "check";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        String pid = PreferenceStorage.getProductId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, pid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.CHECK_REVIEWS;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void submitReview() {
+        resCheck = "sumbit";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
         String oid = PreferenceStorage.getOrderId(this);
         try {
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, oid);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, oid);
+            jsonObject.put(OSAConstants.KEY_COMMENT, edtComments.getText().toString());
+            jsonObject.put(OSAConstants.KEY_RATING,  "" + Integer.getInteger(String.valueOf(rtbComments.getRating())));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = OSAConstants.BUILD_URL + OSAConstants.PAY_COD;
+        String url = OSAConstants.BUILD_URL + OSAConstants.SUBMIT_REVIEW;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+    private void updateReview() {
+        resCheck = "update";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        String oid = PreferenceStorage.getProductId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, oid);
+            jsonObject.put(OSAConstants.KEY_REVIEW_ID, reviewID);
+            jsonObject.put(OSAConstants.KEY_COMMENT, edtComments.getText().toString());
+            jsonObject.put(OSAConstants.KEY_RATING,  "" + rtbComments.getRating());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.UPDATE_REVIEW;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
@@ -182,6 +226,20 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
     }
 
     @Override
+    public void onBackPressed() {
+        //Checking for fragment count on backstack
+        if (orderPlacedLayout.getVisibility() == View.VISIBLE) {
+            layoutGone();
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
+
+    @Override
     public void onResponse(final JSONObject response) {
         progressDialogHelper.hideProgressDialog();
         if (validateSignInResponse(response)) {
@@ -190,6 +248,10 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
                     JSONArray orderObjData = response.getJSONArray("order_details");
 
                     JSONObject data = orderObjData.getJSONObject(0);
+
+                    String orderidd = data.getString("order_id");
+                    String orderdate = data.getString("purchase_date");
+
                     String nameString = data.getString("full_name");
                     String mobileString = data.getString("mobile_number");
                     String houseString = data.getString("house_no");
@@ -201,6 +263,8 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
                     String promoString = data.getString("promo_amount");
                     String walletString = data.getString("wallet_amount");
                     String paidString = data.getString("paid_amount");
+                    String payment = data.getString("payment_status");
+                    paymentMethod.setText(payment);
 
                     String addressFinal = houseString.concat(streetString).concat("\n").concat(cityString).concat(" - ").concat(pincodeString);
                     String temMobile = "";
@@ -210,12 +274,10 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
                     String walletFinal = ("₹").concat(walletString);
                     String paidFinal = ("₹").concat(paidString);
 
-                    String payment = getIntent().getExtras().getString("payment");
-                    if (payment.equalsIgnoreCase("")) {
-                        paymentMethod.setText("Online Payment");
-                    } else {
-                        paymentMethod.setText(payment);
-                    }
+                    txtOrderId.setText(orderidd);
+                    txtOrderDate.setText(orderdate);
+                    txtOrderTotal.setText(paidFinal);
+
                     name.setText(nameString);
                     phone.setText(mobileFinal);
                     address.setText(addressFinal);
@@ -229,14 +291,30 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
 
                     cartItemList = gson.fromJson(response.toString(), CartOrderList.class);
                     cartItemArrayList.addAll(cartItemList.getCartItemArrayList());
-                    mAdapter = new ReviewOrderListAdapter(this, cartItemArrayList, this);
+                    mAdapter = new OrderHistoryDetailListAdapter(this, cartItemArrayList,this);
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
                     recyclerViewCategory.setLayoutManager(mLayoutManager);
                     recyclerViewCategory.setAdapter(mAdapter);
 
                 }
-                if (resCheck.equalsIgnoreCase("COD")) {
-                    layoutVisible();
+                if (resCheck.equalsIgnoreCase("check")) {
+                    if (response.getString("msg").equalsIgnoreCase("Reviews found")) {
+                        newReview = false;
+                        JSONObject data = response.getJSONObject("product_review");
+                        reviewID = data.getString("id");
+                        String rating = data.getString("rating");
+                        String comment = data.getString("comment");
+                        rtbComments.setRating(Integer.getInteger(rating));
+                        edtComments.setText(comment);
+                    } else {
+                        newReview = true;
+                    }
+                }
+                if (resCheck.equalsIgnoreCase("sumbit")) {
+                    layoutGone();
+                }
+                if (resCheck.equalsIgnoreCase("update")) {
+                    layoutGone();
                 }
 
             } catch (JSONException e) {
@@ -255,43 +333,42 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
 
     @Override
     public void onClick(View view) {
-        if (view == placeOrder) {
-            if (paymentMethod.getText().toString().equalsIgnoreCase("Online Payment")) {
-                String orderID = PreferenceStorage.getOrderId(this);
-                Intent i = new Intent(this, InitialScreenActivity.class);
-                i.putExtra("advpay", totalPrice.getText().toString());
-                i.putExtra("page", "payment");
-                startActivity(i);
-                finish();
-            } else if (paymentMethod.getText().toString().equalsIgnoreCase("Wallet")) {
-                layoutVisible();
-            } else if (paymentMethod.getText().toString().equalsIgnoreCase("COD")) {
-                cashPayment();
+        if (view == findViewById(R.id.click_detect)) {
+            layoutGone();
+        }
+        if (view == submitBtn) {
+            if (newReview) {
+                submitReview();
+            } else {
+                updateReview();
             }
-        } if (view == continueShopping) {
-            Intent homeIntent = new Intent(this, MainActivity.class);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(homeIntent);
-            finish();
-        } if (view == goToOrders) {
-            Intent homeIntent = new Intent(this, MainActivity.class);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(homeIntent);
-            finish();
+        }
+        if (view == replacement) {
+            Intent intent = new Intent(this, ReplaceProductActivity.class);
+            startActivity(intent);
+        }
+        if (view == trackOrder) {
+            Intent intent = new Intent(this, TrackOrderActivity.class);
+            startActivity(intent);
         }
     }
 
-    public void reLoadPage() {
-        finish();
-        startActivity(getIntent());
-    }
-
-    private void layoutVisible() {
+    public void layoutVisible(String prodName) {
+        checkReview();
+        productName.setText(prodName);
         orderPlacedLayout.setVisibility(View.VISIBLE);
         originalLayout.setClickable(false);
         originalLayout.setFocusable(false);
-        placeOrder.setClickable(false);
-        placeOrder.setFocusable(false);
+        trackOrder.setClickable(false);
+        trackOrder.setFocusable(false);
+    }
+
+    public void layoutGone() {
+        orderPlacedLayout.setVisibility(View.GONE);
+        originalLayout.setClickable(true);
+        originalLayout.setFocusable(true);
+        trackOrder.setClickable(true);
+        trackOrder.setFocusable(true);
     }
 
     @Override

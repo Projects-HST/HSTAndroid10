@@ -42,6 +42,12 @@ public class OSAConstants {
 
     public static final String GET_PRODUCT_REVIEWS = "product_reviews/";
 
+    public static final String CHECK_REVIEWS = "product_review_check/";
+
+    public static final String SUBMIT_REVIEW = "product_reviews_add/";
+
+    public static final String UPDATE_REVIEW = "review_update/";
+
     public static final String ADD_TO_CART = "product_cart/";
 
     public static final String ADD_TO_WISHLIST = "add_wishlist/";
@@ -61,6 +67,12 @@ public class OSAConstants {
     public static final String ORDER_DETAILS = "order_details/";
 
     public static final String ORDER_HISTORY = "view_orders/";
+
+    public static final String RETURN_REASON_LIST = "return_reason_list/";
+
+    public static final String RETURN_REQUEST = "return_order_request/";
+
+    public static final String TRACK_ORDER = "track_order/";
 
     public static final String ORDER_HISTORY_DETAIL = "view_order_cart_details/";
 
@@ -141,6 +153,15 @@ public class OSAConstants {
     public static String KEY_PHONE_NO = "phone_number";
     public static String KEY_DOB = "dob";
     public static String KEY_NEWS_STATUS = "newsletter_status";
+
+    //      Review Params
+    public static final String KEY_REVIEW_ID = "review_id";
+    public static final String KEY_COMMENT = "comments";
+    public static String KEY_RATING = "rating";
+
+    //      Replace Params
+    public static final String KEY_QUESTION_ID = "reason_question_id";
+    public static final String KEY_ANSWER = "answer_text";
 
     //      Alert Dialog Constants
     public static String ALERT_DIALOG_TITLE = "alertDialogTitle";

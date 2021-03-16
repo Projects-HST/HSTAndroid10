@@ -124,10 +124,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeIDs() {
 
-        recentSearchLay = (LinearLayout)findViewById(R.id.recentMainLay);
-        mainLay = (FrameLayout)findViewById(R.id.fragmentContainer);
-        recentSearchList = (RecyclerView)findViewById(R.id.recentSearchMain);
-        mSearchView = (SearchView)findViewById(R.id.search_main);
+        recentSearchLay = (LinearLayout) findViewById(R.id.recentMainLay);
+        mainLay = (FrameLayout) findViewById(R.id.fragmentContainer);
+        recentSearchList = (RecyclerView) findViewById(R.id.recentSearchMain);
+        mSearchView = (SearchView) findViewById(R.id.search_main);
         navigationView = findViewById(R.id.nav_view);
         profilePic = navigationView.getHeaderView(0).findViewById(R.id.user_img);
         name = navigationView.getHeaderView(0).findViewById(R.id.full_name);
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                if (query != null){
+                if (query != null) {
                     makeSearch(query);
                 }
                 return false;
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        if(PreferenceStorage.getName(this).equalsIgnoreCase("") || PreferenceStorage.getName(this).isEmpty()) {
+        if (PreferenceStorage.getName(this).equalsIgnoreCase("") || PreferenceStorage.getName(this).isEmpty()) {
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mailId.setText(PreferenceStorage.getEmail(this));
         }
 
-        if (OSAValidator.checkNullString(PreferenceStorage.getProfilePic(this))&&(!PreferenceStorage.getProfilePic(this).isEmpty())) {
+        if (OSAValidator.checkNullString(PreferenceStorage.getProfilePic(this)) && (!PreferenceStorage.getProfilePic(this).isEmpty())) {
             Picasso.get().load(PreferenceStorage.getProfilePic(this)).into(profilePic);
         } else {
             profilePic.setImageResource(R.drawable.ic_profile);
@@ -372,36 +372,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view == sideDash) {
             changePage(0);
-        }if (view == sideProfile) {
+        }
+        if (view == sideProfile) {
             Intent i = new Intent(this, EditProfile.class);
 //            i.putExtra("page", "editProfile");
             startActivity(i);
-        }if (view == sideCat) {
+        }
+        if (view == sideCat) {
             Intent i = new Intent(this, CategoryActivity.class);
             startActivity(i);
 //            changePage(1);
-        }if (view == sideWish){
+        }
+        if (view == sideWish) {
             Intent i = new Intent(this, WishListActivity.class);
             startActivity(i);
-        }if (view == sideOrder) {
-
-        }if (view == sideWallet) {
+        }
+        if (view == sideOrder) {
+            Intent i = new Intent(this, OrderHistoryActivity.class);
+            startActivity(i);
+        }
+        if (view == sideWallet) {
             Intent i = new Intent(this, WalletActivity.class);
             startActivity(i);
-        }if (view == sideAddress) {
+        }
+        if (view == sideAddress) {
             Intent i = new Intent(this, ShippingAddressActivity.class);
             i.putExtra("page", "shippingAddress");
             startActivity(i);
 
-        }if (view == sideSettings) {
+        }
+        if (view == sideSettings) {
             Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
-        }if (view == sideLogout) {
+        }
+        if (view == sideLogout) {
             logout();
         }
     }
 
-    private void makeSearch(String searchName){
+    private void makeSearch(String searchName) {
 
         serviceCall = "search";
 
@@ -417,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
-    private void getRecentSearch(){
+    private void getRecentSearch() {
 
 //        recentSearchLay.setVisibility(View.VISIBLE);
         serviceCall = "recentSearch";
@@ -490,7 +499,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intentSearch.putExtras(bundle);
                     startActivity(intentSearch);
                 }
-                if(serviceCall.equalsIgnoreCase("recentSearch")){
+                if (serviceCall.equalsIgnoreCase("recentSearch")) {
                     Gson gson = new Gson();
                     searchList = gson.fromJson(response.toString(), RecentSearchList.class);
                     recentSearchArrayList.addAll(searchList.getRecentSearchArrayList());

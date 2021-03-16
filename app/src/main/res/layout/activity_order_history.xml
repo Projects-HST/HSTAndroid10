@@ -96,6 +96,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/in_transit"
+                android:textColor="@color/text_black"
                 android:textAllCaps="false"
                 android:textSize="14sp" />
 

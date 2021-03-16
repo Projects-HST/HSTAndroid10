@@ -1,6 +1,5 @@
 package com.hst.osa.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,18 +7,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.hst.osa.R;
-import com.hst.osa.adapter.OrderHistoryListAdapter;
-import com.hst.osa.adapter.ReviewOrderListAdapter;
+import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
+import com.hst.osa.adapter.QuestionListAdapter;
+import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
-import com.hst.osa.bean.support.Category;
-import com.hst.osa.bean.support.OrderHistory;
-import com.hst.osa.bean.support.OrderHistoryList;
+import com.hst.osa.bean.support.Question;
+import com.hst.osa.bean.support.QuestionList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -28,6 +24,7 @@ import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.PreferenceStorage;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,23 +32,31 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class OrderHistoryActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, OrderHistoryListAdapter.OnItemClickListener {
-    private static final String TAG = OrderHistoryActivity.class.getName();
+public class AdvanceFilterResultActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, OrderHistoryDetailListAdapter.OnItemClickListener, QuestionListAdapter.OnItemClickListener, View.OnClickListener {
 
+    private static final String TAG = ReplaceProductActivity.class.getName();
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
+    private String resCheck = "";
+    private String prodOrderID = "";
+    private String questionID = "1";
 
-    private TextView delivered, transit;
+    private TextView btnSubmit;
 
-    private ArrayList<OrderHistory> orderHistoryArrayList = new ArrayList<>();
-    OrderHistoryList orderHistoryList;
-    private OrderHistoryListAdapter mAdapter;
+    private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
+    CartOrderList cartItemList;
+    private OrderHistoryDetailListAdapter mAdapter;
     private RecyclerView recyclerViewCategory;
+
+    private ArrayList<Question> questionArrayList = new ArrayList<>();
+    QuestionList questionList;
+    private QuestionListAdapter questionListAdapter;
+    private RecyclerView recyclerViewQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_history);
+        setContentView(R.layout.activity_track_order);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
@@ -63,31 +68,14 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
             }
         });
 
+        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
+        recyclerViewQuestion = (RecyclerView) findViewById(R.id.listView_questions);
+
+        btnSubmit = (TextView) findViewById(R.id.submit);
+        btnSubmit.setOnClickListener(this);
+
         initiateServices();
-        delivered = (TextView) findViewById(R.id.delivered);
-        delivered.setOnClickListener(this);
-        transit = (TextView) findViewById(R.id.in_transit);
-        transit.setOnClickListener(this);
-
-        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_history);
-        getOrderHistory("Delivered");
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view == delivered) {
-            transit.setBackground(null);
-            transit.setTextColor(ContextCompat.getColor(this, R.color.text_black));
-            delivered.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_size_color));
-            delivered.setTextColor(ContextCompat.getColor(this, R.color.white));
-            getOrderHistory("Delivered");
-        } if (view == transit) {
-            delivered.setBackground(null);
-            delivered.setTextColor(ContextCompat.getColor(this, R.color.text_black));
-            transit.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_size_color));
-            transit.setTextColor(ContextCompat.getColor(this, R.color.white));
-            getOrderHistory("Transit");
-        }
+        trackORder();
     }
 
     public void initiateServices() {
@@ -96,18 +84,21 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-    private void getOrderHistory(String orderType) {
+    private void trackORder() {
+        resCheck = "track";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
+        String oid = PreferenceStorage.getOrderId(this);
         try {
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.KEY_STATUS, orderType);
+            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, oid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = OSAConstants.BUILD_URL + OSAConstants.ORDER_HISTORY;
+        String url = OSAConstants.BUILD_URL + OSAConstants.TRACK_ORDER;
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
+
 
     @Override
     public void onAlertPositiveClicked(int tag) {
@@ -146,22 +137,19 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
         return signInSuccess;
     }
 
+
     @Override
-    public void onResponse(final JSONObject response) {
+    public void onResponse(JSONObject response) {
         progressDialogHelper.hideProgressDialog();
         if (validateSignInResponse(response)) {
             try {
-                String count = response.getString("order_count");
-                Gson gson = new Gson();
+                if (resCheck.equalsIgnoreCase("track")) {
+                    JSONArray orderObjData = response.getJSONArray("order_details");
 
-                orderHistoryList = null;
-                orderHistoryList = gson.fromJson(response.toString(), OrderHistoryList.class);
-                orderHistoryArrayList.clear();
-                orderHistoryArrayList.addAll(orderHistoryList.getOrderHistoryArrayList());
-                mAdapter = new OrderHistoryListAdapter(this, orderHistoryArrayList, this);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-                recyclerViewCategory.setLayoutManager(mLayoutManager);
-                recyclerViewCategory.setAdapter(mAdapter);
+                    JSONObject data = orderObjData.getJSONObject(0);
+
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -177,12 +165,29 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
     }
 
     @Override
-    public void onItemClickHistory(View view, int position) {
-        OrderHistory orderHistory = null;
-        orderHistory = orderHistoryArrayList.get(position);
-        Intent intent;
-        intent = new Intent(this, OrderHistoryDetailPage.class);
-        PreferenceStorage.saveOrderId(this, orderHistory.getorder_id());
-        startActivity(intent);
+    public void onItemClickCart(View view, int position) {
+
+    }
+
+    @Override
+    public void onItemClickSize(View view, int position) {
+        Question question = null;
+        question = questionArrayList.get(position);
+        questionID = question.getid();
+        for (int i = 0; i < questionArrayList.size(); i++) {
+            if (i == position) {
+                questionArrayList.get(i).setstatus("check");
+            } else {
+                questionArrayList.get(i).setstatus("Active");
+            }
+        }
+//        questionListAdapter.notifyAll();
+        questionListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == btnSubmit) {
+        }
     }
 }
