@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
@@ -41,12 +40,12 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
 //            else {
 //                onClickListener.onClick(Selecttick);
 //            }
-            if (v == txtLayout){
-                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sel_sub_cat));
-            }
-            else {
-                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sub_cat));
-            }
+//            if (v == txtLayout){
+//                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sel_sub_cat));
+//            }
+//            else {
+//                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sub_cat));
+//            }
         }
     }
 

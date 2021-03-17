@@ -30,7 +30,7 @@ android {
     buildTypes {
         release {
             shrinkResources false
-            debuggable false
+            debuggable true
             jniDebuggable false
             zipAlignEnabled true
             signingConfig signingConfigs.config

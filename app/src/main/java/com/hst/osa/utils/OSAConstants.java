@@ -223,6 +223,5 @@ public class OSAConstants {
     public static final String PARAMS_ORDER_ID = "order_id";
     public static final String PARAMS_PURCHASE_ORDER_ID = "purchase_order_id";
 
-    public static final String KEY_SOCIAL_NETWORK_URL = "profile_picture";
-
+    public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
 }
