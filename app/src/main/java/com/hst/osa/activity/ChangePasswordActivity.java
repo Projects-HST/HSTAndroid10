@@ -2,7 +2,9 @@ package com.hst.osa.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,37 +76,28 @@ public class ChangePasswordActivity extends AppCompatActivity implements IServic
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-//    private boolean validateFields() {
-//
-//        cfmPass.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                txt1 = newPass.getText().toString().trim();
-//                txt2 = cfmPass.getText().toString().trim();
-//                if (txt1.equals(txt2)) {
-//                    cfmPass.setError(getString(R.string.password_match));
-//                } else {
-//                    newPass.setError(getString(R.string.password_error));
-//                }
-//            }
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//        return false;
-//    }
+    private boolean validateFields() {
 
-//    private void reqFocus(View view) {
-//        if (view.requestFocus()) {
-//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//        }
-//    }
+        if (!TextUtils.isEmpty(newPass.getText().toString().trim()) &&
+                (!TextUtils.isEmpty(cfmPass.getText().toString().trim()))){
+
+            if (newPass.getText().toString().trim().equals(cfmPass.getText().toString().trim())){
+                return true;
+            }
+            else {
+                newPass.setError(getString(R.string.password_error));
+                reqFocus(newPass);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void reqFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
     private void checkPassword() {
         reStr = "checkPassword";
@@ -124,17 +117,17 @@ public class ChangePasswordActivity extends AppCompatActivity implements IServic
         reStr = "changePassword";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
-//        if (validateFields()) {
+        if (validateFields()) {
             try {
                 jsonObject.put(OSAConstants.KEY_USER_ID, id);
-                jsonObject.put(OSAConstants.PARAMS_PASSWORD, txt1);
-                jsonObject.put(OSAConstants.PARAMS_PASSWORD, txt2);
+                jsonObject.put(OSAConstants.PARAMS_PASSWORD, newPass.getText().toString().trim());
+                jsonObject.put(OSAConstants.PARAMS_PASSWORD, cfmPass.getText().toString().trim());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             String serverUrl = OSAConstants.BUILD_URL + OSAConstants.CONFIRM_PASSWORD;
             serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
-//        }
+        }
     }
 
     private boolean validateSignInResponse(JSONObject response) {

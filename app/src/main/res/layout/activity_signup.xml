@@ -132,7 +132,6 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="number"
                                 android:maxLength="10"
-                                android:padding="10dp"
                                 android:textColor="@color/grey"
                                 android:textSize="16sp" />
 
@@ -160,7 +159,6 @@
                                 android:textSize="14sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-
                         <Button
                             android:id="@+id/btn_signup"
                             android:layout_width="match_parent"
@@ -186,18 +184,16 @@
                             android:id="@+id/btn_gg_login"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="20dp"
                             android:background="@drawable/btn_half_round_color"
-                            android:drawablePadding="10dp"
+                            android:drawablePadding="20dp"
                             android:fontFamily="@font/medium"
-                            android:gravity="center"
+                            android:gravity="center|center_horizontal"
                             android:paddingHorizontal="20dp"
                             android:text="@string/ggLogIn"
                             android:textAllCaps="false"
                             android:textColor="@color/lite_blue"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             app:drawableStartCompat="@drawable/ic_search__1_" />
 
                         <TextView
@@ -205,18 +201,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_below="@id/btn_gg_login"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginHorizontal="20dp"
                             android:layout_marginVertical="20dp"
                             android:background="@drawable/btn_hf_rd_color_2"
                             android:drawablePadding="20dp"
                             android:fontFamily="@font/medium"
-                            android:gravity="center"
+                            android:gravity="center|center_horizontal"
                             android:paddingHorizontal="20dp"
                             android:text="@string/fbLogIn"
                             android:textAllCaps="false"
                             android:textColor="@color/blue"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             app:drawableStartCompat="@drawable/ic_facebook__2_" />
 
                     </RelativeLayout>

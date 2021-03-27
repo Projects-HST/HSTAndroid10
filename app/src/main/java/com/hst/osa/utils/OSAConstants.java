@@ -18,7 +18,7 @@ public class OSAConstants {
     public static final String SUCCESSFUL_PAYMENT = BASE_URL + JOINT_URL + "";
 
 
-    public static final String FB_GPLUS_LOGIN = "socialLogin/";
+    public static final String FB_GPLUS_LOGIN = "social_login/";
 
     public static final String MOBILE_VERIFY = "login_mobile/";
 
@@ -114,7 +114,7 @@ public class OSAConstants {
 
     public static final String CONFIRM_PASSWORD = "password_update/";
 
-    public static final String NOTIFICATION_HISTORY = "";
+    public static final String NOTIFICATION_HISTORY = "offer_list/";
 
 
     public static final String USE_WALLET = "use_wallet/";
@@ -133,7 +133,6 @@ public class OSAConstants {
     public static final String PARAMS_LOGIN_PORTAL = "login_portal";
     public static final String PARAMS_EMAIL = "email";
     public static final String PARAMS_PASSWORD = "password";
-//    mobile_number,OTP,mob_key,mobile_type,login_type(FB/Gplus/Mobile/Email),login_portal(Web/App)
 
     //      Login mode constants
     public static final int FACEBOOK = 1;
@@ -234,5 +233,4 @@ public class OSAConstants {
     public static final String PARAMS_PURCHASE_ORDER_ID = "purchase_order_id";
 
     public static final String KEY_SOCIAL_NETWORK_URL = "socialNetworkPicUrl";
-
 }

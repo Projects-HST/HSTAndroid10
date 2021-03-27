@@ -4,17 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
-import com.hst.osa.bean.support.Category;
 import com.hst.osa.bean.support.SubCategory;
 
 import java.util.ArrayList;
@@ -22,7 +18,7 @@ import java.util.ArrayList;
 public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryListAdapter.MyViewHolder> {
 
     private ArrayList<SubCategory> categoryArrayList;
-    Context context;
+    Context mContext;
     private SubCategoryListAdapter.OnItemClickListener onItemClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -44,12 +40,18 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
 //            else {
 //                onClickListener.onClick(Selecttick);
 //            }
+//            if (v == txtLayout){
+//                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sel_sub_cat));
+//            }
+//            else {
+//                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sub_cat));
+//            }
         }
     }
 
-    public SubCategoryListAdapter(ArrayList<SubCategory> CategoryArrayList, SubCategoryListAdapter.OnItemClickListener onItemClickListener) {
+    public SubCategoryListAdapter(Context context, ArrayList<SubCategory> CategoryArrayList, SubCategoryListAdapter.OnItemClickListener onItemClickListener) {
         this.categoryArrayList = CategoryArrayList;
-//        this.context = context;
+        this.mContext = context;
         this.onItemClickListener = onItemClickListener;
     }
 

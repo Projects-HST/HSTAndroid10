@@ -238,5 +238,6 @@
     <string name="createPassword">Create new password</string>
     <string name="password_match">Password Match</string>
     <string name="password_error">Password not Match</string>
+    <string name="new_notify">New Notification</string>
 
 </resources>
