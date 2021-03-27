@@ -1,5 +1,6 @@
 package com.hst.osa.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,15 +8,33 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.slider.BaseOnSliderTouchListener;
+import com.google.android.material.slider.RangeSlider;
+import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.adapter.ColourListAdapter;
+import com.hst.osa.adapter.FilterColourListAdapter;
+import com.hst.osa.adapter.FilterSizeListAdapter;
 import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
 import com.hst.osa.adapter.QuestionListAdapter;
+import com.hst.osa.adapter.SizeListAdapter;
+import com.hst.osa.adapter.SubCategoryListAdapter;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
+import com.hst.osa.bean.support.Colour;
+import com.hst.osa.bean.support.ColourList;
+import com.hst.osa.bean.support.FilterColor;
+import com.hst.osa.bean.support.FilterColorList;
+import com.hst.osa.bean.support.FilterSize;
+import com.hst.osa.bean.support.FilterSizeList;
 import com.hst.osa.bean.support.Question;
 import com.hst.osa.bean.support.QuestionList;
+import com.hst.osa.bean.support.Size;
+import com.hst.osa.bean.support.SizeList;
+import com.hst.osa.bean.support.SubCategory;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -29,10 +48,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.util.Log.d;
 
-public class AdvancedFilterActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, OrderHistoryDetailListAdapter.OnItemClickListener, QuestionListAdapter.OnItemClickListener, View.OnClickListener {
+public class AdvancedFilterActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, FilterSizeListAdapter.OnItemClickListener, FilterColourListAdapter.OnItemClickListener, View.OnClickListener, SubCategoryListAdapter.OnItemClickListener {
 
     private static final String TAG = ReplaceProductActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -43,20 +63,30 @@ public class AdvancedFilterActivity extends AppCompatActivity implements IServic
 
     private TextView btnSubmit;
 
-    private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
-    CartOrderList cartItemList;
-    private OrderHistoryDetailListAdapter mAdapter;
-    private RecyclerView recyclerViewCategory;
+    private RecyclerView recyclerViewSubCategory, recyclerViewSize, recyclerViewColour;
+    private String catId = "";
+    private String subCatId = "0";
+    private String serviceCall = "";
 
-    private ArrayList<Question> questionArrayList = new ArrayList<>();
-    QuestionList questionList;
-    private QuestionListAdapter questionListAdapter;
-    private RecyclerView recyclerViewQuestion;
+    private ArrayList<SubCategory> subCategoryArrayList = new ArrayList<>();
+    private SubCategoryListAdapter mAdapter;
+
+    private String productID, sizeID = "0", colourID = "0", minRange = "0", maxRange = "0";
+    private ArrayList<FilterSize> sizeArrayList = new ArrayList<>();
+    private FilterSizeListAdapter sizeListAdapter;
+    FilterSize size;
+    FilterSizeList sizeList;
+
+    private ArrayList<FilterColor> colourArrayList = new ArrayList<>();
+    FilterColor colour;
+    FilterColorList colourList;
+
+    private RangeSlider rangeSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_track_order);
+        setContentView(R.layout.activity_advanced_filter);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
@@ -68,14 +98,33 @@ public class AdvancedFilterActivity extends AppCompatActivity implements IServic
             }
         });
 
-        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
-        recyclerViewQuestion = (RecyclerView) findViewById(R.id.listView_questions);
+        recyclerViewSubCategory = (RecyclerView) findViewById(R.id.sub_cat);
+        recyclerViewSize = (RecyclerView) findViewById(R.id.listView_size);
+        recyclerViewColour = (RecyclerView) findViewById(R.id.listView_colors);
 
-        btnSubmit = (TextView) findViewById(R.id.submit);
+        btnSubmit = (TextView) findViewById(R.id.result);
         btnSubmit.setOnClickListener(this);
 
+        rangeSlider = (RangeSlider) findViewById(R.id.range);
+        rangeSlider.addOnSliderTouchListener(new RangeSlider.OnSliderTouchListener() {
+            public void onStartTrackingTouch(RangeSlider slider) {
+                // Responds to when slider's touch event is being started
+                List<Float> vals = slider.getValues();
+            }
+
+            public void onStopTrackingTouch(RangeSlider slider) {
+                // Responds to when slider's touch event is being stopped
+                List<Float> vals = slider.getValues();
+                minRange = String.valueOf(((Number)vals.get(0)).floatValue());
+                maxRange = String.valueOf(((Number)vals.get(1)).floatValue());
+            }
+        });
+
+        catId = getIntent().getStringExtra("categoryObj");
+
+
         initiateServices();
-        trackORder();
+        showSubCategory();
     }
 
     public void initiateServices() {
@@ -84,19 +133,32 @@ public class AdvancedFilterActivity extends AppCompatActivity implements IServic
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-    private void trackORder() {
-        resCheck = "track";
+    private void showSubCategory() {
+        serviceCall = "sub_category";
+
         JSONObject jsonObject = new JSONObject();
-        String id = PreferenceStorage.getUserId(this);
-        String oid = PreferenceStorage.getOrderId(this);
         try {
-            jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, oid);
+            jsonObject.put(OSAConstants.KEY_CAT_ID, catId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = OSAConstants.BUILD_URL + OSAConstants.TRACK_ORDER;
-        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+        String serverUrl = OSAConstants.BUILD_URL + OSAConstants.SUB_CATEGORY_LIST;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
+    }
+
+    private void getFilter() {
+        serviceCall = "filter";
+        String id = PreferenceStorage.getUserId(this);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.KEY_SUB_CAT_ID, subCatId);
+            jsonObject.put(OSAConstants.KEY_CAT_ID, catId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String serverUrl = OSAConstants.BUILD_URL + OSAConstants.GET_FILTER;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
     }
 
 
@@ -143,11 +205,68 @@ public class AdvancedFilterActivity extends AppCompatActivity implements IServic
         progressDialogHelper.hideProgressDialog();
         if (validateSignInResponse(response)) {
             try {
-                if (resCheck.equalsIgnoreCase("track")) {
-                    JSONArray orderObjData = response.getJSONArray("order_details");
+                if (serviceCall.equalsIgnoreCase("sub_category")) {
 
-                    JSONObject data = orderObjData.getJSONObject(0);
+                    JSONArray subCategoryArray = response.getJSONArray("sub_category_list");
+                    JSONObject subCatObj = subCategoryArray.getJSONObject(0);
 
+                    Log.d(TAG, subCatObj.toString());
+
+                    String id = "";
+                    String txtSubCat = "";
+                    subCategoryArrayList = new ArrayList<>();
+                    subCategoryArrayList.add(new SubCategory("0", "ALL"));
+
+                    for (int i = 0; i < subCategoryArray.length(); i++) {
+                        id = subCategoryArray.getJSONObject(i).getString("id");
+                        txtSubCat = subCategoryArray.getJSONObject(i).getString("category_name");
+                        subCategoryArrayList.add(new SubCategory(id, txtSubCat));
+                    }
+                    mAdapter = new SubCategoryListAdapter(subCategoryArrayList, this);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                    recyclerViewSubCategory.setLayoutManager(layoutManager);
+                    recyclerViewSubCategory.setAdapter(mAdapter);
+                }if (serviceCall.equalsIgnoreCase("filter")) {
+
+                    JSONArray maxPriceArray = response.getJSONArray("max_price_amount");
+                    String maxPrice = maxPriceArray.getJSONObject(0).getString("max_amount");
+                    float maxP = Float.parseFloat(maxPrice);
+                    rangeSlider.setValueFrom((float) 0);
+                    rangeSlider.setValueTo(maxP);
+//                    rangeSlider.setValues((float)(R.array.initial_slider_values));
+                    Gson gson = new Gson();
+
+                    Object obj = response.get("size_list");
+                    if (obj instanceof JSONArray)
+                    {
+                        // it's an array
+                        sizeList = null;
+                        sizeList = gson.fromJson(response.toString(), FilterSizeList.class);
+                        sizeArrayList.clear();
+                        sizeArrayList.addAll(sizeList.getSizeArrayList());
+                        sizeListAdapter = new FilterSizeListAdapter(sizeArrayList, this);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                        recyclerViewSize.setLayoutManager(layoutManager);
+                        recyclerViewSize.setAdapter(sizeListAdapter);
+                        sizeID = sizeArrayList.get(0).getid();
+
+                        colourList = null;
+                        colourList = gson.fromJson(response.toString(), FilterColorList.class);
+                        colourArrayList.clear();
+                        colourArrayList.addAll(colourList.getColourArrayList());
+                        FilterColourListAdapter adapter = new FilterColourListAdapter(colourArrayList, this);
+                        LinearLayoutManager mlayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+                        recyclerViewColour.setLayoutManager(mlayoutManager);
+                        recyclerViewColour.setAdapter(adapter);
+//                        colourID = colourArrayList.get(0).getid();
+                        // do all kinds of JSONArray'ish things with urlArray
+                    }
+                    else
+                    {
+                        // if you know it's either an array or an object, then it's an object
+                        // do objecty stuff with urlObject
+
+                    }
                 }
 
             } catch (JSONException e) {
@@ -165,29 +284,42 @@ public class AdvancedFilterActivity extends AppCompatActivity implements IServic
     }
 
     @Override
-    public void onItemClickCart(View view, int position) {
-
-    }
-
-    @Override
     public void onItemClickSize(View view, int position) {
-        Question question = null;
-        question = questionArrayList.get(position);
-        questionID = question.getid();
-        for (int i = 0; i < questionArrayList.size(); i++) {
-            if (i == position) {
-                questionArrayList.get(i).setstatus("check");
-            } else {
-                questionArrayList.get(i).setstatus("Active");
-            }
-        }
-//        questionListAdapter.notifyAll();
-        questionListAdapter.notifyDataSetChanged();
+        FilterSize filterSize = null;
+        filterSize = sizeArrayList.get(position);
+        sizeID = filterSize.getmas_size_id();
+        FilterSizeListAdapter.selected_item = position;
+        recyclerViewSize.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void onClick(View view) {
         if (view == btnSubmit) {
+            Intent intent = new Intent(this, AdvanceFilterResultActivity.class);
+            intent.putExtra("catID", catId);
+            intent.putExtra("subcatID", subCatId);
+            intent.putExtra("minRange", minRange);
+            intent.putExtra("maxRange", maxRange);
+            intent.putExtra("sizeID", sizeID);
+            intent.putExtra("colourID", colourID);
+            startActivity(intent);
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        SubCategory subCategory = null;
+        subCategory = subCategoryArrayList.get(position);
+        subCatId = subCategory.getId();
+        getFilter();
+    }
+
+    @Override
+    public void onItemClickColour(View view, int position) {
+        FilterColor filterColor = null;
+        filterColor = colourArrayList.get(position);
+        FilterColourListAdapter.selected_item = position;
+        recyclerViewColour.getAdapter().notifyDataSetChanged();
+        colourID = filterColor.getid();
     }
 }

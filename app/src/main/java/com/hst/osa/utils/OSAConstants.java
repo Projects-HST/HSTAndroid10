@@ -67,6 +67,10 @@ public class OSAConstants {
     public static final String ORDER_DETAILS = "order_details/";
 
     public static final String ORDER_HISTORY = "view_orders/";
+    
+    public static final String GET_FILTER = "get_filter/";
+
+    public static final String FILTER_RESULT = "filter_result/";
 
     public static final String RETURN_REASON_LIST = "return_reason_list/";
 
@@ -185,6 +189,10 @@ public class OSAConstants {
     public static String KEY_CAT_ID = "cat_id";
     public static String KEY_SUB_CAT_ID = "sub_cat_id";
     public static String KEY_SEARCH = "search_name";
+    public static String KEY_MIN_PRICE = "min_price_range";
+    public static String KEY_MAX_PRICE = "max_price_range";
+    public static String KEY_PRODUCT_SIZE_ID = "product_size_id";
+    public static String KEY_PRODUCT_COLOUR_ID = "product_colour_id";
 
 
     //    ADDRESS PARAMS
@@ -219,6 +227,7 @@ public class OSAConstants {
     public static final String PARAMS_ADDRESS_ID = "address_id";
     public static final String PARAMS_CART_ID = "cart_id";
     public static final String PARAMS_SIZE_ID = "size_id";
+    public static final String PARAMS_COLOUR_ID = "size_id";
     public static final String PARAMS_COMBINED_ID = "product_comb_id";
     public static final String PARAMS_QUANTITY = "quantity";
     public static final String PARAMS_ORDER_ID = "order_id";

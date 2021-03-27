@@ -108,6 +108,9 @@
     <string name="add_cart">Add to Cart</string>
     <string name="check_out">Check Out</string>
     <string name="sub_category">ALL</string>
+    <string name="txt_sub_category">Sub Category</string>
+    <string name="price_range">Select a price range</string>
+    <string name="result">Result</string>
 
     <!-- Address -->
     <string name="address">Address List</string>

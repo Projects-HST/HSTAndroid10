@@ -70,12 +70,17 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
 
     private RelativeLayout sizeLayout, colourLayout, reviewLayout;
     public RatingBar productRating;
-    public TextView productName, productPrice, productShare, productQuantity, productStockStatus;
+    public TextView productName, productReviewName, productPrice, productShare, productQuantity, productStockStatus;
     public ImageView btnPlus, btnMinus;
     public EditText deliverCode;
     public TextView checkCode;
-    public TextView productDetail, viewMore, productReviews;
+    public TextView productDetail, viewMore, productReviews, submitBtn;
     public TextView totalPrice, addCart;
+
+    private RatingBar rtbComments;
+    private EditText edtComments;
+    private String reviewID = "", prdName = "";
+    private RelativeLayout originalLayout, orderPlacedLayout;
 
     private ArrayList<Size> sizeArrayList = new ArrayList<>();
     private SizeListAdapter mAdapter;
@@ -100,6 +105,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
 
     ImageView imgLike;
     boolean likeClick = false;
+    private boolean newReview = true;
 
     String resFor = "";
     float currentPrice = 0;
@@ -117,6 +123,26 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                 finish();
             }
         });
+        findViewById(R.id.txt_write_review).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutVisible();
+            }
+        });
+        findViewById(R.id.click_detect).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutVisible();
+            }
+        });
+
+        productReviewName = findViewById(R.id.product_name_review);
+        rtbComments = findViewById(R.id.rating_bar);
+        edtComments = findViewById(R.id.edtComments);
+        submitBtn = (TextView) findViewById(R.id.submit_review);
+        submitBtn.setOnClickListener(this);
+        originalLayout = (RelativeLayout) findViewById(R.id.original_layout);
+        orderPlacedLayout = (RelativeLayout) findViewById(R.id.order_played_layout);
 
         productID = getIntent().getStringExtra("productObj");
         aViewFlipper = findViewById(R.id.view_flipper);
@@ -330,6 +356,25 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     likeClick = false;
                     imgLike.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_heart));
                 }
+                if (resFor.equalsIgnoreCase("check")) {
+                    if (response.getString("msg").equalsIgnoreCase("Reviews found")) {
+                        newReview = false;
+                        JSONObject data = response.getJSONObject("product_review");
+                        reviewID = data.getString("id");
+                        String rating = data.getString("rating");
+                        String comment = data.getString("comment");
+                        rtbComments.setRating(Integer.getInteger(rating));
+                        edtComments.setText(comment);
+                    } else {
+                        newReview = true;
+                    }
+                }
+                if (resFor.equalsIgnoreCase("sumbit")) {
+                    layoutGone();
+                }
+                if (resFor.equalsIgnoreCase("update")) {
+                    layoutGone();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -453,6 +498,56 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
     }
 
+    private void checkReview() {
+        resFor = "check";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        String pid = PreferenceStorage.getProductId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, pid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.CHECK_REVIEWS;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void submitReview() {
+        resFor = "sumbit";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        String oid = PreferenceStorage.getOrderId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, oid);
+            jsonObject.put(OSAConstants.KEY_COMMENT, edtComments.getText().toString());
+            jsonObject.put(OSAConstants.KEY_RATING, "" + Integer.getInteger(String.valueOf(rtbComments.getRating())));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.SUBMIT_REVIEW;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void updateReview() {
+        resFor = "update";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        String oid = PreferenceStorage.getProductId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+            jsonObject.put(OSAConstants.PARAMS_PROD_ID, oid);
+            jsonObject.put(OSAConstants.KEY_REVIEW_ID, reviewID);
+            jsonObject.put(OSAConstants.KEY_COMMENT, edtComments.getText().toString());
+            jsonObject.put(OSAConstants.KEY_RATING, "" + rtbComments.getRating());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.UPDATE_REVIEW;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
     @Override
     public void onItemClickSize(View view, int position) {
         Size size = null;
@@ -566,6 +661,26 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                 }
             }
         }
+        if (view == submitBtn) {
+            if (newReview) {
+                submitReview();
+            } else {
+                updateReview();
+            }
+        }
+    }
+
+    public void layoutVisible() {
+        checkReview();
+        orderPlacedLayout.setVisibility(View.VISIBLE);
+        originalLayout.setClickable(false);
+        originalLayout.setFocusable(false);
+    }
+
+    public void layoutGone() {
+        orderPlacedLayout.setVisibility(View.GONE);
+        originalLayout.setClickable(true);
+        originalLayout.setFocusable(true);
     }
 
     private void doLogout() {
