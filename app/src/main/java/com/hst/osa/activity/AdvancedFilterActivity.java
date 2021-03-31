@@ -222,7 +222,7 @@ public class AdvancedFilterActivity extends AppCompatActivity implements IServic
                         txtSubCat = subCategoryArray.getJSONObject(i).getString("category_name");
                         subCategoryArrayList.add(new SubCategory(id, txtSubCat));
                     }
-                    mAdapter = new SubCategoryListAdapter(subCategoryArrayList, this);
+                    mAdapter = new SubCategoryListAdapter(this, subCategoryArrayList, this);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
                     recyclerViewSubCategory.setLayoutManager(layoutManager);
                     recyclerViewSubCategory.setAdapter(mAdapter);

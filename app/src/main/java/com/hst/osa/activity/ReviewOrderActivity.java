@@ -26,6 +26,7 @@ import com.hst.osa.bean.support.AddressArrayList;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartItemList;
 import com.hst.osa.bean.support.CartOrderList;
+import com.hst.osa.bean.support.OrderHistory;
 import com.hst.osa.ccavenue.activity.InitialScreenActivity;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
@@ -274,7 +275,7 @@ public class ReviewOrderActivity extends AppCompatActivity implements IServiceLi
             startActivity(homeIntent);
             finish();
         } if (view == goToOrders) {
-            Intent homeIntent = new Intent(this, MainActivity.class);
+            Intent homeIntent = new Intent(this, OrderHistory.class);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(homeIntent);
             finish();

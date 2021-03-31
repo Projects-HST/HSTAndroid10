@@ -78,6 +78,8 @@ public class OSAConstants {
 
     public static final String TRACK_ORDER = "track_order/";
 
+    public static final String TRACK_STATUS = "list_orderstatus/";
+
     public static final String ORDER_HISTORY_DETAIL = "view_order_cart_details/";
 
     public static final String APPLY_PROMO = "apply_promo_code/";

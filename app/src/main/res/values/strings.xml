@@ -174,6 +174,7 @@
     <string name="order_placed_success">Your order was placed successfully. You can see the status of the order at any time.</string>
     <string name="continue_shopping">Continue Shopping</string>
     <string name="go_orders">Go to Orders</string>
+    <string name="orders">Orders</string>
     <string name="order_history">Order History</string>
     <string name="delivered">Delivered</string>
     <string name="in_transit">In Transit</string>

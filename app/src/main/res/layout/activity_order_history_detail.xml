@@ -179,10 +179,10 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_marginStart="20dp"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/medium"
                             android:text="@string/order_id"
                             android:textColor="@color/text_black"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/order_id"
@@ -193,7 +193,7 @@
                             android:layout_toEndOf="@+id/txt_order_total"
                             android:fontFamily="@font/regular"
                             android:text="asd"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/txt_order_date"
@@ -203,10 +203,10 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="10dp"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/medium"
                             android:text="@string/order_date"
                             android:textColor="@color/text_black"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/order_date"
@@ -219,7 +219,7 @@
                             android:layout_toEndOf="@+id/txt_order_total"
                             android:fontFamily="@font/regular"
                             android:text="asd"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/txt_order_total"
@@ -229,10 +229,10 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="10dp"
-                            android:fontFamily="@font/regular"
+                            android:fontFamily="@font/medium"
                             android:text="@string/order_total"
                             android:textColor="@color/text_black"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/order_total"
@@ -507,6 +507,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:visibility="gone"
                 android:background="@drawable/btn_square_border"
                 android:drawablePadding="20dp"
                 android:gravity="center"

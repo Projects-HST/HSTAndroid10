@@ -1,8 +1,6 @@
 package com.hst.osa.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +11,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
-import com.hst.osa.activity.AddAddressActivity;
-import com.hst.osa.activity.CartActivity;
 import com.hst.osa.activity.OrderHistoryDetailPage;
-import com.hst.osa.activity.ReviewOrderActivity;
-import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.CartItem;
-import com.hst.osa.bean.support.OrderHistory;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.servicehelpers.ServiceHelper;
-import com.hst.osa.serviceinterfaces.IServiceListener;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -37,7 +26,7 @@ public class OrderHistoryDetailListAdapter extends RecyclerView.Adapter<OrderHis
     private ArrayList<CartItem> productArrayList;
     Context mContext;
     private OnItemClickListener onItemClickListener;
-    String resFor = "";
+    public boolean resFor = false;
     int pos ;
     String orderID = "";
     String UserID = "";
@@ -48,7 +37,7 @@ public class OrderHistoryDetailListAdapter extends RecyclerView.Adapter<OrderHis
     MyViewHolder myViewHolder;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView txtProductName, txtProductPrice, txtProductMRP, productQuantity;
+        public TextView txtProductName, txtProductPrice, txtProductMRP, productReplace;
         public LinearLayout productLayout;
         public ImageView productBanner, productDelete;
         public ImageView btnPlus, btnMinus;
@@ -60,18 +49,20 @@ public class OrderHistoryDetailListAdapter extends RecyclerView.Adapter<OrderHis
             txtProductName = (TextView) view.findViewById(R.id.product_name);
             txtProductPrice = (TextView) view.findViewById(R.id.product_price);
             txtProductMRP = (TextView) view.findViewById(R.id.product_mrp);
-            productQuantity = (TextView) view.findViewById(R.id.product_review);
-            productQuantity.setOnClickListener(new View.OnClickListener() {
+            productReplace = (TextView) view.findViewById(R.id.product_review);
+            productReplace.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     String productID = productArrayList.get(pos).getproduct_id();
                     String productName = productArrayList.get(pos).getproduct_name();
                     PreferenceStorage.saveProductId(mContext, productID);
-                    PreferenceStorage.saveProductId(mContext, productID);
-                    ((OrderHistoryDetailPage)mContext).layoutVisible(productName);
+                    ((OrderHistoryDetailPage)mContext).replaceProduct(pos);
                 }
             });
+            if (resFor) {
+                productReplace.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -118,6 +109,14 @@ public class OrderHistoryDetailListAdapter extends RecyclerView.Adapter<OrderHis
         } else {
 //            newsImage.setImageResource(R.drawable.news_banner);
         }
+
+        if (resFor) {
+            holder.productReplace.setVisibility(View.GONE);
+        }
+    }
+
+    public void hideall() {
+        myViewHolder.productReplace.setVisibility(View.GONE);
     }
 
     @Override

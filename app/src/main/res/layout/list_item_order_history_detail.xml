@@ -99,14 +99,15 @@
                     <TextView
                         android:id="@+id/product_review"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:fontFamily="@font/semibold"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/write_reviews"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/replacement"
                         android:textColor="@color/txt_red"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:drawableEndCompat="@drawable/ic_right_arrow" />
 
                 </RelativeLayout>
 

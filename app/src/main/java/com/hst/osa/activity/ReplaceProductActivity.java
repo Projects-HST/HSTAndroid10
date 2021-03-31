@@ -75,11 +75,20 @@ public class ReplaceProductActivity extends AppCompatActivity implements IServic
             }
         });
 
+        cartItemArrayList.add((CartItem) getIntent().getSerializableExtra("prod"));
+
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
         recyclerViewQuestion = (RecyclerView) findViewById(R.id.listView_questions);
 
         btnSubmit = (TextView) findViewById(R.id.submit);
         btnSubmit.setOnClickListener(this);
+
+        mAdapter = new OrderHistoryDetailListAdapter(this, cartItemArrayList,this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerViewCategory.setLayoutManager(mLayoutManager);
+        recyclerViewCategory.setAdapter(mAdapter);
+        mAdapter.resFor = true;
+        mAdapter.notifyDataSetChanged();
 
         initiateServices();
         getReasonList();
@@ -123,6 +132,7 @@ public class ReplaceProductActivity extends AppCompatActivity implements IServic
         resCheck = "submit";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
+        prodOrderID = PreferenceStorage.getProductId(this);
         try {
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
             jsonObject.put(OSAConstants.PARAMS_PURCHASE_ORDER_ID, prodOrderID);
@@ -198,7 +208,7 @@ public class ReplaceProductActivity extends AppCompatActivity implements IServic
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
                     recyclerViewQuestion.setLayoutManager(mLayoutManager);
                     recyclerViewQuestion.setAdapter(questionListAdapter);
-                    getOrderDetails();
+//                    getOrderDetails();
                 } if (resCheck.equalsIgnoreCase("check")) {
                     finish();
                 }

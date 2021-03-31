@@ -343,14 +343,21 @@ public class OrderHistoryDetailPage extends AppCompatActivity implements IServic
                 updateReview();
             }
         }
-        if (view == replacement) {
-            Intent intent = new Intent(this, ReplaceProductActivity.class);
-            startActivity(intent);
-        }
+//        if (view == replacement) {
+//            Intent intent = new Intent(this, ReplaceProductActivity.class);
+//            startActivity(intent);
+//        }
         if (view == trackOrder) {
             Intent intent = new Intent(this, TrackOrderActivity.class);
+            intent.putExtra("prod", cartItemArrayList);
             startActivity(intent);
         }
+    }
+
+    public void replaceProduct(int position) {
+        Intent intent = new Intent(this, ReplaceProductActivity.class);
+        intent.putExtra("prod", cartItemArrayList.get(position));
+        startActivity(intent);
     }
 
     public void layoutVisible(String prodName) {

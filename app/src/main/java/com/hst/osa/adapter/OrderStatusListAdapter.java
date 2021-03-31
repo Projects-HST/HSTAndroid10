@@ -6,31 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
-import com.hst.osa.activity.CartActivity;
-import com.hst.osa.bean.support.CartItem;
-import com.hst.osa.bean.support.OrderHistory;
-import com.hst.osa.helpers.ProgressDialogHelper;
-import com.hst.osa.servicehelpers.ServiceHelper;
-import com.hst.osa.serviceinterfaces.IServiceListener;
-import com.hst.osa.utils.OSAValidator;
+import com.hst.osa.bean.support.OrderStatus;
 import com.hst.osa.utils.PreferenceStorage;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryListAdapter.MyViewHolder> {
+public class OrderStatusListAdapter extends RecyclerView.Adapter<OrderStatusListAdapter.MyViewHolder> {
 
-    private ArrayList<OrderHistory> orderHistoryArrayList;
+    private ArrayList<OrderStatus> orderStatusArrayList;
     Context mContext;
     private OnItemClickListener onItemClickListener;
     String resFor = "";
@@ -38,25 +30,21 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
     String cartID = "";
     String UserID = "";
     String quantity = "";
-    OrderHistory orderHistory;
+    OrderStatus orderStatus;
     MyViewHolder myViewHolder;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView txtProductName, txtProductPrice, txtProductMRP, productStatus, productDate;
-        public LinearLayout productLayout;
-        public ImageView productBanner, productDelete;
-        public ImageView btnPlus, btnMinus;
+        public TextView txtStatus, txtVLine;
+        public RelativeLayout statusLayout;
+        public ImageView imgStatus;
 
         public MyViewHolder(View view) {
             super(view);
-            productLayout = (LinearLayout) view.findViewById(R.id.product_layout);
-            productBanner = (ImageView) view.findViewById(R.id.product_img);
-            productLayout.setOnClickListener(this);
-            txtProductName = (TextView) view.findViewById(R.id.product_name);
-            txtProductPrice = (TextView) view.findViewById(R.id.product_price);
-            txtProductMRP = (TextView) view.findViewById(R.id.product_mrp);
-            productDate = (TextView) view.findViewById(R.id.product_date);
-            productStatus = (TextView) view.findViewById(R.id.product_status);
+            statusLayout = (RelativeLayout) view.findViewById(R.id.status_layout);
+            statusLayout.setOnClickListener(this);
+            imgStatus = (ImageView) view.findViewById(R.id.status_img);
+            txtStatus = (TextView) view.findViewById(R.id.txt_status);
+            txtVLine = (TextView) view.findViewById(R.id.v_line);
         }
 
         @Override
@@ -70,9 +58,9 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
         }
     }
 
-    public OrderHistoryListAdapter(Context context, ArrayList<OrderHistory> orderHistoryArrayList, OnItemClickListener onItemClickListener) {
+    public OrderStatusListAdapter(Context context, ArrayList<OrderStatus> orderStatusArrayList, OnItemClickListener onItemClickListener) {
         this.mContext = context;
-        this.orderHistoryArrayList = orderHistoryArrayList;
+        this.orderStatusArrayList = orderStatusArrayList;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -84,7 +72,7 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_order_history, parent, false);
+                .inflate(R.layout.list_item_order_status, parent, false);
 
         UserID = PreferenceStorage.getUserId(itemView.getContext());
         return new MyViewHolder(itemView);
@@ -92,14 +80,18 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        orderHistory = orderHistoryArrayList.get(position);
+        orderStatus = orderStatusArrayList.get(position);
         myViewHolder = holder;
-        holder.txtProductName.setText("Order ID: " + orderHistory.getorder_id());
-        holder.txtProductMRP.setVisibility(View.GONE);
-        holder.txtProductPrice.setText("₹" + orderHistory.getTotal_amount());
-        String prodDate = getserverdateformat(orderHistory.getpurchase_date());
-        holder.productDate.setText(prodDate);
-        holder.productStatus.setText(orderHistory.getorder_status());
+        holder.txtStatus.setText(orderStatus.getorder_status());
+        if (orderStatus.getstatus().equalsIgnoreCase("1")) {
+            holder.imgStatus.setImageDrawable(ContextCompat.getDrawable(holder.imgStatus.getContext(), R.drawable.ic_order_select));
+        } else {
+            holder.imgStatus.setImageDrawable(ContextCompat.getDrawable(holder.imgStatus.getContext(), R.drawable.ic_order_notselect));
+        }
+        if (orderStatusArrayList.size()-1 == position) {
+            holder.txtVLine.setVisibility(View.GONE);
+        }
+//        if ()
 
     }
 
@@ -124,6 +116,7 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
 
     @Override
     public int getItemCount() {
-        return orderHistoryArrayList.size();
+        return orderStatusArrayList.size();
     }
 }
+

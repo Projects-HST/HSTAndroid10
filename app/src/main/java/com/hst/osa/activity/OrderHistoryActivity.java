@@ -41,7 +41,7 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
     private ServiceHelper serviceHelper;
     private ProgressDialogHelper progressDialogHelper;
 
-    private TextView delivered, transit;
+    private TextView delivered, transit, orderCount;
 
     private ArrayList<OrderHistory> orderHistoryArrayList = new ArrayList<>();
     OrderHistoryList orderHistoryList;
@@ -64,6 +64,7 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
         });
 
         initiateServices();
+        orderCount = (TextView) findViewById(R.id.order_count);
         delivered = (TextView) findViewById(R.id.delivered);
         delivered.setOnClickListener(this);
         transit = (TextView) findViewById(R.id.in_transit);
@@ -152,6 +153,7 @@ public class OrderHistoryActivity extends AppCompatActivity implements IServiceL
         if (validateSignInResponse(response)) {
             try {
                 String count = response.getString("order_count");
+                orderCount.setText(count.concat(" ").concat(getString(R.string.orders)));
                 Gson gson = new Gson();
 
                 orderHistoryList = null;
