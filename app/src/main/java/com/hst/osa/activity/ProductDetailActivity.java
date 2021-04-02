@@ -226,11 +226,9 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
     }
 
     public void initiateServices() {
-
         serviceHelper = new ServiceHelper(this);
         serviceHelper.setServiceListener(this);
         progressDialogHelper = new ProgressDialogHelper(this);
-
     }
 
     private boolean validateSignInResponse(JSONObject response) {
