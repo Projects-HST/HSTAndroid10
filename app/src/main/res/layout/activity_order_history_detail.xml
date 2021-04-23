@@ -148,6 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/semibold"
                     android:text="@string/order_details"
                     android:textColor="@color/text_black"
                     android:textSize="16sp" />
@@ -161,8 +162,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
                     android:orientation="vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp">
@@ -178,7 +177,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:fontFamily="@font/medium"
                             android:text="@string/order_id"
                             android:textColor="@color/text_black"
@@ -201,7 +200,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/txt_order_id"
                             android:layout_alignParentStart="true"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/medium"
                             android:text="@string/order_date"
@@ -227,7 +226,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/txt_order_date"
                             android:layout_alignParentStart="true"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/medium"
                             android:text="@string/order_total"
@@ -267,6 +266,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/semibold"
                     android:text="@string/your_delivery"
                     android:textColor="@color/text_black"
                     android:textSize="16sp" />
@@ -280,7 +280,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -311,7 +310,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/light"
+                        android:fontFamily="@font/regular"
                         android:textColor="@color/text_black"
                         android:textSize="16sp" />
 
@@ -365,6 +364,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/semibold"
                     android:text="@string/payment_information"
                     android:textColor="@color/text_black"
                     android:textSize="16sp" />
@@ -403,8 +403,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
                             android:fontFamily="@font/regular"
                             android:text="@string/items"
                             android:textColor="@color/text_black"
@@ -427,7 +427,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/txt_items"
                             android:layout_alignParentStart="true"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/regular"
                             android:text="@string/delivery"
@@ -451,7 +451,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/txt_delivery"
                             android:layout_alignParentStart="true"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/regular"
                             android:text="@string/offer"
@@ -475,7 +475,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/txt_offer"
                             android:layout_alignParentStart="true"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/regular"
                             android:text="@string/total"
