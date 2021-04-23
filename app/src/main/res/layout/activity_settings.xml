@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <RelativeLayout
             android:id="@+id/changeLayout"
@@ -56,19 +56,26 @@
                 android:padding="4dp"
                 android:src="@drawable/ic_right_black" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/grey"
+                android:layout_below="@id/imgView_1" />
+
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/setLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_below="@id/changeLayout">
 
             <ImageView
                 android:id="@+id/imgView_2"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginTop="16dp"
                 android:src="@drawable/ic_about_us" />
 
             <TextView
@@ -76,7 +83,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_toEndOf="@id/imgView_2"
                 android:fontFamily="@font/medium"
                 android:gravity="center"
@@ -94,22 +100,29 @@
                 android:layout_alignParentEnd="true"
                 android:padding="4dp"
                 android:src="@drawable/ic_right_black" />
+            <View
+                android:id="@+id/div_2"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/grey"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/imgView_2" />
 
             <ImageView
                 android:id="@+id/imgView_3"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_below="@id/imgView_2"
-                android:layout_marginTop="16dp"
+                android:layout_below="@id/div_2"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_privacy" />
 
             <TextView
                 android:id="@+id/privacySecurity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imgView_2"
+                android:layout_below="@id/div_2"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/imgView_3"
                 android:fontFamily="@font/medium"
                 android:gravity="center"
@@ -128,22 +141,29 @@
                 android:padding="4dp"
                 android:src="@drawable/ic_right_black" />
 
+            <View
+                android:id="@+id/div_3"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/grey"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/imgView_3" />
 
             <ImageView
                 android:id="@+id/imgView_4"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_below="@id/imgView_3"
-                android:layout_marginTop="16dp"
+                android:layout_below="@id/div_3"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_help_support" />
 
             <TextView
                 android:id="@+id/helpSupport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imgView_3"
+                android:layout_below="@id/div_3"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/imgView_4"
                 android:fontFamily="@font/medium"
                 android:gravity="center"
@@ -162,14 +182,22 @@
                 android:padding="4dp"
                 android:src="@drawable/ic_right_black" />
 
+            <View
+                android:id="@+id/div_4"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/grey"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/imgView_4" />
+
             <TextView
                 android:id="@+id/recNotify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/helpSupport"
-                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+
+                android:layout_below="@id/div_4"
                 android:fontFamily="@font/medium"
-                android:gravity="center"
+                android:gravity="center|start"
                 android:text="@string/receive_notify"
                 android:textAllCaps="false"
                 android:textColor="@color/text_black"
@@ -177,22 +205,29 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/subNotification"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignTop="@id/recNotify"
                 android:layout_alignBottom="@id/recNotify"
                 android:layout_alignParentEnd="true"
                 android:padding="8dp" />
 
+            <View
+                android:id="@+id/div_5"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/grey"
+                android:layout_below="@id/recNotify" />
+
+
             <TextView
                 android:id="@+id/rec_News"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
+                android:layout_height="40dp"
                 android:layout_below="@id/recNotify"
-                android:layout_marginTop="16dp"
                 android:fontFamily="@font/medium"
                 android:gravity="center"
-                android:text="@string/receive_notify"
+                android:text="@string/receive_news"
                 android:textAllCaps="false"
                 android:textColor="@color/text_black"
                 android:textSize="14sp" />
@@ -204,7 +239,7 @@
                 android:layout_alignTop="@id/rec_News"
                 android:layout_alignBottom="@id/rec_News"
                 android:layout_alignParentEnd="true"
-                android:padding="10dp" />
+                android:padding="8dp" />
 
         </RelativeLayout>
 

@@ -11,15 +11,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.hst.osa.R;
-import com.hst.osa.adapter.CartItemListAdapter;
-import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.AddressArrayList;
-import com.hst.osa.bean.support.CartItemList;
+import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -255,7 +251,7 @@ public class CheckoutActivity extends AppCompatActivity implements IServiceListe
                     getOrderDetails();
                 }
                 if (resCheck.equalsIgnoreCase("detail")) {
-                    JSONArray orderObjData = response.getJSONArray("order_details");
+                    JSONArray orderObjData = response.getJSONArray("cart_items");
 
                     JSONObject data = orderObjData.getJSONObject(0);
                     purchaseOrderID = data.getString("purchase_order_id");

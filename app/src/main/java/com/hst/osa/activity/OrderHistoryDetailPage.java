@@ -2,14 +2,12 @@ package com.hst.osa.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,11 +18,8 @@ import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
 import com.hst.osa.adapter.ReviewOrderListAdapter;
-import com.hst.osa.bean.support.AddressArrayList;
-import com.hst.osa.bean.support.AddressList;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
-import com.hst.osa.ccavenue.activity.InitialScreenActivity;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -348,8 +343,8 @@ public class OrderHistoryDetailPage extends AppCompatActivity implements IServic
             startActivity(intent);
         }
         if (view == trackOrder) {
-            Intent intent = new Intent(this, TrackOrderActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this, TrackOrderActivity.class);
+//            startActivity(intent);
         }
     }
 

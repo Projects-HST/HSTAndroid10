@@ -236,5 +236,6 @@
     <string name="password_match">Password Match</string>
     <string name="password_error">Password not Match</string>
     <string name="new_notify">New Notification</string>
+    <string name="receive_news">Receivee Newsletter</string>
 
 </resources>

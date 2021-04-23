@@ -7,10 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
 import com.hst.osa.adapter.QuestionListAdapter;
@@ -73,7 +71,7 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
         recyclerViewQuestion = (RecyclerView) findViewById(R.id.listView_questions);
 
-        btnSubmit = (TextView) findViewById(R.id.submit);
+        btnSubmit = (TextView) findViewById(R.id.track_order);
         btnSubmit.setOnClickListener(this);
 
         initiateServices();

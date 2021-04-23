@@ -216,6 +216,7 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
 
                     JSONObject advertisementObjData = response.getJSONObject("ads_list");
                     advertisementList = gson.fromJson(advertisementObjData.toString(), AdvertisementList.class);
+                    advertisementArrayList.clear();
                     advertisementArrayList.addAll(advertisementList.getAdvertisementArrayList());
                     AdvertisementListAdapter advertisementListAdapter = new AdvertisementListAdapter(advertisementArrayList, this);
                     RecyclerView.LayoutManager mLayoutManagerAds = new LinearLayoutManager(getActivity());
@@ -229,7 +230,6 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
                     }
                     BestSellingListAdapter adasd = new BestSellingListAdapter(getActivity(),productArrayList, this);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-
                     recyclerViewPopularProduct.setLayoutManager(mLayoutManager);
                     recyclerViewPopularProduct.setAdapter(adasd);
 
@@ -337,10 +337,12 @@ public class DashboardFragment extends Fragment implements IServiceListener, Dia
             startActivity(i);
 
         } if (view == seeAllBestSelling) {
+            productArrayList.clear();
             Fragment newFragment = null;
             newFragment = new BestSellingFragment();
             replaceFragment(newFragment);
         } if (view == seeAllNewArrivals) {
+            productArrayList1.clear();
             Fragment newFragment = null;
             newFragment = new NewArrivalsFragment();
             replaceFragment(newFragment);

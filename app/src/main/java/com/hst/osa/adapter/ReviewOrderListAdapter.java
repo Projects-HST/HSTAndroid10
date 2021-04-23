@@ -8,17 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
-import com.hst.osa.activity.CartActivity;
 import com.hst.osa.activity.ReviewOrderActivity;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.servicehelpers.ServiceHelper;
 import com.hst.osa.serviceinterfaces.IServiceListener;
-import com.hst.osa.utils.OSAConstants;
 import com.hst.osa.utils.OSAValidator;
 import com.hst.osa.utils.PreferenceStorage;
 import com.squareup.picasso.Picasso;
@@ -79,7 +76,7 @@ public class ReviewOrderListAdapter extends RecyclerView.Adapter<ReviewOrderList
             txtProductName = (TextView) view.findViewById(R.id.product_name);
             txtProductPrice = (TextView) view.findViewById(R.id.product_price);
             txtProductMRP = (TextView) view.findViewById(R.id.product_mrp);
-            productQuantity = (TextView) view.findViewById(R.id.product_quantity);
+            productQuantity = (TextView) view.findViewById(R.id.quantity);
         }
 
         @Override
@@ -124,8 +121,13 @@ public class ReviewOrderListAdapter extends RecyclerView.Adapter<ReviewOrderList
         holder.txtProductName.setText(product.getproduct_name());
         holder.txtProductMRP.setVisibility(View.GONE);
         holder.txtProductPrice.setText("₹" + product.getprice());
-        String prodQty = "Quantity: ".concat(product.getquantity());
-        holder.productQuantity.setText(prodQty);
+
+//        if(OSAValidator.checkNullString(product.getquantity())) {
+            holder.productQuantity.setText(product.getquantity());
+//        }
+//        else {
+//            holder.productQuantity.setVisibility(View.GONE);
+//        }
 
         if (OSAValidator.checkNullString(product.getproduct_cover_img())) {
             Picasso.get().load(product.getproduct_cover_img()).into(holder.productBanner);

@@ -7,6 +7,17 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_toolbar"
+        style="@style/ToolBarStyle.Event"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_bg"
+        android:minHeight="@dimen/abc_action_bar_default_height_material"
+        android:theme="@style/ThemeOverlay.MyApp.ActionBar" />
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hst.osa.R;
@@ -20,6 +21,7 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
     private ArrayList<SubCategory> categoryArrayList;
     Context mContext;
     private SubCategoryListAdapter.OnItemClickListener onItemClickListener;
+    public static int selected_item = 0;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public LinearLayout txtLayout;
@@ -37,15 +39,6 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(v, getAdapterPosition());
             }
-//            else {
-//                onClickListener.onClick(Selecttick);
-//            }
-//            if (v == txtLayout){
-//                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sel_sub_cat));
-//            }
-//            else {
-//                txtLayout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_sub_cat));
-//            }
         }
     }
 
@@ -71,13 +64,14 @@ public class SubCategoryListAdapter extends RecyclerView.Adapter<SubCategoryList
     @Override
     public void onBindViewHolder(@NonNull SubCategoryListAdapter.MyViewHolder holder, int position) {
 
-//        holder.txtLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                holder.txtLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_sel_sub_cat));
-//            }
-//        });
+        if (position == selected_item) {
+            holder.txtLayout.setBackground(ContextCompat.getDrawable(holder.txtLayout.getContext(), R.drawable.btn_sel_sub_cat));
+            holder.txtCategoryName.setTextColor(ContextCompat.getColor(holder.txtCategoryName.getContext(), R.color.white));
+        }
+        else {
+            holder.txtLayout.setBackground(ContextCompat.getDrawable(holder.txtLayout.getContext(), R.drawable.btn_sub_cat));
+            holder.txtCategoryName.setTextColor(ContextCompat.getColor(holder.txtCategoryName.getContext(), R.color.black));
+        }
         SubCategory category = categoryArrayList.get(position);
         holder.txtCategoryName.setText(category.getCategory_name());
     }

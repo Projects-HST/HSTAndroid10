@@ -101,7 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
     ImageView imgLike;
     boolean likeClick = false;
 
-    String resFor = "";
+    String resFor = "", offPer = "", offStatus = "";
     float currentPrice = 0;
     int stockCount = 0;
 
@@ -245,12 +245,24 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     setImageInFlipr(imgUrl.get(0));
                     productName.setText(productDetails.getString("product_name"));
                     productDetail.setText(productDetails.getString("product_description"));
-                    productPrice.setText("Rs." + productDetails.getString("prod_actual_price"));
-                    currentPrice = Float.parseFloat(productDetails.getString("prod_actual_price"));
+                    offStatus = productDetails.getString("offer_status");
+                    offPer = productDetails.getString("offer_percentage");
                     stockCount = Integer.parseInt(productDetails.getString("stocks_left"));
                     if (stockCount == 0) {
                         productStockStatus.setText(getString(R.string.out_stock));
                         productStockStatus.setTextColor(ContextCompat.getColor(this, R.color.out_of_stock));
+                    }
+                    if (offStatus.equalsIgnoreCase("0")) {
+                        productPrice.setText("Rs." + productDetails.getString("prod_actual_price"));
+                        currentPrice = Float.parseFloat(productDetails.getString("prod_actual_price"));
+                    } else {
+                        String offPrice = productDetails.getString("prod_actual_price");
+                        double offer = Double.parseDouble(offPer);
+                        double offCal = Double.parseDouble(offPrice);
+                        double actualAmt = (offCal / 100.0f) * offer;
+                        double amount = (offCal - actualAmt);
+                        productPrice.setText("Rs." + amount);
+                        currentPrice = Float.parseFloat(String.valueOf(amount));
                     }
                     calculatePrice(1);
 
@@ -304,8 +316,18 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
                     LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
                     recyclerViewColour.setLayoutManager(layoutManager);
                     recyclerViewColour.setAdapter(adapter);
-                    productPrice.setText("Rs." + colourArrayList.get(0).getProd_actual_price());
-                    currentPrice = Float.parseFloat(colourArrayList.get(0).getProd_actual_price());
+                    if (offStatus.equalsIgnoreCase("1")) {
+                        String offPrice = colourArrayList.get(0).getProd_actual_price();
+                        double offer = Double.parseDouble(offPer);
+                        double offCal = Double.parseDouble(offPrice);
+                        double actualAmt = (offCal / 100.0f) * offer;
+                        double amount = (offCal - actualAmt);
+                        productPrice.setText("Rs." + amount);
+                        currentPrice = Float.parseFloat(String.valueOf(amount));
+                    } else {
+                        productPrice.setText("Rs." + colourArrayList.get(0).getProd_actual_price());
+                        currentPrice = Float.parseFloat(colourArrayList.get(0).getProd_actual_price());
+                    }
                     colourID = colourArrayList.get(0).getid();
                     stockCount = Integer.parseInt(colourArrayList.get(0).getstocks_left());
                     calculatePrice(Integer.parseInt(productQuantity.getText().toString()));
@@ -469,8 +491,19 @@ public class ProductDetailActivity extends AppCompatActivity implements IService
         colour = colourArrayList.get(position);
         ColourListAdapter.selected_item = position;
         recyclerViewColour.getAdapter().notifyDataSetChanged();
-        productPrice.setText("Rs." + colour.getProd_actual_price());
-        currentPrice = Float.parseFloat(colour.getProd_actual_price());
+        if (offStatus.equalsIgnoreCase("1")) {
+            String offPrice = colour.getProd_actual_price();
+            double offer = Double.parseDouble(offPer);
+            double offCal = Double.parseDouble(offPrice);
+            double actualAmt = (offCal / 100.0f) * offer;
+            double amount = (offCal - actualAmt);
+            productPrice.setText("Rs." + amount);
+            currentPrice = Float.parseFloat(String.valueOf(amount));
+        }
+        else {
+            productPrice.setText("Rs." + colour.getProd_actual_price());
+            currentPrice = Float.parseFloat(colour.getProd_actual_price());
+        }
         colourID = colour.getid();
         calculatePrice(Integer.parseInt(productQuantity.getText().toString()));
     }

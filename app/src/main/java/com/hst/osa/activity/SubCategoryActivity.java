@@ -270,6 +270,8 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
 //        } else {
 //            category = subCategoryArrayList.get(position);
 //        }
+        SubCategoryListAdapter.selected_item = position;
+        recyclerViewSubCategory.getAdapter().notifyDataSetChanged();
         category = subCategoryArrayList.get(position);
         subCatId = category.getId();
         productArrayList.clear();
