@@ -24,7 +24,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryListAdapter.MyViewHolder> {
 
@@ -40,7 +42,7 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
     MyViewHolder myViewHolder;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView txtProductName, txtProductPrice, txtProductMRP, txtProductStock, productQuantity;
+        public TextView txtProductName, txtProductPrice, txtProductMRP, productStatus, productDate;
         public LinearLayout productLayout;
         public ImageView productBanner, productDelete;
         public ImageView btnPlus, btnMinus;
@@ -53,7 +55,8 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
             txtProductName = (TextView) view.findViewById(R.id.product_name);
             txtProductPrice = (TextView) view.findViewById(R.id.product_price);
             txtProductMRP = (TextView) view.findViewById(R.id.product_mrp);
-            productQuantity = (TextView) view.findViewById(R.id.product_quantity);
+            productDate = (TextView) view.findViewById(R.id.product_date);
+            productStatus = (TextView) view.findViewById(R.id.product_status);
         }
 
         @Override
@@ -91,18 +94,32 @@ public class OrderHistoryListAdapter extends RecyclerView.Adapter<OrderHistoryLi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         orderHistory = orderHistoryArrayList.get(position);
         myViewHolder = holder;
-        holder.txtProductName.setText(orderHistory.getorder_id());
+        holder.txtProductName.setText("Order ID: " + orderHistory.getorder_id());
         holder.txtProductMRP.setVisibility(View.GONE);
-        holder.productQuantity.setVisibility(View.GONE);
         holder.txtProductPrice.setText("₹" + orderHistory.getTotal_amount());
-//        String prodQty = "Quantity: ".concat(orderHistory.getquantity());
-//        holder.productQuantity.setText(prodQty);
+        String prodDate = getserverdateformat(orderHistory.getpurchase_date());
+        holder.productDate.setText(prodDate);
+        holder.productStatus.setText(orderHistory.getorder_status());
 
-        if (OSAValidator.checkNullString(orderHistory.getorder_cover_img())) {
-            Picasso.get().load(orderHistory.getorder_cover_img()).into(holder.productBanner);
-        } else {
-//            newsImage.setImageResource(R.drawable.news_banner);
+    }
+
+    private String getserverdateformat(String dd) {
+        String serverFormatDate = "";
+        if (dd != null && dd != "") {
+
+            String date = dd;
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date testDate = null;
+            try {
+                testDate = formatter.parse(date);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+            serverFormatDate = sdf.format(testDate);
+            System.out.println(".....Date..." + serverFormatDate);
         }
+        return serverFormatDate;
     }
 
     @Override

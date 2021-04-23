@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,6 +64,8 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
     private SearchView mSearchView;
 
     private String catId, subCatId, serviceCall;
+
+    private ImageView imgFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +139,17 @@ public class SubCategoryActivity extends AppCompatActivity implements IServiceLi
         progressDialogHelper = new ProgressDialogHelper(this);
 
         catId = getIntent().getStringExtra("categoryObj");
+
+
+        imgFilter = (ImageView) findViewById(R.id.img_filter);
+        imgFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), AdvancedFilterActivity.class);
+                i.putExtra("categoryObj", catId);
+                startActivity(i);
+            }
+        });
 
         showSubCategory();
     }

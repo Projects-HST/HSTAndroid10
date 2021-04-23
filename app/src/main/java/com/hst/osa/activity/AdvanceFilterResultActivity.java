@@ -1,5 +1,6 @@
 package com.hst.osa.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,15 +8,20 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.hst.osa.R;
+import com.hst.osa.adapter.BestSellingListAdapter;
 import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
 import com.hst.osa.adapter.QuestionListAdapter;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
+import com.hst.osa.bean.support.Product;
 import com.hst.osa.bean.support.Question;
 import com.hst.osa.bean.support.QuestionList;
+import com.hst.osa.bean.support.SubProductList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -32,7 +38,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class AdvanceFilterResultActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, OrderHistoryDetailListAdapter.OnItemClickListener, QuestionListAdapter.OnItemClickListener, View.OnClickListener {
+public class AdvanceFilterResultActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, View.OnClickListener, BestSellingListAdapter.OnItemClickListener {
 
     private static final String TAG = ReplaceProductActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -43,20 +49,16 @@ public class AdvanceFilterResultActivity extends AppCompatActivity implements IS
 
     private TextView btnSubmit;
 
-    private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
-    CartOrderList cartItemList;
-    private OrderHistoryDetailListAdapter mAdapter;
-    private RecyclerView recyclerViewCategory;
+    private String productID, sizeID = "0", colourID = "0", minRange = "0", maxRange = "0", catId = "", subCatId = "0";
 
-    private ArrayList<Question> questionArrayList = new ArrayList<>();
-    QuestionList questionList;
-    private QuestionListAdapter questionListAdapter;
-    private RecyclerView recyclerViewQuestion;
+    private ArrayList<Product> productArrayList = new ArrayList<>();
+    SubProductList productList;
+    private RecyclerView recyclerViewSubCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_track_order);
+        setContentView(R.layout.activity_advanced_filter_result);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.activity_toolbar);
         setSupportActionBar(toolbar);
@@ -68,14 +70,17 @@ public class AdvanceFilterResultActivity extends AppCompatActivity implements IS
             }
         });
 
-        recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
-        recyclerViewQuestion = (RecyclerView) findViewById(R.id.listView_questions);
+        recyclerViewSubCategory = (RecyclerView) findViewById(R.id.sub_product_list);
 
-        btnSubmit = (TextView) findViewById(R.id.submit);
-        btnSubmit.setOnClickListener(this);
+        catId = getIntent().getStringExtra("catID");
+        subCatId = getIntent().getStringExtra("subcatID");
+        minRange = getIntent().getStringExtra("minRange");
+        maxRange = getIntent().getStringExtra("maxRange");
+        sizeID = getIntent().getStringExtra("sizeID");
+        colourID = getIntent().getStringExtra("colourID");
 
         initiateServices();
-        trackORder();
+        getResults();
     }
 
     public void initiateServices() {
@@ -84,19 +89,25 @@ public class AdvanceFilterResultActivity extends AppCompatActivity implements IS
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-    private void trackORder() {
-        resCheck = "track";
+    private void getResults() {
+
+        resCheck = "result";
+
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
-        String oid = PreferenceStorage.getOrderId(this);
         try {
             jsonObject.put(OSAConstants.KEY_USER_ID, id);
-            jsonObject.put(OSAConstants.PARAMS_ORDER_ID, oid);
+            jsonObject.put(OSAConstants.KEY_CAT_ID, catId);
+            jsonObject.put(OSAConstants.KEY_SUB_CAT_ID, subCatId);
+            jsonObject.put(OSAConstants.KEY_PRODUCT_SIZE_ID, sizeID);
+            jsonObject.put(OSAConstants.KEY_PRODUCT_COLOUR_ID, colourID);
+            jsonObject.put(OSAConstants.KEY_MIN_PRICE, minRange);
+            jsonObject.put(OSAConstants.KEY_MAX_PRICE, maxRange);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = OSAConstants.BUILD_URL + OSAConstants.TRACK_ORDER;
-        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+        String serverUrl = OSAConstants.BUILD_URL + OSAConstants.FILTER_RESULT;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), serverUrl);
     }
 
 
@@ -142,17 +153,24 @@ public class AdvanceFilterResultActivity extends AppCompatActivity implements IS
     public void onResponse(JSONObject response) {
         progressDialogHelper.hideProgressDialog();
         if (validateSignInResponse(response)) {
-            try {
-                if (resCheck.equalsIgnoreCase("track")) {
-                    JSONArray orderObjData = response.getJSONArray("order_details");
-
-                    JSONObject data = orderObjData.getJSONObject(0);
-
+            Gson gson = new Gson();
+            productList = gson.fromJson(response.toString(), SubProductList.class);
+            productArrayList.addAll(productList.getProductArrayList());
+            BestSellingListAdapter adasd = new BestSellingListAdapter(this, productArrayList, this);
+            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 4);
+            mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (adasd.getItemViewType(position) > 0) {
+                        return adasd.getItemViewType(position);
+                    } else {
+                        return 1;
+                    }
+                    //return 2;
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            });
+            recyclerViewSubCategory.setLayoutManager(mLayoutManager);
+            recyclerViewSubCategory.setAdapter(adasd);
 
         } else {
             Log.d(TAG, "Error while sign In");
@@ -165,29 +183,18 @@ public class AdvanceFilterResultActivity extends AppCompatActivity implements IS
     }
 
     @Override
-    public void onItemClickCart(View view, int position) {
-
-    }
-
-    @Override
-    public void onItemClickSize(View view, int position) {
-        Question question = null;
-        question = questionArrayList.get(position);
-        questionID = question.getid();
-        for (int i = 0; i < questionArrayList.size(); i++) {
-            if (i == position) {
-                questionArrayList.get(i).setstatus("check");
-            } else {
-                questionArrayList.get(i).setstatus("Active");
-            }
-        }
-//        questionListAdapter.notifyAll();
-        questionListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void onClick(View view) {
         if (view == btnSubmit) {
         }
+    }
+
+    @Override
+    public void onItemClickBestSelling(View view, int position) {
+        Product product = null;
+        product = productArrayList.get(position);
+        Intent intent;
+        intent = new Intent(this, ProductDetailActivity.class);
+        intent.putExtra("productObj", product.getid());
+        startActivity(intent);
     }
 }

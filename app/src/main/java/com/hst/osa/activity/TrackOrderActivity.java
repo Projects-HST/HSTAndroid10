@@ -7,13 +7,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.hst.osa.R;
 import com.hst.osa.adapter.OrderHistoryDetailListAdapter;
+import com.hst.osa.adapter.OrderStatusListAdapter;
 import com.hst.osa.adapter.QuestionListAdapter;
 import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
+import com.hst.osa.bean.support.OrderStatus;
+import com.hst.osa.bean.support.OrderStatusList;
 import com.hst.osa.bean.support.Question;
 import com.hst.osa.bean.support.QuestionList;
 import com.hst.osa.helpers.AlertDialogHelper;
@@ -32,7 +37,7 @@ import java.util.ArrayList;
 
 import static android.util.Log.d;
 
-public class TrackOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, OrderHistoryDetailListAdapter.OnItemClickListener, QuestionListAdapter.OnItemClickListener, View.OnClickListener {
+public class TrackOrderActivity extends AppCompatActivity implements IServiceListener, DialogClickListener, OrderHistoryDetailListAdapter.OnItemClickListener, QuestionListAdapter.OnItemClickListener, View.OnClickListener, OrderStatusListAdapter.OnItemClickListener {
 
     private static final String TAG = ReplaceProductActivity.class.getName();
     private ServiceHelper serviceHelper;
@@ -43,15 +48,14 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
 
     private TextView btnSubmit;
 
+    private ArrayList<OrderStatus> orderStatusArrayList = new ArrayList<>();
+    OrderStatusList orderStatusList;
+    private OrderStatusListAdapter mAdapter;
+    private RecyclerView recyclerViewStat;
+
     private ArrayList<CartItem> cartItemArrayList = new ArrayList<>();
     CartOrderList cartItemList;
-    private OrderHistoryDetailListAdapter mAdapter;
     private RecyclerView recyclerViewCategory;
-
-    private ArrayList<Question> questionArrayList = new ArrayList<>();
-    QuestionList questionList;
-    private QuestionListAdapter questionListAdapter;
-    private RecyclerView recyclerViewQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +72,20 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
             }
         });
 
+        cartItemArrayList = (ArrayList<CartItem>) getIntent().getSerializableExtra("prod");
+        recyclerViewStat = (RecyclerView) findViewById(R.id.listView_order_status);
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
-        recyclerViewQuestion = (RecyclerView) findViewById(R.id.listView_questions);
 
-        btnSubmit = (TextView) findViewById(R.id.track_order);
-        btnSubmit.setOnClickListener(this);
+        OrderHistoryDetailListAdapter orderHistoryDetailListAdapter = new OrderHistoryDetailListAdapter(this, cartItemArrayList,this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerViewCategory.setLayoutManager(mLayoutManager);
+        recyclerViewCategory.setAdapter(orderHistoryDetailListAdapter);
+        orderHistoryDetailListAdapter.resFor = true;
+        orderHistoryDetailListAdapter.notifyDataSetChanged();
+
 
         initiateServices();
-        trackORder();
+        getTrackStatus();
     }
 
     public void initiateServices() {
@@ -84,7 +94,20 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
         progressDialogHelper = new ProgressDialogHelper(this);
     }
 
-    private void trackORder() {
+    private void getTrackStatus() {
+        resCheck = "track_status";
+        JSONObject jsonObject = new JSONObject();
+        String id = PreferenceStorage.getUserId(this);
+        try {
+            jsonObject.put(OSAConstants.KEY_USER_ID, id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = OSAConstants.BUILD_URL + OSAConstants.TRACK_STATUS;
+        serviceHelper.makeGetServiceCall(jsonObject.toString(), url);
+    }
+
+    private void trackOrder() {
         resCheck = "track";
         JSONObject jsonObject = new JSONObject();
         String id = PreferenceStorage.getUserId(this);
@@ -144,10 +167,33 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
         if (validateSignInResponse(response)) {
             try {
                 if (resCheck.equalsIgnoreCase("track")) {
-                    JSONArray orderObjData = response.getJSONArray("order_details");
+                    JSONArray orderObjData = response.getJSONArray("track_details");
 
                     JSONObject data = orderObjData.getJSONObject(0);
 
+                    for (int i = 0; i < orderStatusArrayList.size(); i ++) {
+                        if (data.getString("old_status").equalsIgnoreCase(orderStatusArrayList.get(i).getorder_status())) {
+                            int position = i;
+                            for (int j = 0; j <= position; j++) {
+                                orderStatusArrayList.get(j).setstatus("1");
+                                recyclerViewStat.getAdapter().notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                } if (resCheck.equalsIgnoreCase("track_status")) {
+                    Gson gson = new Gson();
+
+                    orderStatusList = gson.fromJson(response.toString(), OrderStatusList.class);
+                    orderStatusArrayList.addAll(orderStatusList.getOrderStatusArrayList());
+                    for (int i = 0; i < orderStatusArrayList.size(); i ++) {
+                        orderStatusArrayList.get(i).setstatus("0");
+                    }
+                    mAdapter = new OrderStatusListAdapter(this, orderStatusArrayList,this);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+                    recyclerViewStat.setLayoutManager(mLayoutManager);
+                    recyclerViewStat.setAdapter(mAdapter);
+                    trackOrder();
                 }
 
             } catch (JSONException e) {
@@ -171,23 +217,17 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
 
     @Override
     public void onItemClickSize(View view, int position) {
-        Question question = null;
-        question = questionArrayList.get(position);
-        questionID = question.getid();
-        for (int i = 0; i < questionArrayList.size(); i++) {
-            if (i == position) {
-                questionArrayList.get(i).setstatus("check");
-            } else {
-                questionArrayList.get(i).setstatus("Active");
-            }
-        }
-//        questionListAdapter.notifyAll();
-        questionListAdapter.notifyDataSetChanged();
+
     }
 
     @Override
     public void onClick(View view) {
         if (view == btnSubmit) {
         }
+    }
+
+    @Override
+    public void onItemClickHistory(View view, int position) {
+
     }
 }

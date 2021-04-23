@@ -101,10 +101,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(getApplicationContext(), ProductDetailActivity.class);
-//                i.putExtra("productObj", productID);
-//                startActivity(i);
-//                finish();
+                if (page.equalsIgnoreCase("product")) {
+                    Intent i = new Intent(getApplicationContext(), ProductDetailActivity.class);
+                    i.putExtra("productObj", productID);
+                    startActivity(i);
+                    finish();
+                } else {
+                    finish();
+                }
             }
         });
 

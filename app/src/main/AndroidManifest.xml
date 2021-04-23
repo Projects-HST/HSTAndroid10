@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.OSA"
+        android:theme="@style/AppThemeNoActionBarLogin"
         android:usesCleartextTraffic="true">
 
         <uses-library
@@ -58,7 +58,7 @@
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA"
+            android:theme="@style/AppThemeNoActionBarLogin"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.LoginActivity"
@@ -95,32 +95,32 @@
             android:name=".activity.CategoryActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.SubCategoryActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.ProductDetailActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.SearchResultActivity"
             android:label="@string/category"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.CartActivity"
             android:label="@string/cart"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.ShippingAddressActivity"
             android:label="@string/address"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.OSA" />
+            android:theme="@style/AppThemeNoActionBarLogin" />
         <activity
             android:name=".activity.AddAddressActivity"
             android:label="@string/address"

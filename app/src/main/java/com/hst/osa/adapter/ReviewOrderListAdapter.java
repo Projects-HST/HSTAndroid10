@@ -104,7 +104,7 @@ public class ReviewOrderListAdapter extends RecyclerView.Adapter<ReviewOrderList
     @Override
     public ReviewOrderListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_cart, parent, false);
+                .inflate(R.layout.list_item_review_order, parent, false);
 
 
         serviceHelper = new ServiceHelper(itemView.getContext());
