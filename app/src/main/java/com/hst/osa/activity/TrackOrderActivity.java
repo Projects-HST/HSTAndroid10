@@ -19,8 +19,6 @@ import com.hst.osa.bean.support.CartItem;
 import com.hst.osa.bean.support.CartOrderList;
 import com.hst.osa.bean.support.OrderStatus;
 import com.hst.osa.bean.support.OrderStatusList;
-import com.hst.osa.bean.support.Question;
-import com.hst.osa.bean.support.QuestionList;
 import com.hst.osa.helpers.AlertDialogHelper;
 import com.hst.osa.helpers.ProgressDialogHelper;
 import com.hst.osa.interfaces.DialogClickListener;
@@ -73,7 +71,7 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
         });
 
         cartItemArrayList = (ArrayList<CartItem>) getIntent().getSerializableExtra("prod");
-        recyclerViewStat = (RecyclerView) findViewById(R.id.listView_order_status);
+//        recyclerViewStat = (RecyclerView) findViewById(R.id.listView_order_status);
         recyclerViewCategory = (RecyclerView) findViewById(R.id.listView_cart);
 
         OrderHistoryDetailListAdapter orderHistoryDetailListAdapter = new OrderHistoryDetailListAdapter(this, cartItemArrayList,this);
@@ -83,6 +81,8 @@ public class TrackOrderActivity extends AppCompatActivity implements IServiceLis
         orderHistoryDetailListAdapter.resFor = true;
         orderHistoryDetailListAdapter.notifyDataSetChanged();
 
+        btnSubmit = findViewById(R.id.track_order);
+        btnSubmit.setOnClickListener(this);
 
         initiateServices();
         getTrackStatus();
